@@ -1,0 +1,20 @@
+[
+    {
+        "typeName":"request1",
+        "typeCode":1,
+        "queueID":"A",
+        "serviceTime":10
+    },
+    {
+        "typeName":"request2",
+        "typeCode":2,
+        "queueID":"B",
+        "serviceTime":15
+    },
+    {
+        "typeName":"request3",
+        "typeCode":3,
+        "queueID":"C",
+        "serviceTime":20 
+    }
+] 

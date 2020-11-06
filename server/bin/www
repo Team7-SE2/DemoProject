@@ -1,0 +1,14 @@
+﻿process.on('uncaughtException', function (err) {
+        console.debug('Caught exception: ' + err);
+    });
+
+var debug = require('debug')('OfficeQueue');
+var app = require('../app');
+
+app.set('port', 3001);
+
+var server = app.listen(app.get('port'), function() {
+    console.log('Office Queue server listening on port ' + server.address().port);	
+	app.io.attach(server);
+});
+
