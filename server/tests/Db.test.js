@@ -2,7 +2,7 @@ test('check if the sequelize.json file exists and it was configured ', () => {
 
     // if the file doesn't exists it throws an exception and the test will fail
     var sequelize = require('../config/sequelize.json')
-
+ 
     expect(sequelize).not.toBeNull();
 
     expect(sequelize.dialect).not.toBeNull();
