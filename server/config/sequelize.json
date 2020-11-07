@@ -1,0 +1,10 @@
+{
+  "dialect": "sqlite",
+  "database": "demoproject",
+  "username": "team7",
+  "password": "se2_team7",
+  "host": "127.0.0.1",
+  "idleTimeoutMillis": 30000,
+  "maxConnections": 2,
+  "storage": "../server/database.sqlite"
+}
