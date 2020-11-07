@@ -10,7 +10,7 @@ module.exports = function () {
     finale.initialize({
         app: router,
         sequelize: db
-    });
+    }); 
 
     // Create REST resource
     var userResource = finale.resource({
