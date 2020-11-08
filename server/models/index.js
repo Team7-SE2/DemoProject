@@ -58,11 +58,11 @@ sequelize.sync(/*{alter:true}*/).then(async function(){
     await db['roles'].findOrCreate({where:{id:5},defaults:{role:'Student'}})
     await db['users'].findOrCreate({where:{userID: 's202020'},defaults:{userID:'s202020',name:'Team7',surname:'Se2',email:'s202020@studenti.polito.it',role_id:1}})
     await db['users'].findOrCreate({where:{userID: 's202021'},defaults:{userID:'s202021',name:'Giosuè',surname:'Valfrè',email:'s202021@studenti.polito.it',role_id:5}})
-    await db['users'].findOrCreate({where:{userID: 's202022'},defaults:{userID:'s202022',name:'Gaetano',surname:'Buscema',email:'s202022@studenti.polito.it',role_id:5}})*/
+    await db['users'].findOrCreate({where:{userID: 's202022'},defaults:{userID:'s202022',name:'Gaetano',surname:'Buscema',email:'s202022@studenti.polito.it',role_id:5}})
     await db['users'].findOrCreate({where:{userID: 't202021'},defaults:{userID:'t202021',name:'Antonio',surname:'Vetrò',email:'t202021@professori.polito.it',role_id:4}})
     await db['users'].findOrCreate({where:{userID: 't202022'},defaults:{userID:'t202022',name:'Marco',surname:'Torchiano',email:'t202022@professori.polito.it',role_id:4}})
     await db['users'].findOrCreate({where:{userID: 'so202021'},defaults:{userID:'so202021',name:'SupportOfficer1',surname:'SO',email:'so202021@professori.polito.it',role_id:2}})
-    await db['users'].findOrCreate({where:{userID: 'bm202021'},defaults:{userID:'bm202021',name:'BookingManager1',surname:'BM',email:'bm202021@professori.polito.it',role_id:3}})
+    await db['users'].findOrCreate({where:{userID: 'bm202021'},defaults:{userID:'bm202021',name:'BookingManager1',surname:'BM',email:'bm202021@professori.polito.it',role_id:3}})*/
 });
 
 db.sequelize = sequelize;

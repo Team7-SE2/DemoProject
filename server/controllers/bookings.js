@@ -13,16 +13,11 @@ module.exports = function () {
     });
 
     // Create REST resource
-    /*var studentResource = finale.resource({
-        model: db.users,
-        endpoints: ['/', ],
-        excludeAttributes: [
-            "password","salt"
-        ],
-        // include: [{
-        //     model: db.lectures,
-        // }]
-    });*/  
+    var bookingsResource = finale.resource({
+        model: db.bookings,
+        endpoints: ['/','/users/:user_id/lectures/:lecture_id'], //all bookings
+    });
+
 
     return router;
 }
