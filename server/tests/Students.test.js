@@ -1,9 +1,8 @@
-// test('check if the counter.json file exists and it was configured ', () => {
+const db = require("../models")
 
-//     // if the file doesn't exists it throws an exception and the test will fail
-//     var counterJSON = require('../config/counters.json')
-
-//     // if the dimension of the JSON object is greater than 0, it means that the JSON file exists
-//     expect(counterJSON.length).toBeGreaterThan(0);
-
-// });
+test('check if the model bookings is correctly istantiated', () => {
+    expect(db['bookings']).not.toBeNull();
+})
+test('check if the model users is correctly istantiated', () => {
+    expect(db['users']).not.toBeNull();
+})
