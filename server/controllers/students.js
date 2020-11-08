@@ -176,5 +176,28 @@ module.exports = function () {
             })
 
     })
+
+    // API DELETE booking for student
+    router.delete('/:student_id/bookings/:lecture_id',function(req,res){
+        if(req.params && req.params.student_id && req.params.lecture_id){
+            db['bookings'].destroy(
+                {
+                    where:{
+                        user_id: req.params.student_id,
+                        lecture_id: req.params.lecture_id
+                    }
+                }).then(() => {
+                    res.status(200).end();
+                }).catch((err) => {
+                    console.log(err)
+                    res.status(500).end();
+                })
+        }
+        else{
+            console.log("Some params missing to delete a booking!");
+            res.status(500).end();
+        }
+
+    })
     return router;
 }
