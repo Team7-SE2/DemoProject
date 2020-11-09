@@ -4,19 +4,17 @@ var finale = require('finale-rest')
 var db = require('../models/index');
 const Op = db.Sequelize.Op;
 
+/*
+    *** API LIST ***
+    GET -> /api/teaching_loads -> restituisce la lista degli studenti con la lista delle materie nel loro carico didattico -> con i ?nomeCampoDb= si può filtrare
+    GET -> /api/teaching_loads/students/:id -> restituisce la lista delle materie nel carico didattico del signolo studente
+    GET -> /api/teaching_loads/students/:user_id/subjects/:subject_id' -> restituisce la singola coppia studente materia
+    DELETE -> /api/teaching_loads/students/:user_id/subjects/:subject_id' -> elimina una materia dal caricao didattico dello studente
+    PUT -> /api/teaching_loads/students/:user_id/subjects/:subject_id' -> modifica dettagli della coppia user_id e subject_id (future implementazioni)
+    POST -> /api/teaching_loads -> body:{campi della tabella} -> aggiunge un insegnamento nel carico didattico per uno studente
+*/ 
+
 module.exports = function () {
-
-    // Initialize finale
-    finale.initialize({
-        app: router,
-        sequelize: db
-    });
-
-    // Create REST resource
-    var teachingLoadsResource = finale.resource({
-        model: db.teaching_loads,
-        endpoints: ['/'] //all teaching_loads
-    });
 
     // API GET student TEACHING LOADS 
     router.get('/students/:user_id', function (req, res) {
@@ -47,6 +45,22 @@ module.exports = function () {
         }
 
     })
+
+    // Initialize finale
+    finale.initialize({
+        app: router,
+        sequelize: db
+    });
+
+    // Create REST resource
+    var teachingLoadsResource = finale.resource({
+        model: db.teaching_loads,
+        endpoints: ['/','/students/:user_id/subjects/:subject_id'],  //MANAGE GET, POST, PUT, DELETE
+        include: [
+            {model:db.users, as:'user'},
+            {model:db.subjects, as:'subject'}
+        ]
+    });
 
     return router;
 }
