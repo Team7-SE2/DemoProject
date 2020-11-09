@@ -5,7 +5,7 @@ module.exports = function (sequelize, DataTypes) {
         date: { type: DataTypes.DATE },
         duration: { type: DataTypes.REAL },
     }, {
-        paranoid: true
+        paranoid: process.env.NODE_ENV =="test"? false : true
     });
 
     Lecture.associate = function (models) {
