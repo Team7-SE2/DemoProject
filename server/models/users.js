@@ -1,6 +1,6 @@
 module.exports = function (sequelize, DataTypes) {
     var User = sequelize.define('users', {
-        id: { type: DataTypes.INTEGER,primaryKey: true },
+        id: { type: DataTypes.INTEGER,primaryKey: true,autoIncrement: true },
         userID: { type: DataTypes.STRING },
         name: { type: DataTypes.STRING },
         surname: { type: DataTypes.STRING },
@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
         password: { type: DataTypes.STRING },
         email: { type: DataTypes.STRING },
     }, {
-        paranoid: true
+        paranoid: process.env.NODE_ENV =="test"? false : true
     });
 
     User.associate = function (models) {
