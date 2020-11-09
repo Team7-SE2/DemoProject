@@ -25,7 +25,7 @@ module.exports = function () {
     // Create REST resource
     var lecturesResource = finale.resource({
         model: db.lectures,
-        endpoints: ['/','/:lecture_id'], //MANAGE GET, POST, PUT, DELETE
+        endpoints: ['/','/:id'], //MANAGE GET, POST, PUT, DELETE
         search: [
             {
             operator: Op.gt,
