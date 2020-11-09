@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 import { Redirect, Route, Link } from 'react-router-dom';
 import { Switch } from 'react-router';
 import { withRouter } from 'react-router-dom';
-
+import ListStudentsLecture from "./components/ListStudentsLecture"
 import API from './api/api.js';
 
 class App extends React.Component {
@@ -22,10 +22,7 @@ class App extends React.Component {
 
   }
 
-  componentDidMount() {
-
-    this.getRequestTypes();
-  }
+  
 
   getRequestTypes = () => {
 
@@ -88,7 +85,9 @@ console.log(err);
         <Container fluid>
 
           <Switch>
-
+            <Route path="/prova">
+              <ListStudentsLecture />
+              </Route>
 
 
             <Route path="/public">

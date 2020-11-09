@@ -1,5 +1,5 @@
 
-async function getRequestTypes(){
+/*async function getRequestTypes(){
 
     let url = "/api/requestTypes"; //todo: waiting for Giosue's Endpoints
     const response = await fetch(url); 
@@ -15,22 +15,41 @@ async function getRequestTypes(){
         throw err; 
     }
 
+}*/
+
+async function getbookings(LectureId) {
+
+    let url = "/api/bookings?lecture_id=" + LectureId;
+    const response = await fetch(url);
+    const bookingsJson = await response.json();
+
+    if (response.ok) {
+
+        return bookingsJson;  // have to do parsing
+    }
+    else {
+        console.log("getStudentsforLectures Error");
+        let err = { status: response.status, errObj: bookingsJson };
+        throw err;
+    }
+
 }
+
 
 // If Giosuè send me only one object, this function can be deleted.
 async function getExpectedWaitingTimes() {
     let url = ""; //todo: waiting for Giosue's Endpoints
-    const response = await fetch(url); 
+    const response = await fetch(url);
     const requestExpectedWaitingTime = await response.json();
-    
-    if (response.ok){
+
+    if (response.ok) {
         return requestExpectedWaitingTime; // have to do parsing
     }
 
     else {
         console.log("getExpectedWaitingTime error");
-        let err = {status: response.status, errObj: requestExpectedWaitingTime}; 
-        throw err; 
+        let err = { status: response.status, errObj: requestExpectedWaitingTime };
+        throw err;
     }
 }
 
@@ -63,9 +82,9 @@ async function setCounterFree(idCounter) {
 
 // invio al server il tipo della richiesta che è stata prenotata da un cliente appena entrato
 async function bookRequestType(ReqType) {
- let obj = {
-     requestTypeId : ReqType
- };
+    let obj = {
+        requestTypeId: ReqType
+    };
 
     return new Promise((resolve, reject) => {
         fetch("/api/requestTypes/addNumberInQueue", {                             // url da decidere
@@ -73,14 +92,14 @@ async function bookRequestType(ReqType) {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                
-            
+
+
             },
             body: JSON.stringify(obj),
         }).then((response) => {
             if (response.ok) {
                 resolve(response.text());
-                
+
             } else {
                 // analyze the cause of error
                 console.log(response);
@@ -90,5 +109,5 @@ async function bookRequestType(ReqType) {
 }
 
 
-const API = {getRequestTypes, getExpectedWaitingTimes, setCounterFree, bookRequestType};
+const API = {/*getRequestTypes,*/ getbookings, getExpectedWaitingTimes, setCounterFree, bookRequestType };
 export default API;
