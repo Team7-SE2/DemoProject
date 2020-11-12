@@ -80,6 +80,66 @@ async function getStudentCourses(studentId){
 
 }
 
+async function getSubject(subjectId){
+
+    let url = "/api/subjects?id=" + subjectId; 
+    const response = await fetch(url); 
+    const studentCoursesJson = await response.json(); 
+
+    if (response.ok) {
+        console.log(studentCoursesJson);
+        return( studentCoursesJson.map((course)=>course));  // have to do parsing
+    }
+    else {
+        console.log("studentCoursesJson Error"); 
+        let err = {status: response.status, errObj: studentCoursesJson};
+        throw err; 
+    }
+
+}
+
+async function getStudentBookings(studentId){
+
+    let url = "/api/bookings?user_id=" + studentId; 
+    console.log(url)
+    const response = await fetch(url); 
+    const studentBookingsJson = await response.json(); 
+    let id = 1;
+    if (response.ok) {
+        console.log(studentBookingsJson);
+        let array = studentBookingsJson.map( async (book) => {
+            
+            let startDate = new Date(book.lecture.date);
+
+            let endDate = new Date(startDate);
+            endDate.setHours( startDate.getHours() + book.lecture.duration )
+
+            let subjectDescription = '';
+
+            await getSubject(book.lecture.subject_id).then((subject) => {
+                subjectDescription = subject[0].description;
+            })
+            
+            return {
+                location: book.lecture.subject_id,
+                id: id++,
+                title: subjectDescription,
+                startDate: startDate,
+                endDate: endDate,
+                ownerId: book.user_id,
+            }
+        }); 
+
+        return await Promise.all(array);
+
+    }
+    else {
+        console.log("studentCoursesJson Error"); 
+        let err = {status: response.status, errObj: studentBookingsJson};
+        throw err; 
+    }
+
+}
 
 async function getStudentCourseLectures (courseID){
     let url = "/api/lectures?subject_id=" + courseID; 
@@ -191,5 +251,5 @@ async function bookRequestType(ReqType) {
 }
 
 
-const API = {/*getRequestTypes,*/ getStudentCourses,getStudentCourseLectures, userLogin,userLogout, getbookings, getExpectedWaitingTimes, setCounterFree, bookRequestType };
+const API = {/*getRequestTypes,*/ getStudentCourses,getStudentCourseLectures, userLogin,userLogout, getStudentBookings, getbookings, getExpectedWaitingTimes, setCounterFree, bookRequestType };
 export default API;

@@ -88,6 +88,7 @@ module.exports = function (app) {
     router.use('/api/teaching_loads', require('./teaching_loads.js')());
     router.use('/api/teachers', require('./teachers.js')());
     router.use('/api/lectures', require('./lectures.js')());
+    router.use('/api/subjects', require('./subjects.js')());
     router.use('/api/students', require('./students.js')());
     // /* GET home page. */
     // router.get('/', function (req, res) {

@@ -13,6 +13,7 @@ import ListStudentsCourses from "./components/ListStudentsCourses";
 import StudentCourseLectures from "./components/StudentCourseLectures";
 import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
+import Demo from "./components/Calendar.js";
 
 class App extends React.Component {
 
@@ -48,8 +49,11 @@ class App extends React.Component {
         this.setState({ loginError: false });
         this.setState({ info_user: info });
         this.setState({ authUser: info });
+        this.setState({ ID_User: info.ID_User})
         this.loadInitialData();
         this.props.history.push("/student");
+
+        console.log(this.state.info_user)
 
 
       }
@@ -181,6 +185,12 @@ class App extends React.Component {
                   </Col>
                   <Col sm={3} className="below-nav" />
 
+                </Row>
+              </Route>
+
+              <Route exact path="/student/calendar">
+                <Row className="vheight-100 ">
+                  <Demo userId={this.state.ID_User}></Demo>
                 </Row>
               </Route>
 
