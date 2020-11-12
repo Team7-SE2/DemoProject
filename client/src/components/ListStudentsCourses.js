@@ -51,11 +51,12 @@ function CourseTableRow(props) {
 let {course, showLectures} = props; 
 return <tr onClick={() => showLectures(course)}> 
 <Nav className="mr-auto">
-<Nav.Link  to="/abc" as={NavLink} >
-<td>{course.subjectID}</td>
-</Nav.Link> 
+<Nav.Item>
+      <Nav.Link className="active" >{course.subjectID}</Nav.Link>
+    </Nav.Item>
+
 </Nav>
-<td>{course.description}</td>
+<td className="inactive">{course.description}</td>
   
 </tr>
 }

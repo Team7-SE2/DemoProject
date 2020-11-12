@@ -25,8 +25,16 @@
     margin-top: 2rem;
 }
 
+.active {
+    color: rgb(34, 66, 211);
+    text-decoration: none;
+  }
 
 
+.inactive {
+    color: gray;
+    text-decoration: none;
+  }
 
 
 
