@@ -1,35 +1,101 @@
 import React from "react";
 import "./App.css";
 import Header from "./components/Header";
-import Queues from "./components/Queues"
 import Counters from "./components/Counters"
+import Login from "./components/Login"
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Redirect, Route, Link } from 'react-router-dom';
 import { Switch } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import ListStudentsLecture from "./components/ListStudentsLecture"
+import ListStudentsCourses from "./components/ListStudentsCourses";
+import StudentCourseLectures from "./components/StudentCourseLectures";
 import API from './api/api.js';
+import { AuthContext } from "./auth/AuthContext";
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
+    let course = {subjectID: " "};
+    
     this.state = {
-      requestTypes: []
+      authUser: null,
+      info_user: null,
+      login_error: null,
+      courses: [],
+      lectures: [],
+      logged: false,
+      course: course
     }
+    this.initialState = { ...this.state };
+    
+    
 
   }
 
-  
+  userLogin = (username, password) => {
+
+    API.userLogin(username, password).then(
+      (userObj) => {
+        const info = {
+          ID_User: userObj.id,
+          nome: userObj.name,
+
+        };
+        this.setState({ logged: true });
+        this.setState({ loginError: false });
+        this.setState({ info_user: info });
+        this.setState({ authUser: info });
+        this.loadInitialData();
+        this.props.history.push("/student");
+
+
+      }
+    ).catch(
+      () => { this.setState({ loginError: true }) }
+    );
+  }
+
+  userLogout = () => {
+
+    API.userLogout().then(() => {
+      //this.setState({ authUser: null, authErr: null, veicoli: [], logged: false, veicoli_disponibili: [], info_noleggi_utente: [], importo: 0, info_noleggio: null, ID_Veicolo: -1, cliente_frequente: false, num_veicoli_disponibili: 0 });
+      this.setState(this.initialState);
+
+      this.props.history.push("/login");
+
+
+    });
+  }
+
+  showLectures = (course) => {
+    API.getStudentCourseLectures(course.id)
+      .then((lectures) => {
+        this.setState({ course: course });
+        this.setState({lectures: lectures});
+        this.props.history.push("/student/courses/" + course.subjectID + "/lectures");
+
+      });
+  }
+
+  loadInitialData = () => {
+    API.getStudentCourses(this.state.info_user.ID_User)
+      .then((courses) => {
+        this.setState({ courses: courses })
+      }
+      )
+
+  }
+
 
   getRequestTypes = () => {
 
     API.getRequestTypes()
       .then((requestTypes) => {
-        
-       this.setState({requestTypes: requestTypes});
+
+        this.setState({ requestTypes: requestTypes });
 
       })
       .catch((err) => {
@@ -41,21 +107,21 @@ class App extends React.Component {
 
   bookTicket = (ServiceTypeID) => {
     API.bookRequestType(ServiceTypeID)
-    .then((id) => {
-      console.log("l'id è: "+id);
-    })
-    .catch((err) => {
-console.log(err);
-    })
-  }
-
-  getExpectedWaitingTimes = () =>{
-    API.getExpectedWaitingTimes()
-      .then((requestTypes) => {
-          // todo: set the state for dynamic fill of the table
+      .then((id) => {
+        console.log("l'id è: " + id);
       })
       .catch((err) => {
-        this.handleErrors(err); 
+        console.log(err);
+      })
+  }
+
+  getExpectedWaitingTimes = () => {
+    API.getExpectedWaitingTimes()
+      .then((requestTypes) => {
+        // todo: set the state for dynamic fill of the table
+      })
+      .catch((err) => {
+        this.handleErrors(err);
       }
       );
   }
@@ -76,68 +142,72 @@ console.log(err);
 
   render() {
 
+    const value = {
+      authUser: this.state.authUser,
+      authErr: this.state.authErr,
+      loginUser: this.login
+    }
+
 
     return (
-      <Container fluid>
-
-        <Header />
-
+      <AuthContext.Provider value={value}>
         <Container fluid>
 
-          <Switch>
-            <Route path="/prova">
-              <ListStudentsLecture />
+          <Header userLogout={this.userLogout} />
+
+          <Container fluid>
+
+            <Switch>
+
+              <Route exact path="/">
+                {this.state.logged ? <Redirect to="/student" /> : <Redirect to="/login" />}
+              </Route>
+
+              <Route path="/login">
+                <Container fluid>
+                  <Login userLogin={this.userLogin} loginError={this.state.loginError} />
+                </Container>
+              </Route>
+
+              <Route exact path="/student">
+
+                <Row className="vheight-100 ">
+                  <Col sm={3} className="below-nav" />
+                  <Col sm={6} className="below-nav">
+
+                    <ListStudentsCourses courses={this.state.courses} showLectures={this.showLectures}>
+                    </ListStudentsCourses>
+
+                  </Col>
+                  <Col sm={3} className="below-nav" />
+
+                </Row>
+              </Route>
+
+              <Route path={"/student/courses/" + this.state.course.subjectID + "/lectures"}>
+                <Row className="vheight-100 ">
+                  <Col sm={3} className="below-nav" />
+                  <Col sm={6} className="below-nav">
+                    <StudentCourseLectures lectures={this.state.lectures} course={this.state.course} />
+                  </Col>
+                  <Col sm={3} className="below-nav" />
+
+                </Row>
+
               </Route>
 
 
-            <Route path="/public">
-              <Row className="vheight-100 ">
-                <Col sm={3} className="below-nav" />
-                <Col sm={6} className="below-nav">
-                  <Queues requestTypes = {this.state.requestTypes} bookTicket={this.bookTicket}>
 
-                  </Queues>
-                </Col>
-                <Col sm={3} className="below-nav" />
-
-              </Row>
+              <Route>
+                <Redirect to='/student' />
+              </Route>
 
 
+            </Switch>
+          </Container>
 
-            </Route>
-
-
-
-            <Route path='/employee'>
-              <Row className="vheight-100 ">
-                <Col sm={3} className="below-nav" />
-                <Col sm={6} className="below-nav">
-                  <Counters>
-
-                  </Counters>
-                </Col>
-                <Col sm={3} className="below-nav" />
-
-
-              </Row>
-            </Route>
-
-
-
-
-
-
-
-            <Route>
-              <Redirect to='/public' />
-            </Route>
-
-
-          </Switch>
         </Container>
-
-      </Container>
-
+      </AuthContext.Provider>
 
     );
   }
