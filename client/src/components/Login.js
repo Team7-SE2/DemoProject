@@ -32,7 +32,7 @@ class Login extends React.Component {
                             <Form.Row>
                                 <Form.Group controlId="formBasicEmail">
                                     <Form.Label>Username</Form.Label>
-                                    <Form.Control type="text" placeholder="Inserisci il tuo username!"
+                                    <Form.Control type="text" placeholder="Insert your username"
                                         name='username'
                                         value={this.state.username}
                                         onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
@@ -47,7 +47,7 @@ class Login extends React.Component {
                                         onChange={(ev) => this.updateField(ev.target.name, ev.target.value)}
                                     />
                                     <Form.Text className="text-muted">
-                                        Non condividere le tue credenziali con nessuno
+                                        Don't share your password with anyone
                       </Form.Text>
                                 </Form.Group>
                             </Form.Row>
@@ -61,7 +61,7 @@ class Login extends React.Component {
 
                         {this.props.loginError &&
                             <Card bg="danger">
-                                <Card.Header>Credenziali errate</Card.Header>
+                                <Card.Header>Wrong username or password</Card.Header>
                             </Card>
                         }
                     </Card.Body>
