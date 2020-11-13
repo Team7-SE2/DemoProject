@@ -1,11 +1,8 @@
-/* eslint-disable max-classes-per-file */
-/* eslint-disable react/no-unused-state */
 import * as React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
 import { indigo, blue, teal, yellow, red, green } from '@material-ui/core/colors';
 import {
-  //AppointmentForm,
   Scheduler, DayView, Appointments, MonthView, WeekView, Toolbar,
   DateNavigator, ViewSwitcher, TodayButton, Resources, AppointmentTooltip, DragDropProvider,
   EditRecurrenceMenu, AllDayPanel
@@ -22,39 +19,13 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import API from '../api/api.js';
-import ColorBar from 'react-color-bar';
 
-//import { appointments } from '../../../demo-data/appointments';
 const today = new Date()
 const tomorrow = new Date(today)
 tomorrow.setDate(tomorrow.getDate() + 1)
-const dataColor = [
-    {
-        value: 37,
-        color: '#03A9F4',
-        legendLabel: 'available',
-        legendValue: 37,
-        tooltip: 'interest is $300',
-    }, {
-        value: 11,
-        color: '#da0d0d',
-        legendLabel: 'booked',
-        /*legendValue: 11,
-        tooltip: 'insurance is $100',*/
-    },
-];
 
-const resources = [{
-    fieldName: 'location',
-    title: 'Location',
-    instances: [
-      { id: 1, text: 'Room 1', color: teal },
-      { id: 2, text: 'Room 2', color: red },
-      { id: 3, text: 'Room 3', color: green[300] },
-      { id: 4, text: 'Room 3', color: blue[300] },
-      { id: 5, text: 'Room 1', color: indigo },
-    ]
-  }];
+let resources = [];
+let selectedChecks = [];
 const styles = theme => ({
   addButton: {
     position: 'absolute',
@@ -62,6 +33,9 @@ const styles = theme => ({
     right: theme.spacing(1) * 4,
   },
 });
+
+const colors = [teal[300], red[300], green[300], blue[300], indigo[300]]
+let instances = []
 
 /* eslint-disable-next-line react/no-multi-comp */
 class Demo extends React.PureComponent {
@@ -88,21 +62,75 @@ class Demo extends React.PureComponent {
 
     this.commitChanges = this.commitChanges.bind(this);
     this.onEditingAppointmentChange = this.onEditingAppointmentChange.bind(this);
-    
-}
 
-  componentDidMount() {
-    // Utilizzo tipico (non dimenticarti di comparare le props):
-    API.getStudentBookings(this.state.userID)
-      .then((books) => {
-          console.log(books)
-        this.setState({data: books})
+    API.getStudentCourses(this.state.userID)
+      .then((courses) => {
+        courses.forEach((course) => {
+          var index = instances.findIndex(x => x.id==course.id)
+          // here you can check specific property for an object whether it exist in your array or not
+
+          if (index === -1){
+            instances.push({ 
+              id: course.id,
+              description: course.description,
+              color: colors[course.id] 
+            })
+            selectedChecks.push(course.id)
+          }
+        })
+        
+        resources = [{
+          fieldName: 'location',
+          title: 'Location',
+          instances: instances
+        }];
+
+        API.getStudentBookings(this.state.userID)
+        .then((books) => {
+          this.setState({data: books, data2: books})
+        })
+        .catch((err) => {
+          console.log(err);
+        })
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
+    
+}
+
+  checkBoxMount() {
+
+    return instances.map((instance) => {
+          return <FormControlLabel
+            control={<Checkbox id = {instance.id} style ={{color: instance.color}} defaultChecked={true} /*checked={true} */onChange={this.handleChange}/>}
+            label={instance.description}
+          />
+        })
+
   }
 
+  componentDidMount() {
+    
+  }
+
+  handleChange = (event) =>{
+    var newData = [];
+    var id = parseInt(event.target.id)
+
+    var index = selectedChecks.findIndex(x => x == id)
+
+    if (index === -1){
+      selectedChecks.push(id)
+    } else 
+      selectedChecks.splice(index, 1)
+    
+    newData = this.state.data2.filter((d) => selectedChecks.includes(d.location))
+    console.log(newData)
+    this.setState({
+      data: newData
+    });
+  }
   onEditingAppointmentChange(editingAppointment) {
     this.setState({ editingAppointment });
   }
@@ -129,14 +157,6 @@ class Demo extends React.PureComponent {
   commitChanges({ added, changed, deleted }) {
     this.setState((state) => {
       let { data } = state;
-      /*if (added) {
-        const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-        data = [...data, { id: startingAddedId, ...added }];
-      }
-      if (changed) {
-        data = data.map(appointment => (
-          changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment));
-      }*/
       if (deleted !== undefined) {
         this.setDeletedAppointmentId(deleted);
         this.toggleConfirmationVisible();
@@ -164,20 +184,11 @@ class Demo extends React.PureComponent {
                 <br></br>
                 <h2><b>My bookings calendar</b></h2>
                 <br></br>
-                <h5><b>Chose your lessons</b></h5>
             </div>
+            <h5><b>Chose your lessons</b></h5>
             <FormGroup style= {{"width":"100%"}} row>
-                <FormControlLabel
-                    control={<Checkbox style ={{color: teal[300]}} checked={true} /*onChange={handleChange}*//>}
-                    label="Software Engineering II"
-                />
-                <FormControlLabel
-                    control={<Checkbox style ={{color: green[300]}} />} label="System Programming"/>
-                <FormControlLabel
-                    control={<Checkbox style ={{color: blue[300]}} checked={true} /*onChange={handleChange}*/ />}
-                    label="Web Application I"
-                />
-            </FormGroup>
+              {this.checkBoxMount()}
+            </FormGroup>            
             <Paper>
                 <Scheduler
                 data={data}

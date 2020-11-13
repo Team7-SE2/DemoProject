@@ -26,7 +26,7 @@ const ListStudentsCourses = (props) => {
 
       const keyA = a.key;
       const keyB = b.key;
-      
+
       return keyA.localeCompare(keyB);
 
   };
@@ -45,6 +45,9 @@ const ListStudentsCourses = (props) => {
   ]);
 
   return (
+    <>
+    <h4>My teaching load</h4>
+        <br></br>
     <Paper>
       <Grid
         rows={test}
@@ -66,6 +69,7 @@ const ListStudentsCourses = (props) => {
         <PagingPanel pageSizes={pageSizes}/>
       </Grid>
     </Paper>
+    </>
   );
 }
 
