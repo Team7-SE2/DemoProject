@@ -1,7 +1,7 @@
 {
-  "name": "exam",
+  "name": "pulsbs-client",
   "version": "0.1.0",
-  "proxy": "http://localhost:3001/",
+  "proxy": "http://server-application:3100/",
   "private": true,
   "dependencies": {
     "@date-io/moment": "^1.3.13",
@@ -19,7 +19,7 @@
     "react-color-bar": "^0.1.2",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.4",
+    "react-scripts": "3.4.0",
     "react-tooltip": "^4.2.10"
   },
   "scripts": {

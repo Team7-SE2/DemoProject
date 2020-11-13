@@ -1,0 +1,12 @@
+FROM node:12-alpine
+# set working directory
+WORKDIR /usr/src/app/client
+
+# add `/app/node_modules/.bin` to $PATH
+# ENV PATH /usr/src/app/client/node_modules/.bin:$PATH
+
+COPY ./client/package*.json ./
+RUN npm install
+COPY ./client .
+
+CMD ["npm","start"]
