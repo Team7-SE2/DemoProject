@@ -1,68 +1,87 @@
-import React from "react";
-import Table from "react-bootstrap/Table";
-import { Redirect } from "react-router-dom";
-import { AuthContext } from "../auth/AuthContext";
+import React, { useState, useCallback } from 'react'
 import moment from 'moment';
 import Button from "react-bootstrap/Button";
+import Paper from '@material-ui/core/Paper';
+import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
+import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
+
 const StudentCourseLectures = (props) => {
+  
+    let { lectures, course, bookLecture, deleteBookedLecture,bookedLectures  } = props;
+  
+    function checkPrenotation (bookedLectures, lectureID){
 
-    let { lectures, course, bookLecture, deleteBookedLecture,bookedLectures } = props;
+        console.log(bookedLectures);
+        return bookedLectures.find((bl) => bl.lecture_id==lectureID); 
 
-    return <>
+    }
+    const test = lectures.map((lecture) => {
+        return {
+        id: lecture.id,
+        lectureDate: moment(new Date(lecture.date)).format("LLL"),
+        ' ':   <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+                        {checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button>: <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>}
+                    </div>
+        }
+    })
 
-        <AuthContext.Consumer>
-            {(context) => (
-                context.authUser ? <>
+    const compareDate = (a, b) => {
 
-                    <h3> {course.description}</h3>
-                    <Table striped bordered hover>
-                        <thead>
-                            <tr>
-                                <th> Lecture Date </th>
-                                <th>  </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                lectures.map(lecture => <LecturesTableRow
-                                    key={lecture.id}
-                                    lecture={lecture}
-                                    bookLecture={bookLecture}
-                                    bookedLectures = {bookedLectures}
-                                    deleteBookedLecture = {deleteBookedLecture}
-                                />)
+        console.log(a,b)
+        const millisA = new Date(a).getTime();
+        const millisB = new Date(b).getTime();
+  
+        return millisA - millisB;
+  
+    };
+    
+    const [integratedSortingColumnExtensions] = useState([
+        { columnName: 'lectureDate', compare: compareDate },
+    ]);
 
-                            }
-                        </tbody>
-                    </Table>
+    const [pageSizes] = useState([5, 10, 15, 0]);
 
-                </> : <Redirect to="./login" />
-            )}
-        </AuthContext.Consumer>
-    </>
+    const [columns] = useState([
+        //{ name: 'id', title: 'ID'},
+        { name: 'lectureDate',title: 'Lecture Date'},
+        { name: ' '}
+    ]);
+    
+    const [sortingStateColumnExtensions] = useState([
+        { columnName: ' ', sortingEnabled: false },
+    ]);
 
-}
-
-
-function LecturesTableRow(props) {
-    let { lecture, bookLecture, bookedLectures,deleteBookedLecture } = props;
-
-    return <tr>
-        <td>{moment(new Date(lecture.date)).format("LLL")}</td>
-        {checkPrenotation(bookedLectures, lecture.id) ? 
-        <td><Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button></td>
-       : <td><Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button></td>
-        
-}
-    </tr>
-}
-
-function checkPrenotation (bookedLectures, lectureID){
-
-
-    console.log(bookedLectures);
-    return bookedLectures.find((bl) => bl.lecture_id==lectureID); 
-
+    return (
+        <>
+        <h4>{course.description} - lectures</h4>
+        <br></br>
+        <Paper>
+        <Grid
+            rows={test}
+            columns={columns}
+        >
+            <PagingState
+            defaultCurrentPage={0}
+            pageSize={10}
+            />
+            <SortingState
+                columnExtensions={sortingStateColumnExtensions}
+            />
+            <IntegratedSorting
+              columnExtensions={integratedSortingColumnExtensions}
+            />
+            <IntegratedPaging />
+            <Table />
+            <TableHeaderRow showSortingControls />
+            <PagingPanel pageSizes={pageSizes}/>
+        </Grid>
+        </Paper>
+        </>
+    );
 }
 
 export default StudentCourseLectures;
