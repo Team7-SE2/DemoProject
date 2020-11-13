@@ -19,8 +19,8 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    let course = {subjectID: " "};
-    
+    let course = { subjectID: " " };
+
     this.state = {
       authUser: null,
       info_user: null,
@@ -28,11 +28,12 @@ class App extends React.Component {
       courses: [],
       lectures: [],
       logged: false,
-      course: course
+      course: course,
+      bookedLectures: null
     }
     this.initialState = { ...this.state };
-    
-    
+
+
 
   }
 
@@ -49,12 +50,9 @@ class App extends React.Component {
         this.setState({ loginError: false });
         this.setState({ info_user: info });
         this.setState({ authUser: info });
-        this.setState({ ID_User: info.ID_User})
+        this.setState({ ID_User: info.ID_User })
         this.loadInitialData();
         this.props.history.push("/student");
-
-        console.log(this.state.info_user)
-
 
       }
     ).catch(
@@ -78,7 +76,7 @@ class App extends React.Component {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
         this.setState({ course: course });
-        this.setState({lectures: lectures});
+        this.setState({ lectures: lectures });
         this.props.history.push("/student/courses/" + course.subjectID + "/lectures");
 
       });
@@ -89,7 +87,21 @@ class App extends React.Component {
       .then((courses) => {
         this.setState({ courses: courses })
       }
-      )
+      );
+      API.getBookedLectures(this.state.info_user.ID_User)
+      .then((bookedLectures) =>{
+        const myBookedLectures = [];
+        bookedLectures.forEach(elem => {
+          if(elem.user_id == this.state.info_user.ID_User) 
+            myBookedLectures.push(elem);
+        })
+        console.log("mybl: "+myBookedLectures);
+        this.setState({bookedLectures : myBookedLectures});
+      })
+      .catch(() => {
+        console.log("Errore in getBookedLectures");
+      });
+
 
   }
 
@@ -109,26 +121,8 @@ class App extends React.Component {
 
   }
 
-  bookTicket = (ServiceTypeID) => {
-    API.bookRequestType(ServiceTypeID)
-      .then((id) => {
-        console.log("l'id è: " + id);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }
 
-  getExpectedWaitingTimes = () => {
-    API.getExpectedWaitingTimes()
-      .then((requestTypes) => {
-        // todo: set the state for dynamic fill of the table
-      })
-      .catch((err) => {
-        this.handleErrors(err);
-      }
-      );
-  }
+
 
 
 
@@ -142,7 +136,27 @@ class App extends React.Component {
   }
 
 
+  bookLecture = (LectureID) => {
+    API.bookLecture(this.state.authUser.ID_User, LectureID)
+      .then(() => {
 
+      this.loadInitialData();
+
+      })
+      .catch(() => {
+
+      });
+  }
+
+  deleteBookedLecture = (LectureID) => {
+    API.deleteBookedLecture(this.state.authUser.ID_User, LectureID)
+    .then(() => {
+     this.loadInitialData();
+      })
+    .catch(() => {
+
+    });
+  }
 
   render() {
 
@@ -198,7 +212,7 @@ class App extends React.Component {
                 <Row className="vheight-100 ">
                   <Col sm={3} className="below-nav" />
                   <Col sm={6} className="below-nav">
-                    <StudentCourseLectures lectures={this.state.lectures} course={this.state.course} />
+                    <StudentCourseLectures lectures={this.state.lectures} course={this.state.course} bookLecture ={this.bookLecture} deleteBookedLecture = {this.deleteBookedLecture} bookedLectures = {this.state.bookedLectures}/>
                   </Col>
                   <Col sm={3} className="below-nav" />
 

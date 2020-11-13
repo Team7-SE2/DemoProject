@@ -69,7 +69,6 @@ async function getStudentCourses(studentId){
     const studentCoursesJson = await response.json(); 
 
     if (response.ok) {
-        console.log(studentCoursesJson);
         return( studentCoursesJson.map((course)=>course));  // have to do parsing
     }
     else {
@@ -87,7 +86,6 @@ async function getSubject(subjectId){
     const studentCoursesJson = await response.json(); 
 
     if (response.ok) {
-        console.log(studentCoursesJson);
         return( studentCoursesJson.map((course)=>course));  // have to do parsing
     }
     else {
@@ -101,12 +99,10 @@ async function getSubject(subjectId){
 async function getStudentBookings(studentId){
 
     let url = "/api/bookings?user_id=" + studentId; 
-    console.log(url)
     const response = await fetch(url); 
     const studentBookingsJson = await response.json(); 
     let id = 1;
     if (response.ok) {
-        console.log(studentBookingsJson);
         let array = studentBookingsJson.map( async (book) => {
             
             let startDate = new Date(book.lecture.date);
@@ -143,12 +139,10 @@ async function getStudentBookings(studentId){
 
 async function getStudentCourseLectures (courseID){
     let url = "/api/lectures?subject_id=" + courseID; 
-    console.log(courseID);
     const response = await fetch(url); 
     const studentCourseLecturesJson = await response.json(); 
 
     if (response.ok) {
-        console.log(studentCourseLecturesJson);
         return(studentCourseLecturesJson.map((lecture)=>lecture));  
     }
     else {
@@ -159,6 +153,71 @@ async function getStudentCourseLectures (courseID){
 }
 
 
+async function bookLecture (user_id, lecture_id){
+    let obj = {
+        user_id: user_id,
+        lecture_id: lecture_id
+    };
+    //const url = `/api/${user_id}/lectures/${lecture_id}`;
+    const url = "/api/bookings";
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            },
+            body: JSON.stringify(obj),
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+
+            } else {
+                // analyze the cause of error
+                console.log(response);
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+    });
+}
+
+async function deleteBookedLecture(user_id, lecture_id){
+
+    const url = `/api/bookings/students/${user_id}/lectures/${lecture_id}`;
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'DElETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+
+            } else {
+                // analyze the cause of error
+                console.log(response);
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+    });
+}
+
+async function getBookedLectures (user_id){
+    let url = "/api/bookings?user_id="+user_id;
+    const response = await fetch(url);
+    const BookedLecturesJson = await response.json();
+    console.log("aaa: "+BookedLecturesJson);
+    if(response.ok){
+        return (BookedLecturesJson.map((l) => l));
+    }
+    else {
+        console.log("GetBookedLectures Error");
+        let err = {status: response.status, errObj: BookedLecturesJson};
+        throw err; 
+    }
+}
 async function getbookings(LectureId) {
 
     let url = "/api/bookings?lecture_id=" + LectureId;
@@ -175,24 +234,6 @@ async function getbookings(LectureId) {
         throw err;
     }
 
-}
-
-
-// If Giosuè send me only one object, this function can be deleted.
-async function getExpectedWaitingTimes() {
-    let url = ""; //todo: waiting for Giosue's Endpoints
-    const response = await fetch(url);
-    const requestExpectedWaitingTime = await response.json();
-
-    if (response.ok) {
-        return requestExpectedWaitingTime; // have to do parsing
-    }
-
-    else {
-        console.log("getExpectedWaitingTime error");
-        let err = { status: response.status, errObj: requestExpectedWaitingTime };
-        throw err;
-    }
 }
 
 
@@ -251,5 +292,5 @@ async function bookRequestType(ReqType) {
 }
 
 
-const API = {/*getRequestTypes,*/ getStudentCourses,getStudentCourseLectures, userLogin,userLogout, getStudentBookings, getbookings, getExpectedWaitingTimes, setCounterFree, bookRequestType };
+const API = {getStudentCourses,getStudentCourseLectures,getBookedLectures,deleteBookedLecture, bookLecture, userLogin,userLogout, getStudentBookings, getbookings, setCounterFree, bookRequestType };
 export default API;
