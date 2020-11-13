@@ -56,7 +56,7 @@
     {
         "dependsOrder":"sequence",
         "label": "Start_dev_environment",
-        "dependsOn": ["build_postgres_postgis_image", "build_server_image_debug","build_client_image_debug", "start_docker_compose_debug","open_chrome"]
+        "dependsOn": [/*"build_postgres_postgis_image", */"build_server_image_debug","build_client_image_debug", "start_docker_compose_debug","open_chrome"]
     }
 ]
 }
