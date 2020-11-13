@@ -65,20 +65,6 @@ class Demo extends React.PureComponent {
 
     API.getStudentCourses(this.state.userID)
       .then((courses) => {
-        courses.forEach((course) => {
-          var index = instances.findIndex(x => x.id==course.id)
-          // here you can check specific property for an object whether it exist in your array or not
-
-          if (index === -1){
-            instances.push({ 
-              id: course.id,
-              description: course.description,
-              color: colors[course.id] 
-            })
-            selectedChecks.push(course.id)
-          }
-        })
-        
         resources = [{
           fieldName: 'location',
           title: 'Location',
@@ -87,6 +73,20 @@ class Demo extends React.PureComponent {
 
         API.getStudentBookings(this.state.userID)
         .then((books) => {
+          books.forEach((b) => {
+
+            var index = selectedChecks.findIndex(x => parseInt(x)==parseInt(b.location))
+            if(index === -1){
+              var courseIndex = courses.findIndex(course => parseInt(course.id)==parseInt(b.location))
+              instances.push({ 
+                id: parseInt(b.location),
+                description: courses[courseIndex].description,
+                color: colors[parseInt(b.location)] 
+              })
+              selectedChecks.push(parseInt(b.location))
+            }
+
+          })
           this.setState({data: books, data2: books})
         })
         .catch((err) => {
