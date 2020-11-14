@@ -13,7 +13,15 @@ WORKDIR /usr/src/app/client
 
 COPY ./client/package*.json ./
 RUN npm install
+
+#compiled package
+
+RUN npm install @devexpress/dx-react-core
+RUN npm install @devexpress/dx-react-grid
+RUN npm install @devexpress/dx-react-grid-material-ui
 RUN npm install @devexpress/dx-react-scheduler
+RUN npm install @devexpress/dx-react-scheduler-material-ui
+
 COPY ./client .
 
 CMD ["npm","start"]

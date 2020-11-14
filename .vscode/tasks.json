@@ -9,7 +9,7 @@
     {
         "label": "build_client_image_debug",
         "command": "docker",
-        "args": ["build", "-t", "client/application-main:debug","-f", "client/DockerfileClient","." ],
+        "args": ["build", "-t", "client/application-main:debug","-f", "client/dockerfile","." ],
         "type": "shell"
     }
     ,{
@@ -21,7 +21,7 @@
     ,{
         "label": "start_docker_compose_debug",
         "command": "docker-compose",
-        "args": ["-f", "docker/debug-env/docker-compose.yml", "up","-d"],
+        "args": ["-f", "docker/debug-env/docker-compose.yml", "up","-d","--build"],
         "type": "shell"
     },
     {
@@ -56,7 +56,7 @@
     {
         "dependsOrder":"sequence",
         "label": "Start_dev_environment",
-        "dependsOn": [/*"build_postgres_postgis_image", */"build_server_image_debug","build_client_image_debug", "start_docker_compose_debug","open_chrome"]
+        "dependsOn": [/*"build_postgres_postgis_image", *//*"build_server_image_debug","build_client_image_debug", */"start_docker_compose_debug","open_chrome"]
     }
 ]
 }

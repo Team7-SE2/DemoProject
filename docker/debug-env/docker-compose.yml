@@ -16,6 +16,9 @@ services:
   #     - pg-data:/var/lib/postgresql/data
   server-application:
     env_file: "debug.env"
+    build:
+      context: ../../
+      dockerfile: ./server/dockerfile
     image: "server/application-main:debug"
     ports:
      - "3100:3100"
@@ -28,6 +31,9 @@ services:
     env_file: "../../client/client.env"
     tty: true #interation mode
     stdin_open: true #interation mode
+    build:
+      context: ../../
+      dockerfile: ./client/dockerfile
     image: "client/application-main:debug"
     ports:
      - "3000:3000"
