@@ -4,15 +4,15 @@ import Nav from 'react-bootstrap/Nav';
 import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 
-const ListStudentsCourses = (props) => {
+const ListTeachersCourses = (props) => {
 
-  let { courses ,showStudentsLectures} = props;
+  let { courses ,showLectures} = props;
   const test = courses.map((course) => {
     return {
       id: course.id,
       subjectID: course.subjectID,
       description: course.description,
-      book:  <tr key={course.subjectID} onClick={() => showStudentsLectures(course)}> 
+      book:  <tr key={course.subjectID} onClick={() => showLectures(course)}> 
       <Nav className="mr-auto">
         <Nav.Item>
           <Nav.Link className="active" >Book your seat</Nav.Link>
@@ -35,7 +35,7 @@ const ListStudentsCourses = (props) => {
   const [columns] = useState([
     { name: 'subjectID', title: 'Subject ID'},
     { name: 'description', title: 'Description'},
-    {name: 'book', title: "Booking"}
+    {name: 'details', title: "Details"}
   ]);
   const [integratedSortingColumnExtensions] = useState([
     { columnName: 'subjectID', compare: compareKey },
@@ -47,7 +47,7 @@ const ListStudentsCourses = (props) => {
 
   return (
     <>
-    <h4><b>My teaching load</b></h4>
+    <h4><b>My courses</b></h4>
         <br></br>
     <Paper>
       <Grid
@@ -74,4 +74,4 @@ const ListStudentsCourses = (props) => {
   );
 }
 
-export default ListStudentsCourses;
+export default ListTeachersCourses;
