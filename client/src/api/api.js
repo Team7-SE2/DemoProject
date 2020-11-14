@@ -86,6 +86,7 @@ async function getStudentBookings(studentId){
     const studentBookingsJson = await response.json(); 
     let id = 1;
     if (response.ok) {
+        console.log(studentBookingsJson)
         let array = studentBookingsJson.map( async (book) => {
             
             let startDate = new Date(book.lecture.date);
@@ -108,6 +109,8 @@ async function getStudentBookings(studentId){
                 ownerId: book.user_id,
             }
         }); 
+
+        console.log(array)
 
         return await Promise.all(array);
 
@@ -247,22 +250,29 @@ async function getLectures (user_id){
 }
 
 async function getTeacherLectures (user_id){
-    let url = `/api/lectures?user_id=${user_id}`;
+    let url = `/api/lectures/users/${user_id}`;
     const response = await fetch(url); 
-    const coursesJson = await response.json(); 
+    const lecturesJson = await response.json(); 
     let id = 1;
     if (response.ok) {
-        console.log(coursesJson)
+        console.log(lecturesJson)
         let array = [];
-        coursesJson.forEach( (course) => {
-            
-            let lectures = course.lectures.map((lecture) => {
+        lecturesJson.forEach( (lecture) => {
+            let startDate = new Date(lecture.date);
 
-                let startDate = new Date(lecture.date);
+            let endDate = new Date(startDate);
+            endDate.setHours( startDate.getHours() + lecture.duration )
+            array.push({
+                location: lecture.subject_id,
+                id: id++,
+                title: lecture.subject.description,
+                startDate: startDate,
+                endDate: endDate,
+                ownerId: user_id,
+            })
+            /*let lectures = lecture.lectures.map((lecture) => {
 
-                let endDate = new Date(startDate);
-                endDate.setHours( startDate.getHours() + lecture.duration )
-    
+                
                 let subjectDescription = lecture.subject ? lecture.subject.description : '';
                 
                 return {
@@ -275,22 +285,22 @@ async function getTeacherLectures (user_id){
                 }
 
             })
-            lectures.forEach((l) => array.push(l))
+            lectures.forEach((l) => array.push(l))*/
             //array.push(lectures)
         }); 
 
-        console.log(array)
+        console.log("array: " + JSON.stringify(array))
         return await Promise.all(array);
 
     }
     else {
         console.log("studentCoursesJson Error"); 
-        let err = {status: response.status, errObj: coursesJson};
+        let err = {status: response.status, errObj: lecturesJson};
         throw err; 
     }
 }
 async function getTeacherSubjects (teacher_id){
-    let url = "/api/subjects?user_id=" + teacher_id; //CI MANCA L?URL 
+    let url = "/api/subjects?teacher_id=" + teacher_id; //CI MANCA L?URL 
     const response = await fetch(url); 
     const teacherSubjectsJson = await response.json(); 
 

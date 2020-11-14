@@ -36,6 +36,8 @@ const styles = theme => ({
 
 const colors = [teal[300], red[300], green[300], blue[300], indigo[300]]
 let instances = []
+let selectedChecks = [];
+
 
 /* eslint-disable-next-line react/no-multi-comp */
 class HomeCalendar extends React.PureComponent {
@@ -52,10 +54,13 @@ class HomeCalendar extends React.PureComponent {
       editingAppointment: undefined,
       previousAppointment: undefined,
       addedAppointment: {},
-      startDayHour: 9,
+      startDayHour: 8,
       endDayHour: 19,
       isNewAppointment: false,
+      isMyCalendar: props.isMyCalendar
     };
+    instances = [];
+    selectedChecks = [];
 
     this.toggleConfirmationVisible = this.toggleConfirmationVisible.bind(this);
     this.commitDeletedAppointment = this.commitDeletedAppointment.bind(this);
@@ -63,6 +68,89 @@ class HomeCalendar extends React.PureComponent {
     this.commitChanges = this.commitChanges.bind(this);
     this.onEditingAppointmentChange = this.onEditingAppointmentChange.bind(this);
 
+    if(props.isStudent){
+      if(props.isMyCalendar)
+        this.studentMyCalendar();
+  
+      else 
+        this.studentCalendar();
+    } else {
+      this.teacherCalendar();
+    }
+    
+}
+handleChange = (event) =>{
+  var newData = [];
+  var id = parseInt(event.target.id)
+
+  var index = selectedChecks.findIndex(x => x == id)
+
+  if (index === -1){
+    selectedChecks.push(id)
+  } else 
+    selectedChecks.splice(index, 1)
+  
+  newData = this.state.data2.filter((d) => selectedChecks.includes(d.location))
+  console.log(newData)
+  this.setState({
+    data: newData
+  });
+}
+
+checkBoxMount() {
+
+  return instances.map((instance) => {
+        return <FormControlLabel
+          control={<Checkbox id = {instance.id} style ={{color: instance.color}} defaultChecked={true} /*checked={true} */onChange={this.handleChange}/>}
+          label={instance.description}
+        />
+      })
+
+}
+
+  componentDidMount() {
+    
+  }
+
+  studentMyCalendar = () => {
+
+    API.getStudentCourses(this.state.userID)
+    .then((courses) => {
+      resources = [{
+        fieldName: 'location',
+        title: 'Location',
+        instances: instances
+      }];
+      console.log(courses)
+      API.getStudentBookings(this.state.userID)
+      .then((books) => {
+        books.forEach((b) => {
+  
+          var index = selectedChecks.findIndex(x => parseInt(x)==parseInt(b.location))
+          if(index === -1){
+            var courseIndex = courses.findIndex(course => parseInt(course.id)==parseInt(b.location))
+            instances.push({ 
+              id: parseInt(b.location),
+              description: courses[courseIndex].description,
+              color: colors[parseInt(b.location)] 
+            })
+            selectedChecks.push(parseInt(b.location))
+          }
+        })
+        this.setState({data: books, data2: books})
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  
+  }
+  
+  studentCalendar = () => {
+  
     API.getStudentCourses(this.state.userID)
       .then((courses) => {
         resources = [{
@@ -70,9 +158,9 @@ class HomeCalendar extends React.PureComponent {
           title: 'Location',
           instances: instances
         }];
-
+  
         console.log(courses)
-
+  
         API.getLectures(this.state.userID)
         .then((books) => {
           books.forEach((b) => {
@@ -87,7 +175,7 @@ class HomeCalendar extends React.PureComponent {
               })
               //instances.push(parseInt(b.location))
             }
-
+  
           })
           console.log(instances)
           this.setState({data: books, data2: books})
@@ -95,18 +183,45 @@ class HomeCalendar extends React.PureComponent {
         .catch((err) => {
           console.log(err);
         })
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    
-}
-
-
-  componentDidMount() {
-    
+    })
+  
   }
 
+  teacherCalendar = () => {
+  
+    API.getTeacherSubjects(this.state.userID)
+      .then((courses) => {
+        resources = [{
+          fieldName: 'location',
+          title: 'Location',
+          instances: instances
+        }];
+        console.log(courses)
+        API.getTeacherLectures(this.state.userID)
+        .then((books) => {
+          console.log(books)
+          books.forEach((b) => {
+
+            var index = instances.findIndex(x => parseInt(x.id)==parseInt(b.location))
+            if(index === -1){
+              var courseIndex = courses.findIndex(course => parseInt(course.id)==parseInt(b.location))
+              instances.push({ 
+                id: parseInt(b.location),
+                description: courses[courseIndex].description,
+                color: colors[parseInt(b.location)] 
+              })
+              //instances.push(parseInt(b.location))
+            }
+  
+          })
+          this.setState({data: books, data2: books})
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    })
+  
+  }
   onEditingAppointmentChange(editingAppointment) {
     this.setState({ editingAppointment });
   }
@@ -154,6 +269,18 @@ class HomeCalendar extends React.PureComponent {
 
     return (
         <>
+            {this.state.isMyCalendar ? <><div style= {{"width":"100%"}}>
+              <br></br>
+              <br></br>
+              <br></br>
+              <h2><b>My bookings calendar</b></h2>
+              <br></br>
+              </div>
+              <h5><b>Chose the subjects to show</b></h5>
+              <FormGroup style= {{"width":"100%"}} row>
+              {this.checkBoxMount()}
+              </FormGroup></> : <></>
+            }
             
             <Paper>
                 <Scheduler
@@ -184,7 +311,7 @@ class HomeCalendar extends React.PureComponent {
                 <AppointmentTooltip
                     //showOpenButton
                     showCloseButton
-                    showDeleteButton
+                    //showDeleteButton
                 />
                 <Toolbar />
                 <ViewSwitcher />
@@ -196,20 +323,9 @@ class HomeCalendar extends React.PureComponent {
                 open={confirmationVisible}
                 onClose={this.cancelDelete}
                 >
-                <DialogTitle>
-                    Delete Appointment
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                    Are you sure you want to delete this appointment?
-                    </DialogContentText>
-                </DialogContent>
                 <DialogActions>
                     <Button onClick={this.toggleConfirmationVisible} color="primary" variant="outlined">
                     Cancel
-                    </Button>
-                    <Button onClick={this.commitDeletedAppointment} color="secondary" variant="outlined">
-                    Delete
                     </Button>
                 </DialogActions>
                 </Dialog>

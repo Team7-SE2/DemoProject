@@ -37,8 +37,38 @@ module.exports = function () {
             param: 'endDate',
             attributes: [ 'date' ]
           }
-        ],
+        ]
     });
+
+    // API teacher LECTURES LOADS 
+    router.get('/users/:user_id', function (req, res) {
+        
+        // get only users with ROLE-STUDENT
+        if (req.params && req.params.user_id) {
+            db['lectures'].findAll({
+                include: [{
+                    model: db.subjects,
+                    as: 'subject',
+                    where: { 
+                        teacher_id: req.params.user_id 
+                    },
+                }]
+            })
+            .then((lectures) => {
+                // send the student's teaching load
+                res.send(lectures);
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(500).end();
+            })
+        }
+        else {
+            console.log("Some params missing requesting sudent's load!");
+            res.status(500).end();
+        }
+
+    })
     
     return router;
 }

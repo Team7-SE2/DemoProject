@@ -124,17 +124,17 @@ class App extends React.Component {
 
   loadInitialDataTeacher = () => {
 
-    API.getTeacherLectures(this.state.info_user.ID_User)
+    /*API.getTeacherLectures(this.state.info_user.ID_User)
       .then((lectures) => {
 
-      })
-    /*  API.getTeacherSubjects(this.state.info_user.ID_User)
+      })*/
+      API.getTeacherSubjects(this.state.info_user.ID_User)
         .then((courses) => {
           this.setState({ courses: courses })
         }
         );
       
-      */
+    
 
   }
 
@@ -244,7 +244,7 @@ class App extends React.Component {
                         <h3>Available Lectures Calendar</h3>
                       </Card.Header>
                       <Card.Body>
-                        <HomeCalendar userId={this.state.ID_User}></HomeCalendar>
+                        <HomeCalendar userId={this.state.ID_User} isMyCalendar={false} isStudent={true}></HomeCalendar>
                       </Card.Body>
                     </Card>
                   </Col>
@@ -255,7 +255,7 @@ class App extends React.Component {
 
               <Route exact path="/student/calendar">
                 <Row >
-                  <Demo userId={this.state.ID_User}></Demo>
+                    <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
                 </Row>
               </Route>
 
@@ -275,14 +275,24 @@ class App extends React.Component {
               <Route exact path="/teacher">
                 <Row >
                   <Col sm={5} className="below-nav">
-
-                    <ListTeachersCourses courses={this.state.courses} showLectures={this.showLectures} />
-
-
+                    <Card>
+                      <Card.Header className="text-center">
+                        <h3>My Courses</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <ListTeachersCourses courses={this.state.courses} showLectures={this.showLectures} />
+                      </Card.Body>
+                    </Card>
                   </Col>
                   <Col sm={7} className="below-nav" >
-                    <HomeCalendar userId={this.state.ID_User}></HomeCalendar>
-
+                    <Card>
+                      <Card.Header className="text-center">
+                          <h3>Lectures Calendar</h3>
+                        </Card.Header>
+                      <Card.Body>
+                        <HomeCalendar userId={this.state.ID_User} isStudent={false}></HomeCalendar>
+                      </Card.Body>
+                    </Card>
                   </Col>
 
                 </Row>
