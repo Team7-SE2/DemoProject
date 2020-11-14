@@ -12,37 +12,34 @@ const ListStudentsCourses = (props) => {
       id: course.id,
       subjectID: course.subjectID,
       description: course.description,
-      book:  <tr key={course.subjectID} onClick={() => showStudentsLectures(course)}> 
-      <Nav className="mr-auto">
-        <Nav.Item>
+      ' ':  <div key={course.subjectID} onClick={() => showStudentsLectures(course)}> 
+      
           <Nav.Link className="active" >Book your seat</Nav.Link>
-        </Nav.Item>
-      </Nav>              
-    </tr>,
+    </div>,
     }
   })
 
-  const compareKey = (a, b) => {
+  /*const compareKey = (a, b) => {
 
       const keyA = a.key;
       const keyB = b.key;
 
       return keyA.localeCompare(keyB);
 
-  };
+  };*/
   const [pageSizes] = useState([5, 10, 15, 0]);
 
   const [columns] = useState([
     { name: 'subjectID', title: 'Subject ID'},
     { name: 'description', title: 'Description'},
-    {name: 'book', title: "Booking"}
+    {name: ' ', title: " "}
   ]);
   const [integratedSortingColumnExtensions] = useState([
-    { columnName: 'subjectID', compare: compareKey },
+    //{ columnName: 'subjectID', compare: compareKey },
   ]);
 
   const [sortingStateColumnExtensions] = useState([
-    { columnName: 'subjectID', sortingEnabled: true }
+    //{ columnName: 'book', sortingEnabled: false }
   ]);
 
   return (

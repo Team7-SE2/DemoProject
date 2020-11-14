@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import Header from "./components/Header";
 import Counters from "./components/Counters"
 import Login from "./components/Login"
@@ -17,6 +16,7 @@ import { AuthContext } from "./auth/AuthContext";
 import Demo from "./components/Calendar.js";
 import HomeCalendar from "./components/HomeCalendar.js";
 import Card from "react-bootstrap/Card"
+import "./App.css";
 
 class App extends React.Component {
 
