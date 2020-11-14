@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
 
     Lecture.associate = function (models) {
         Lecture.belongsTo(models.subjects, { as: 'subject' });
-        Lecture.belongsToMany(models.users, { through: 'bookings' });
+        Lecture.belongsToMany(models.users, { as: 'lecture_bookings', through: 'bookings' });
     }
     return Lecture;
 }

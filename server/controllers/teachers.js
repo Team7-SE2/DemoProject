@@ -4,6 +4,8 @@ var finale = require('finale-rest')
 var db = require('../models/index');
 var moment = require('moment');
 const Op = db.Sequelize.Op;
+var cron = require('cron');
+var transporter = require('../helpers/email');
 
 /*
     *** API LIST ***
@@ -16,6 +18,39 @@ const Op = db.Sequelize.Op;
     GET -> /api/teachers/:id/nextLecture -> restituisce la prossima lezione dell'insegnante con il numero degli studenti prenotati in "studentsBookedNumber"
 */ 
 
+//seconds, minutes, hours, DayOfMonth, Month, DayOfWeek, Year
+const job = new cron.CronJob('0 1 0 * * *', function () { // 00:01
+
+    db['lectures'].findAll({
+        where: {date: {[Op.between]: [moment().set("hours",0).set("minutes",0).set("seconds",0).toDate(),moment().set("hours",23).set("minutes",59).set("seconds",59).toDate()] } },
+        include: [{model: db.subjects, as: 'subject',include:[{model: db.users,as: 'teacher',attributes:['name','surname','email']} ]},{model: db.users,as:'lecture_bookings'}]
+    })
+    .then((lectures)=>{
+        lectures.forEach((lecture)=>{
+            var mailOptions = {
+                from: "pulsbsnoreply@gmail.com",
+                subject: 'Reminder today lecture',
+                text: 'Dear teacher '+lecture.subject.teacher.name+' '+lecture.subject.teacher.surname+',\n\ryou will take a lecture '+moment(lecture.date).calendar()+".\n\rThe number of students booked for the lecture, is: "+lecture.lecture_bookings.length+".\n\rRegards"
+            }
+            // set the teacher email
+            mailOptions.to = lecture.subject.teacher.email;
+    
+            // send the email to the student
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                }
+            })
+        })
+        console.log("Mandate notifiche ai teachers per le lezioni di oggi")
+    })
+    .catch((err)=>{
+        if(err)
+            console.log(err);
+    })
+});
+job.start(); // avvio il job
+
 module.exports = function () {
 
 
@@ -26,12 +61,7 @@ module.exports = function () {
                     model: db.subjects,
                     as: 'subject',
                     where: { teacher_id: req.params.teacher_id }
-                },
-                {
-                    model: db.users,
-                    attribute:['id']
-                },
-                ],
+                }],
                 where: { date: { [Op.gte]: moment() } },
                 order: [['date']]
             })
