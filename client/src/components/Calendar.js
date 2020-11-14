@@ -186,7 +186,7 @@ class Demo extends React.PureComponent {
                 <h2><b>My bookings calendar</b></h2>
                 <br></br>
             </div>
-            <h5><b>Chose your lessons</b></h5>
+            <h5><b>Chose the subjects to show</b></h5>
             <FormGroup style= {{"width":"100%"}} row>
               {this.checkBoxMount()}
             </FormGroup>            

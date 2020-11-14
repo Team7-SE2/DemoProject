@@ -57,7 +57,7 @@ const StudentCourseLectures = (props) => {
 
     return (
         <>
-        <h4>{course.description} - lectures</h4>
+        <h4><b>{course.description} - lectures</b></h4>
         <br></br>
         <Paper>
         <Grid

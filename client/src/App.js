@@ -207,7 +207,7 @@ class App extends React.Component {
               </Route>
 
               <Route exact path="/student/calendar">
-                <Row className="vheight-100 ">
+                <Row >
                   <Demo userId={this.state.ID_User}></Demo>
                 </Row>
               </Route>
