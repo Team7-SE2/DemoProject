@@ -191,13 +191,13 @@ class App extends React.Component {
               <Route exact path="/student">
 
                 <Row >
-                  <Col sm={4} className="below-nav">
+                  <Col sm={5} className="below-nav">
 
                     <ListStudentsCourses courses={this.state.courses} showLectures={this.showLectures}>
                     </ListStudentsCourses>
 
                   </Col>
-                  <Col sm={8} className="below-nav" >
+                  <Col sm={7} className="below-nav" >
                     <HomeCalendar userId={this.state.ID_User}></HomeCalendar>
                     
                   </Col>

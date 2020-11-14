@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import Paper from '@material-ui/core/Paper';
 import Nav from 'react-bootstrap/Nav';
@@ -11,14 +10,15 @@ const ListStudentsCourses = (props) => {
   const test = courses.map((course) => {
     return {
       id: course.id,
-      subjectID:  <tr key={course.subjectID} onClick={() => showLectures(course)}> 
-                    <Nav className="mr-auto">
-                      <Nav.Item>
-                        <Nav.Link className="active" >{course.subjectID}</Nav.Link>
-                      </Nav.Item>
-                    </Nav>              
-                  </tr>,
-      description: course.description
+      subjectID: course.subjectID,
+      description: course.description,
+      book:  <tr key={course.subjectID} onClick={() => showLectures(course)}> 
+      <Nav className="mr-auto">
+        <Nav.Item>
+          <Nav.Link className="active" >Book your seat</Nav.Link>
+        </Nav.Item>
+      </Nav>              
+    </tr>,
     }
   })
 
@@ -34,7 +34,8 @@ const ListStudentsCourses = (props) => {
 
   const [columns] = useState([
     { name: 'subjectID', title: 'Subject ID'},
-    { name: 'description', title: 'Description'}
+    { name: 'description', title: 'Description'},
+    {name: 'book', title: "Booking"}
   ]);
   const [integratedSortingColumnExtensions] = useState([
     { columnName: 'subjectID', compare: compareKey },
@@ -74,4 +75,3 @@ const ListStudentsCourses = (props) => {
 }
 
 export default ListStudentsCourses;
-
