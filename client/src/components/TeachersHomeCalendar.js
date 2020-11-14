@@ -20,7 +20,6 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import API from '../api/api.js';
 
-import "../Calendar.css";
 const today = new Date()
 const tomorrow = new Date(today)
 tomorrow.setDate(tomorrow.getDate() + 1)
@@ -73,7 +72,7 @@ class HomeCalendar extends React.PureComponent {
 
         console.log(courses)
 
-        API.getLectures(this.state.userID)
+        API.getTeacherLectures(this.state.userID)
         .then((books) => {
           books.forEach((b) => {
             console.log(b.location)
@@ -154,7 +153,10 @@ class HomeCalendar extends React.PureComponent {
 
     return (
         <>
-            
+            <div>
+            <h4><b>Available Lectures Calendar</b></h4>
+            <br></br>
+            </div>
             <Paper>
                 <Scheduler
                 data={data}

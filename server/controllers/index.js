@@ -64,7 +64,7 @@ module.exports = function (app) {
                 //AUTHENTICATION SUCCESS
                 const token = jsonwebtoken.sign({ user: user.dataValues.id }, jwtSecret, { expiresIn: expireTime});
                 res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000*expireTime });
-                res.send({id: user.dataValues.id, name: user.dataValues.name, email: user.dataValues.email});
+                res.send({id: user.dataValues.id, name: user.dataValues.name, email: user.dataValues.email, role_id: user.dataValues.role_id});
 
             }
 

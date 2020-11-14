@@ -1,21 +1,4 @@
 
-/*async function getRequestTypes(){
-
-    let url = "/api/requestTypes"; //todo: waiting for Giosue's Endpoints
-    const response = await fetch(url); 
-    const requestTypesJson = await response.json(); 
-
-    if (response.ok) {
-        
-        return requestTypesJson;  // have to do parsing
-    }
-    else {
-        console.log("getRequestType Error"); 
-        let err = {status: response.status, errObj: requestTypesJson};
-        throw err; 
-    }
-
-}*/
 async function userLogin(username, password) {
     return new Promise((resolve, reject) => {
         fetch("/api/login", {
@@ -263,6 +246,64 @@ async function getLectures (user_id){
     }
 }
 
+async function getTeacherLectures (user_id){
+    let url = `/api/lectures?user_id=${user_id}`;
+    const response = await fetch(url); 
+    const coursesJson = await response.json(); 
+    let id = 1;
+    if (response.ok) {
+        console.log(coursesJson)
+        let array = [];
+        coursesJson.forEach( (course) => {
+            
+            let lectures = course.lectures.map((lecture) => {
+
+                let startDate = new Date(lecture.date);
+
+                let endDate = new Date(startDate);
+                endDate.setHours( startDate.getHours() + lecture.duration )
+    
+                let subjectDescription = lecture.subject ? lecture.subject.description : '';
+                
+                return {
+                    location: course.id,
+                    id: id++,
+                    title: course.description,
+                    startDate: startDate,
+                    endDate: endDate,
+                    ownerId: user_id,
+                }
+
+            })
+            lectures.forEach((l) => array.push(l))
+            //array.push(lectures)
+        }); 
+
+        console.log(array)
+        return await Promise.all(array);
+
+    }
+    else {
+        console.log("studentCoursesJson Error"); 
+        let err = {status: response.status, errObj: coursesJson};
+        throw err; 
+    }
+}
+async function getTeacherSubjects (teacher_id){
+    let url = "/api/subjects?user_id=" + teacher_id; //CI MANCA L?URL 
+    const response = await fetch(url); 
+    const teacherSubjectsJson = await response.json(); 
+
+    if (response.ok) {
+        return(teacherSubjectsJson.map((subject)=>subject));  
+    }
+    else {
+        console.log("teacherSubjectsJson Error"); 
+        let err = {status: response.status, errObj: teacherSubjectsJson};
+        throw err; 
+    }
+}
+
 async function getbookings(LectureId) {
 
     let url = "/api/bookings?lecture_id=" + LectureId;
@@ -282,30 +323,7 @@ async function getbookings(LectureId) {
 }
 
 
-// invio al server l'id del counter che si è appena liberato e è pronto
-//per ricevere un nuovo cliente
-async function setCounterFree(idCounter) {
-    return new Promise((resolve, reject) => {
-        fetch("", {                             // url da decidere
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(idCounter),
-        }).then((response) => {
-            if (response.ok) {
-                response.json().then((idCounter) => {
-                    resolve(idCounter);
-                });
-            } else {
-                // analyze the cause of error
-                response.json()
-                    .then((obj) => { reject(obj); }) // error msg in the response body
-                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
-            }
-        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
-    });
-}
+
 
 
 // invio al server il tipo della richiesta che è stata prenotata da un cliente appena entrato
@@ -337,5 +355,5 @@ async function bookRequestType(ReqType) {
 }
 
 
-const API = {getStudentCourses,getStudentCourseLectures,getBookedLectures,getLectures,deleteBookedLecture, bookLecture, userLogin,userLogout, getStudentBookings, getbookings, setCounterFree, bookRequestType };
+const API = {getStudentCourses,getStudentCourseLectures,getBookedLectures,getLectures,getTeacherLectures,deleteBookedLecture,getTeacherSubjects, bookLecture, userLogin,userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;

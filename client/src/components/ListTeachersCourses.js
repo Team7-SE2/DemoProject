@@ -4,47 +4,51 @@ import Nav from 'react-bootstrap/Nav';
 import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 
-const ListStudentsCourses = (props) => {
+const ListTeachersCourses = (props) => {
 
-  let { courses ,showStudentsLectures} = props;
+  let { courses ,showLectures} = props;
   const test = courses.map((course) => {
     return {
       id: course.id,
       subjectID: course.subjectID,
       description: course.description,
-      ' ':  <div key={course.subjectID} onClick={() => showStudentsLectures(course)}> 
-      
+      book:  <tr key={course.subjectID} onClick={() => showLectures(course)}> 
+      <Nav className="mr-auto">
+        <Nav.Item>
           <Nav.Link className="active" >Book your seat</Nav.Link>
-    </div>,
+        </Nav.Item>
+      </Nav>              
+    </tr>,
     }
   })
 
-  /*const compareKey = (a, b) => {
+  const compareKey = (a, b) => {
 
       const keyA = a.key;
       const keyB = b.key;
 
       return keyA.localeCompare(keyB);
 
-  };*/
+  };
   const [pageSizes] = useState([5, 10, 15, 0]);
 
   const [columns] = useState([
     { name: 'subjectID', title: 'Subject ID'},
     { name: 'description', title: 'Description'},
-    {name: ' ', title: " "}
+    {name: 'details', title: "Details"}
   ]);
   const [integratedSortingColumnExtensions] = useState([
-    //{ columnName: 'subjectID', compare: compareKey },
+    { columnName: 'subjectID', compare: compareKey },
   ]);
 
   const [sortingStateColumnExtensions] = useState([
-    //{ columnName: 'book', sortingEnabled: false }
+    { columnName: 'subjectID', sortingEnabled: true }
   ]);
 
   return (
     <>
-    
+    <h4><b>My courses</b></h4>
+        <br></br>
     <Paper>
       <Grid
         rows={test}
@@ -70,4 +74,4 @@ const ListStudentsCourses = (props) => {
   );
 }
 
-export default ListStudentsCourses;
+export default ListTeachersCourses;
