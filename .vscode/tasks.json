@@ -44,7 +44,7 @@
     },
     {
         "label": "open_chrome",
-        "command": "google-chrome",
+        "command": "chrome",
         "windows": {
             "command": "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
         },
