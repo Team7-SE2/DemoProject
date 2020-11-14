@@ -47,8 +47,7 @@ const ListStudentsCourses = (props) => {
 
   return (
     <>
-    <h4><b>My teaching load</b></h4>
-        <br></br>
+    
     <Paper>
       <Grid
         rows={test}

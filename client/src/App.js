@@ -16,7 +16,7 @@ import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
 import Demo from "./components/Calendar.js";
 import HomeCalendar from "./components/HomeCalendar.js";
-
+import Card from "react-bootstrap/Card"
 
 class App extends React.Component {
 
@@ -56,16 +56,16 @@ class App extends React.Component {
         this.setState({ info_user: info });
         this.setState({ authUser: info });
         this.setState({ ID_User: info.ID_User })
-        
-        if (info.role_id == 5){
+
+        if (info.role_id == 5) {
           this.loadInitialDataStudent();
           this.props.history.push("/student");
         }
-        if (info.role_id == 4){
+        if (info.role_id == 4) {
           this.loadInitialDataTeacher();
           this.props.history.push("/teacher");
         }
-         
+
       }
     ).catch(
       () => { this.setState({ loginError: true }) }
@@ -97,11 +97,11 @@ class App extends React.Component {
   showTeachersLectures = () => {
 
   }
- 
+
 
   loadInitialDataStudent = () => {
-   
-   
+
+
     API.getStudentCourses(this.state.info_user.ID_User)
       .then((courses) => {
         this.setState({ courses: courses })
@@ -123,18 +123,18 @@ class App extends React.Component {
   }
 
   loadInitialDataTeacher = () => {
-    
-    API.getTeacherLectures(this.state.info_user.ID_User)
-    .then ((lectures) => {
 
-    })
-  /*  API.getTeacherSubjects(this.state.info_user.ID_User)
-      .then((courses) => {
-        this.setState({ courses: courses })
-      }
-      );
-    
-    */
+    API.getTeacherLectures(this.state.info_user.ID_User)
+      .then((lectures) => {
+
+      })
+    /*  API.getTeacherSubjects(this.state.info_user.ID_User)
+        .then((courses) => {
+          this.setState({ courses: courses })
+        }
+        );
+      
+      */
 
   }
 
@@ -226,15 +226,27 @@ class App extends React.Component {
               <Route exact path="/student">
 
                 <Row >
+
                   <Col sm={5} className="below-nav">
-
-                    <ListStudentsCourses courses={this.state.courses} showStudentsLectures={this.showStudentsLectures}>
-                    </ListStudentsCourses>
-
+                    <Card>
+                      <Card.Header className="text-center">
+                        <h3>My teaching load</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <ListStudentsCourses courses={this.state.courses} showStudentsLectures={this.showStudentsLectures}>
+                        </ListStudentsCourses>
+                      </Card.Body>
+                    </Card>
                   </Col>
                   <Col sm={7} className="below-nav" >
-                    <HomeCalendar userId={this.state.ID_User}></HomeCalendar>
-
+                    <Card>
+                      <Card.Header className="text-center">
+                        <h3>Available Lectures Calendar</h3>
+                      </Card.Header>
+                      <Card.Body>
+                        <HomeCalendar userId={this.state.ID_User}></HomeCalendar>
+                      </Card.Body>
+                    </Card>
                   </Col>
 
                 </Row>
@@ -264,8 +276,8 @@ class App extends React.Component {
                 <Row >
                   <Col sm={5} className="below-nav">
 
-                    <ListTeachersCourses courses={this.state.courses} showLectures={this.showLectures}/>
-                   
+                    <ListTeachersCourses courses={this.state.courses} showLectures={this.showLectures} />
+
 
                   </Col>
                   <Col sm={7} className="below-nav" >
@@ -284,7 +296,7 @@ class App extends React.Component {
           </Container>
 
         </Container>
-      </AuthContext.Provider>
+      </AuthContext.Provider >
 
     );
   }

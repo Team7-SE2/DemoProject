@@ -153,10 +153,7 @@ class HomeCalendar extends React.PureComponent {
 
     return (
         <>
-            <div>
-            <h4><b>Available Lectures Calendar</b></h4>
-            <br></br>
-            </div>
+            
             <Paper>
                 <Scheduler
                 data={data}
