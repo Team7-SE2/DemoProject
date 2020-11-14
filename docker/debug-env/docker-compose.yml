@@ -26,8 +26,8 @@ services:
     command: npm start
   client-application:
     env_file: "../../client/client.env"
-    tty: true
-    stdin_open: true
+    tty: true #interation mode
+    stdin_open: true #interation mode
     image: "client/application-main:debug"
     ports:
      - "3000:3000"
