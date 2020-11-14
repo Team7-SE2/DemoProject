@@ -14,6 +14,7 @@ import StudentCourseLectures from "./components/StudentCourseLectures";
 import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
 import Demo from "./components/Calendar.js";
+import HomeCalendar from "./components/HomeCalendar.js";
 
 class App extends React.Component {
 
@@ -189,17 +190,20 @@ class App extends React.Component {
 
               <Route exact path="/student">
 
-                <Row className="vheight-100 ">
-                  <Col sm={3} className="below-nav" />
-                  <Col sm={6} className="below-nav">
+                <Row >
+                  <Col sm={4} className="below-nav">
 
                     <ListStudentsCourses courses={this.state.courses} showLectures={this.showLectures}>
                     </ListStudentsCourses>
 
                   </Col>
-                  <Col sm={3} className="below-nav" />
+                  <Col sm={8} className="below-nav" >
+                    <HomeCalendar userId={this.state.ID_User}></HomeCalendar>
+                    
+                  </Col>
 
                 </Row>
+                
               </Route>
 
               <Route exact path="/student/calendar">

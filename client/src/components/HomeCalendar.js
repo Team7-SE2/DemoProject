@@ -25,7 +25,6 @@ const tomorrow = new Date(today)
 tomorrow.setDate(tomorrow.getDate() + 1)
 
 let resources = [];
-let selectedChecks = [];
 const styles = theme => ({
   addButton: {
     position: 'absolute',
@@ -38,7 +37,7 @@ const colors = [teal[300], red[300], green[300], blue[300], indigo[300]]
 let instances = []
 
 /* eslint-disable-next-line react/no-multi-comp */
-class Demo extends React.PureComponent {
+class HomeCalendar extends React.PureComponent {
   constructor(props) {
 
     super(props);
@@ -56,8 +55,7 @@ class Demo extends React.PureComponent {
       endDayHour: 19,
       isNewAppointment: false,
     };
-    instances = [];
-    selectedChecks = [];
+
     this.toggleConfirmationVisible = this.toggleConfirmationVisible.bind(this);
     this.commitDeletedAppointment = this.commitDeletedAppointment.bind(this);
 
@@ -72,11 +70,13 @@ class Demo extends React.PureComponent {
           instances: instances
         }];
 
-        API.getStudentBookings(this.state.userID)
+        console.log(courses)
+
+        API.getLectures(this.state.userID)
         .then((books) => {
           books.forEach((b) => {
-
-            var index = selectedChecks.findIndex(x => parseInt(x)==parseInt(b.location))
+            console.log(b.location)
+            var index = instances.findIndex(x => parseInt(x.id)==parseInt(b.location))
             if(index === -1){
               var courseIndex = courses.findIndex(course => parseInt(course.id)==parseInt(b.location))
               instances.push({ 
@@ -84,10 +84,11 @@ class Demo extends React.PureComponent {
                 description: courses[courseIndex].description,
                 color: colors[parseInt(b.location)] 
               })
-              selectedChecks.push(parseInt(b.location))
+              //instances.push(parseInt(b.location))
             }
 
           })
+          console.log(instances)
           this.setState({data: books, data2: books})
         })
         .catch((err) => {
@@ -100,38 +101,11 @@ class Demo extends React.PureComponent {
     
 }
 
-  checkBoxMount() {
-
-    return instances.map((instance) => {
-          return <FormControlLabel
-            control={<Checkbox id = {instance.id} style ={{color: instance.color}} defaultChecked={true} /*checked={true} */onChange={this.handleChange}/>}
-            label={instance.description}
-          />
-        })
-
-  }
 
   componentDidMount() {
     
   }
 
-  handleChange = (event) =>{
-    var newData = [];
-    var id = parseInt(event.target.id)
-
-    var index = selectedChecks.findIndex(x => x == id)
-
-    if (index === -1){
-      selectedChecks.push(id)
-    } else 
-      selectedChecks.splice(index, 1)
-    
-    newData = this.state.data2.filter((d) => selectedChecks.includes(d.location))
-    console.log(newData)
-    this.setState({
-      data: newData
-    });
-  }
   onEditingAppointmentChange(editingAppointment) {
     this.setState({ editingAppointment });
   }
@@ -179,17 +153,10 @@ class Demo extends React.PureComponent {
 
     return (
         <>
-            <div style= {{"width":"100%"}}>
-                <br></br>
-                <br></br>
-                <br></br>
-                <h2><b>My bookings calendar</b></h2>
-                <br></br>
+            <div>
+            <h4><b>Lectures Calendar</b></h4>
+            <br></br>
             </div>
-            <h5><b>Chose your lessons</b></h5>
-            <FormGroup style= {{"width":"100%"}} row>
-              {this.checkBoxMount()}
-            </FormGroup>            
             <Paper>
                 <Scheduler
                 data={data}
@@ -257,4 +224,4 @@ class Demo extends React.PureComponent {
   }
 }
 
-export default withStyles(styles, { name: 'EditingDemo' })(Demo);
+export default withStyles(styles, { name: 'EditingDemo' })(HomeCalendar);

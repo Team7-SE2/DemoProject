@@ -46,7 +46,7 @@ const ListStudentsCourses = (props) => {
 
   return (
     <>
-    <h4>My teaching load</h4>
+    <h4><b>My teaching load</b></h4>
         <br></br>
     <Paper>
       <Grid

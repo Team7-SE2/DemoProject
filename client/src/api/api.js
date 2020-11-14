@@ -218,6 +218,51 @@ async function getBookedLectures (user_id){
         throw err; 
     }
 }
+
+async function getLectures (user_id){
+    let url = "api/teaching_loads/students/"+user_id+'/lectures';
+    const response = await fetch(url); 
+    const coursesJson = await response.json(); 
+    let id = 1;
+    if (response.ok) {
+        console.log(coursesJson)
+        let array = [];
+        coursesJson.forEach( (course) => {
+            
+            let lectures = course.lectures.map((lecture) => {
+
+                let startDate = new Date(lecture.date);
+
+                let endDate = new Date(startDate);
+                endDate.setHours( startDate.getHours() + lecture.duration )
+    
+                let subjectDescription = lecture.subject ? lecture.subject.description : '';
+                
+                return {
+                    location: course.id,
+                    id: id++,
+                    title: course.description,
+                    startDate: startDate,
+                    endDate: endDate,
+                    ownerId: user_id,
+                }
+
+            })
+            lectures.forEach((l) => array.push(l))
+            //array.push(lectures)
+        }); 
+
+        console.log(array)
+        return await Promise.all(array);
+
+    }
+    else {
+        console.log("studentCoursesJson Error"); 
+        let err = {status: response.status, errObj: coursesJson};
+        throw err; 
+    }
+}
+
 async function getbookings(LectureId) {
 
     let url = "/api/bookings?lecture_id=" + LectureId;
@@ -292,5 +337,5 @@ async function bookRequestType(ReqType) {
 }
 
 
-const API = {getStudentCourses,getStudentCourseLectures,getBookedLectures,deleteBookedLecture, bookLecture, userLogin,userLogout, getStudentBookings, getbookings, setCounterFree, bookRequestType };
+const API = {getStudentCourses,getStudentCourseLectures,getBookedLectures,getLectures,deleteBookedLecture, bookLecture, userLogin,userLogout, getStudentBookings, getbookings, setCounterFree, bookRequestType };
 export default API;

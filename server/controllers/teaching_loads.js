@@ -7,6 +7,7 @@ const Op = db.Sequelize.Op;
 /*
     *** API LIST ***
     GET -> /api/teaching_loads -> restituisce la lista degli studenti con la lista delle materie nel loro carico didattico -> con i ?nomeCampoDb= si può filtrare
+    GET -> /api/teaching_loads/students/:user_id/lectures -> restituisce la lista delle lezioni del carico didattico dello studente
     GET -> /api/teaching_loads/students/:id -> restituisce la lista delle materie nel carico didattico del signolo studente
     GET -> /api/teaching_loads/students/:user_id/subjects/:subject_id' -> restituisce la singola coppia studente materia
     DELETE -> /api/teaching_loads/students/:user_id/subjects/:subject_id' -> elimina una materia dal caricao didattico dello studente
@@ -27,6 +28,40 @@ module.exports = function () {
                 },
                 include: [{
                     model: db.subjects,
+                }],
+                attributes: []
+            })
+            .then((student) => {
+                // send the student's teaching load
+                res.send(student.dataValues.subjects);
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(500).end();
+            })
+        }
+        else {
+            console.log("Some params missing requesting sudent's load!");
+            res.status(500).end();
+        }
+
+    })
+
+    // API GET student TEACHING LOADS lectures
+    router.get('/students/:user_id/lectures', function (req, res) {
+        
+        // get only users with ROLE-STUDENT
+        if (req.params && req.params.user_id) {
+            db['users'].findOne({
+                where: { 
+                    id: req.params.user_id 
+                },
+                include: [{
+                    model: db.subjects,
+                    include: [{
+                        model: db.lectures,
+                        as: 'lectures'
+                    }],
                 }],
                 attributes: []
             })
