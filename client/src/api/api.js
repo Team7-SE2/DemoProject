@@ -139,13 +139,14 @@ async function getStudentCourseLectures (courseID){
 }
 
 
-async function bookLecture (user_id, lecture_id){
+async function bookLecture (user_id, lecture_id, email){
     let obj = {
         user_id: user_id,
-        lecture_id: lecture_id
+        lecture_id: lecture_id,
+        email: email
     };
-    //const url = `/api/${user_id}/lectures/${lecture_id}`;
-    const url = "/api/bookings";
+    const url = `/api/bookings/students/${user_id}/lectures/${lecture_id}`;
+    //const url = "/api/bookings";
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL
             method: 'POST',

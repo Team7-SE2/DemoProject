@@ -47,7 +47,8 @@ class App extends React.Component {
         const info = {
           ID_User: userObj.id,
           nome: userObj.name,
-          role_id: userObj.role_id
+          role_id: userObj.role_id,
+          email: userObj.email
 
         };
         console.log(info);
@@ -172,7 +173,7 @@ class App extends React.Component {
 
 
   bookLecture = (LectureID) => {
-    API.bookLecture(this.state.authUser.ID_User, LectureID)
+    API.bookLecture(this.state.authUser.ID_User, LectureID, this.state.info_user.email)
       .then(() => {
 
         this.loadInitialDataStudent();

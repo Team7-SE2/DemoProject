@@ -74,7 +74,6 @@ module.exports = function () {
 
         // save the student email
         let email = req.body.email;
-        console.log(email);
 
         // add the booking and send the mail
         db['bookings'].create({
@@ -87,22 +86,49 @@ module.exports = function () {
             var mailOptions = {
 
                 from: "pulsbsnoreply@gmail.com",
-                subject: 'using Node.js',
+                subject: 'Lecture Booking',
                 text: 'Ti sei iscritto correttamente alla lezione'
             
             }
-            // set the student email
-            mailOptions.to = email;
-            // respond to the caller
-            res.send();
-            // send the email to the student
-            transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            })
+
+                // API get lesson info 
+                    if (req.params && req.params.user_id) {
+                        db['lectures'].findOne({
+                            include: [{
+                                model: db.subjects,
+                                as: 'subject',
+                            }],
+                            where: { 
+                                id: req.params.lecture_id 
+                            },
+                        })
+                        .then((lecture) => {
+
+                            // set the student email
+                            mailOptions.to = email;
+                            mailOptions.text = "Dear student, you correctly booked for the \"" + lecture.subject.description + "\" course-lesson.\nIt will take on date: " + lecture.date + ".\n\nRegards"
+                            // respond to the caller
+                            res.send();
+                            // send the email to the student
+                            transporter.sendMail(mailOptions, function (error, info) {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    console.log('Email sent: ' + info.response);
+                                }
+                            })
+
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                            res.status(500).end();
+                        })
+                    }
+                    else {
+                        console.log("Some params missing requesting sudent's load!");
+                        res.status(500).end();
+                    }
+
 
         })
         .catch((err) => {
