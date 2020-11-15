@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="C:\Users\giosue\Desktop\POLITO\SE2\DemoProject\server\tests\Db.test.js">
+    <testCase name="check if the sequelize.json file exists and it was configured " duration="22"/>
+  </file>
+  <file path="C:\Users\giosue\Desktop\POLITO\SE2\DemoProject\server\tests\ApiREST.test.js">
+    <testCase name="check if the model bookings is correctly istantiated" duration="5"/>
+    <testCase name="check if the model users is correctly istantiated" duration="1"/>
+    <testCase name="check if the model lectures is correctly istantiated" duration="1"/>
+    <testCase name="API test POST users" duration="200"/>
+    <testCase name="API test GET users" duration="31"/>
+    <testCase name="API test GET/:id users" duration="22"/>
+    <testCase name="API test POST lectures" duration="36"/>
+    <testCase name="API test GET lectures" duration="17"/>
+    <testCase name="API test GET/:id lectures" duration="13"/>
+    <testCase name="API test POST bookings" duration="53"/>
+    <testCase name="API test GET bookings" duration="23"/>
+    <testCase name="API test GET/:id bookings" duration="18"/>
+    <testCase name="API test POST teaching_loads" duration="44"/>
+    <testCase name="API test GET teaching_loads" duration="33"/>
+    <testCase name="API test GET/:id teaching_loads" duration="22"/>
+    <testCase name="API test GET teachers" duration="27"/>
+    <testCase name="API test GET students" duration="23"/>
+    <testCase name="API test DELETE bookings" duration="35"/>
+    <testCase name="API test DELETE teaching_loads" duration="31"/>
+    <testCase name="API test DELETE lectures" duration="25"/>
+    <testCase name="API test DELETE users" duration="25"/>
+  </file>
+</testExecutions>

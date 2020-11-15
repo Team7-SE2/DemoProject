@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node --inspect=0.0.0.0 ./bin/www",
-    "test": "set NODE_ENV=test&& jest"
+    "test": "set NODE_ENV=test&& jest --coverage"
   },
   "description": "PULSBS",
   "author": {
@@ -41,6 +41,16 @@
   },
   "devDependencies": {
     "jest": "^26.6.0",
-    "supertest": "^6.0.1"
+    "supertest": "^6.0.1",
+    "jest-sonar-reporter": "^2.0.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "testResultsProcessor": "jest-sonar-reporter",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ]
   }
 }
