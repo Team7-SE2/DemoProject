@@ -4,8 +4,13 @@ var Sequelize = require("sequelize");
 var config = require("../config/sequelize.json");
 const event = require("../helpers/events");
 
-if (process.env.NODE_ENV && process.env.NODE_ENV == "test")
+if (process.env.NODE_ENV && process.env.NODE_ENV == "test"){
     config.storage = "../server/databaseTest.sqlite"
+    setTimeout(function(){
+        process.exit();
+    },20000)
+}
+    
 
 var sequelize = new Sequelize(config.database, config.user, config.password, {
     host: config.host,
