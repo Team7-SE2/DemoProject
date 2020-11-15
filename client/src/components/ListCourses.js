@@ -4,9 +4,10 @@ import Nav from 'react-bootstrap/Nav';
 import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 
-const ListTeachersCourses = (props) => {
+const ListCourses = (props) => {
 
-  let { courses ,showLectures} = props;
+  let { courses ,showLectures, role_id} = props;
+  
   const test = courses.map((course) => {
     return {
       id: course.id,
@@ -14,19 +15,13 @@ const ListTeachersCourses = (props) => {
       description: course.description,
       ' ':  <div key={course.subjectID} onClick={() => showLectures(course)}> 
       
-          <Nav.Link className="active" >View Details</Nav.Link>
+      {role_id==5 && <Nav.Link className="active" >Book your seat</Nav.Link>}
+      {role_id==4 && <Nav.Link className="active" >View details</Nav.Link>}
+
     </div>,
     }
   })
 
-  /*const compareKey = (a, b) => {
-
-      const keyA = a.key;
-      const keyB = b.key;
-
-      return keyA.localeCompare(keyB);
-
-  };*/
   const [pageSizes] = useState([5, 10, 15, 0]);
 
   const [columns] = useState([
@@ -70,4 +65,4 @@ const ListTeachersCourses = (props) => {
   );
 }
 
-export default ListTeachersCourses;
+export default ListCourses;

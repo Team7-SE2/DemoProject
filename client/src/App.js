@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "./components/Header";
-import Counters from "./components/Counters"
 import Login from "./components/Login"
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,11 +7,10 @@ import Col from "react-bootstrap/Col";
 import { Redirect, Route, Link } from 'react-router-dom';
 import { Switch } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import ListStudentsCourses from "./components/ListStudentsCourses";
 import StudentCourseLectures from "./components/StudentCourseLectures";
 import TeacherCourseLectures from "./components/TeacherCourseLectures"
-import ListTeachersCourses from "./components/ListTeachersCourses";
 import StudentList from "./components/StudentList";
+import ListCourses from "./components/ListCourses";
 import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
 import HomeCalendar from "./components/HomeCalendar.js";
@@ -24,11 +22,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     let course = { subjectID: " " };
-    let lecture ={};
+    let lecture = {};
 
     this.state = {
       authUser: null,
-      info_user: null,
+      info_user: { role_id: "" },
       login_error: null,
       courses: [],
       lectures: [],
@@ -55,7 +53,6 @@ class App extends React.Component {
           email: userObj.email
 
         };
-        console.log(info);
         this.setState({ logged: true });
         this.setState({ loginError: false });
         this.setState({ info_user: info });
@@ -72,15 +69,16 @@ class App extends React.Component {
         }
 
       }
-    ).catch(
-      () => { this.setState({ loginError: true }) }
-    );
+    ).catch((err) => {
+
+      this.setState({ loginError: true })
+      this.handleErrors(err);
+    });
   }
 
   userLogout = () => {
 
     API.userLogout().then(() => {
-      //this.setState({ authUser: null, authErr: null, veicoli: [], logged: false, veicoli_disponibili: [], info_noleggi_utente: [], importo: 0, info_noleggio: null, ID_Veicolo: -1, cliente_frequente: false, num_veicoli_disponibili: 0 });
       this.setState(this.initialState);
 
       this.props.history.push("/login");
@@ -96,26 +94,35 @@ class App extends React.Component {
         this.setState({ lectures: lectures });
         this.props.history.push("/student/courses/" + course.subjectID + "/lectures");
 
+      })
+      .catch((err) => {
+        this.handleErrors(err);
       });
   }
 
   showTeachersLectures = (course) => {
     API.getStudentCourseLectures(course.id)
-    .then((lectures) => {
-      this.setState({ course: course });
-      this.setState({ lectures: lectures });
-      this.props.history.push("/teacher/courses/" + course.subjectID + "/lectures");
+      .then((lectures) => {
+        this.setState({ course: course });
+        this.setState({ lectures: lectures });
+        this.props.history.push("/teacher/courses/" + course.subjectID + "/lectures");
 
-    });
+      })
+      .catch((err) => {
+        this.handleErrors(err);
+      });
   }
 
-  getStudentsList=(lecture)=>{
+  getStudentsList = (lecture) => {
     API.getStudentListforLecture(lecture.id)
-    .then((students) => {
-      this.setState({ students: students,lecture: lecture});
-      this.props.history.push("/teacher/lectures/"+lecture.id+"/students");
+      .then((students) => {
+        this.setState({ students: students, lecture: lecture });
+        this.props.history.push("/teacher/lectures/" + lecture.id + "/students");
 
-    });
+      })
+      .catch((err) => {
+        this.handleErrors(err);
+      });
 
   }
 
@@ -137,7 +144,8 @@ class App extends React.Component {
         });
         this.setState({ bookedLectures: myBookedLectures });
       })
-      .catch(() => {
+      .catch((err) => {
+        this.handleErrors(err);
         console.log("Errore in getBookedLectures");
       });
 
@@ -145,14 +153,12 @@ class App extends React.Component {
 
   loadInitialDataTeacher = () => {
 
-      API.getTeacherSubjects(this.state.info_user.ID_User)
-        .then((courses) => {
-          this.setState({ courses: courses })
-        }
-        );
+    API.getTeacherSubjects(this.state.info_user.ID_User)
+      .then((courses) => {
+        this.setState({ courses: courses })
+      }
+      );
   }
-
-
 
 
   getRequestTypes = () => {
@@ -171,17 +177,9 @@ class App extends React.Component {
   }
 
 
-
-
-
-
   handleErrors(err) {
-    if (err) {
-      if (err.status && err.status === 401) {
-        this.setState({ authErr: err.errorObj });
-
-      }
-    }
+    this.setState({logged: false});
+    this.props.history.push("/login");
   }
 
 
@@ -192,8 +190,8 @@ class App extends React.Component {
         this.loadInitialDataStudent();
 
       })
-      .catch(() => {
-
+      .catch((err) => {
+        this.handleErrors(err);
       });
   }
 
@@ -202,8 +200,8 @@ class App extends React.Component {
       .then(() => {
         this.loadInitialDataStudent();
       })
-      .catch(() => {
-
+      .catch((err) => {
+        this.handleErrors(err);
       });
   }
 
@@ -220,7 +218,7 @@ class App extends React.Component {
       <AuthContext.Provider value={value}>
         <Container fluid>
 
-          <Header userLogout={this.userLogout} />
+          <Header userLogout={this.userLogout} role_id={this.state.info_user.role_id} logged = {this.state.logged} />
 
           <Container fluid>
 
@@ -238,6 +236,7 @@ class App extends React.Component {
               </Route>
 
               <Route exact path="/student">
+              {this.state.logged ? <Redirect to="/student" /> : <Redirect to="/login" />}
 
                 <Row >
 
@@ -247,8 +246,7 @@ class App extends React.Component {
                         <h3>My teaching load</h3>
                       </Card.Header>
                       <Card.Body>
-                        <ListStudentsCourses courses={this.state.courses} showStudentsLectures={this.showStudentsLectures}>
-                        </ListStudentsCourses>
+                        <ListCourses courses={this.state.courses} showLectures={this.showStudentsLectures} role_id={this.state.info_user.role_id} />
                       </Card.Body>
                     </Card>
                   </Col>
@@ -258,7 +256,7 @@ class App extends React.Component {
                         <h3>Available Lectures Calendar</h3>
                       </Card.Header>
                       <Card.Body>
-                        <HomeCalendar userId={this.state.ID_User} isMyCalendar={false} isStudent={true}></HomeCalendar>
+                      <HomeCalendar userId={this.state.ID_User} isStudent={true}></HomeCalendar>
                       </Card.Body>
                     </Card>
                   </Col>
@@ -269,7 +267,7 @@ class App extends React.Component {
 
               <Route exact path="/student/calendar">
                 <Row >
-                    <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
+                  <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
                 </Row>
               </Route>
 
@@ -287,6 +285,7 @@ class App extends React.Component {
 
 
               <Route exact path="/teacher">
+              {this.state.logged ? <Redirect to="/teacher" /> : <Redirect to="/login" />}
                 <Row >
                   <Col sm={5} className="below-nav">
                     <Card>
@@ -294,15 +293,15 @@ class App extends React.Component {
                         <h3>My Courses</h3>
                       </Card.Header>
                       <Card.Body>
-                        <ListTeachersCourses courses={this.state.courses} showLectures={this.showTeachersLectures} />
+                      <ListCourses courses={this.state.courses} showLectures={this.showTeachersLectures} role_id={this.state.info_user.role_id} />
                       </Card.Body>
                     </Card>
                   </Col>
                   <Col sm={7} className="below-nav" >
                     <Card>
                       <Card.Header className="text-center">
-                          <h3>Lectures Calendar</h3>
-                        </Card.Header>
+                        <h3>Lectures Calendar</h3>
+                      </Card.Header>
                       <Card.Body>
                         <HomeCalendar userId={this.state.ID_User} isStudent={false}></HomeCalendar>
                       </Card.Body>
@@ -324,11 +323,11 @@ class App extends React.Component {
               </Route>
 
 
-              <Route exact path={"/teacher/lectures/"+this.state.lecture.id+"/students"}>
+              <Route exact path={"/teacher/lectures/" + this.state.lecture.id + "/students"}>
                 <Row className="vheight-100 ">
                   <Col sm={3} className="below-nav" />
                   <Col sm={6} className="below-nav">
-                    <StudentList students={this.state.students} lecture={this.state.lecture}/>
+                    <StudentList students={this.state.students} lecture={this.state.lecture} />
                   </Col>
                   <Col sm={3} className="below-nav" />
 

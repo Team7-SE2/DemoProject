@@ -5,11 +5,11 @@ import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
 
 const Header = (props) => {
-  let { userLogout } = props;
+  let { userLogout,role_id, logged } = props;
   return (
     <AuthContext.Consumer>
       {(context) => (
-
+     
         <Navbar className="navbar navbar-dark bg-dark" expand="sm" fixed="top">
 
           <Navbar.Brand >
@@ -21,27 +21,24 @@ const Header = (props) => {
         </Navbar.Brand>
 
           <Nav className="mr-auto">
-            {context.authUser &&
+            {context.authUser && role_id==5 && logged &&
               <Nav.Link as={NavLink} to="/student"  >My teaching load</Nav.Link>
             }
-
-            {context.authUser &&
-              <Nav.Link as={NavLink} to="/student/calendar"  >My Calendar</Nav.Link>
+            {
+              context.authUser && role_id==4 && logged &&
+              <Nav.Link as={NavLink} to="/teacher"  >My courses</Nav.Link>
             }
 
+
           </Nav>
-
-
-
-
-
 
 
           <Nav className="ml-md-auto">
             {context.authUser &&
               <>
+              {logged &&<>
                 <Navbar.Brand>Welcome {context.authUser.nome}!</Navbar.Brand>
-                <Nav.Link onClick={userLogout}>Logout</Nav.Link>
+                <Nav.Link onClick={userLogout}>Logout</Nav.Link></>}
               </>}
             {!context.authUser && <Nav.Link as={NavLink} to="/login">Login</Nav.Link>}
             <Nav.Link href="#">
