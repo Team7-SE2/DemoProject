@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var db = require('./models/index');
 var index = require('./controllers/index');
 const { fdatasync } = require('fs');
 
@@ -20,12 +20,11 @@ app.use(function (req, res, next) {
 app.use('/', index(app));
 
 app.io = require('./helpers/socketIo')();
-
 // create and initialize the QUEUE MANAGER
-app.queueMan = require('./helpers/queueManager')();
+/*app.queueMan = require('./helpers/queueManager')();
 
 // create and initialize the COUNTER MANAGER
-app.counterMan = require('./helpers/counterManager')();
+app.counterMan = require('./helpers/counterManager')();*/
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise' + p + 'reason:' + reason);

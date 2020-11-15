@@ -1,0 +1,27 @@
+FROM node:12-alpine
+
+RUN npm install --global node-pre-gyp
+RUN apk --no-cache add --virtual native-deps \
+  g++ gcc libgcc libstdc++ linux-headers autoconf automake make nasm python git && \
+  npm install --quiet node-gyp -g
+  
+# set working directory
+WORKDIR /usr/src/app/client
+
+# add `/app/node_modules/.bin` to $PATH
+# ENV PATH /usr/src/app/client/node_modules/.bin:$PATH
+
+COPY ./client/package*.json ./
+RUN npm install
+
+#compiled package
+
+RUN npm install @devexpress/dx-react-core
+RUN npm install @devexpress/dx-react-grid
+RUN npm install @devexpress/dx-react-grid-material-ui
+RUN npm install @devexpress/dx-react-scheduler
+RUN npm install @devexpress/dx-react-scheduler-material-ui
+
+COPY ./client .
+
+CMD ["npm","start"]
