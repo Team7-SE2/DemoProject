@@ -14,7 +14,7 @@ test('check if the model lectures is correctly istantiated', () => {
 
 
 
-/*describe('API test', function () {
+describe('API test', function () {
 
     //==================== users API test ====================
     it('POST users', function (done) {
@@ -169,4 +169,3 @@ test('check if the model lectures is correctly istantiated', () => {
     });
 
 });
-*/
