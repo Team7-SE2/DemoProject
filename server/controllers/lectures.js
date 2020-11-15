@@ -44,7 +44,7 @@ module.exports = function () {
     router.get('/users/:user_id', function (req, res) {
         
         // get only users with ROLE-STUDENT
-        if (req.params && req.params.user_id) {
+        if (req.params && Number(req.params.user_id)) {
             db['lectures'].findAll({
                 include: [{
                     model: db.subjects,
@@ -55,12 +55,7 @@ module.exports = function () {
                 }]
             })
             .then((lectures) => {
-                // send the student's teaching load
                 res.send(lectures);
-            })
-            .catch((err) => {
-                console.log(err);
-                res.status(500).end();
             })
         }
         else {

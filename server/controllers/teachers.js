@@ -17,9 +17,7 @@ var transporter = require('../helpers/email');
 
     GET -> /api/teachers/:id/nextLecture -> restituisce la prossima lezione dell'insegnante con il numero degli studenti prenotati in "studentsBookedNumber"
 */ 
-
-//seconds, minutes, hours, DayOfMonth, Month, DayOfWeek, Year
-const job = new cron.CronJob('0 1 0 * * *', function () { // 00:01
+function reminderTodayLecture() { // 00:01
 
     db['lectures'].findAll({
         where: {date: {[Op.between]: [moment().set("hours",0).set("minutes",0).set("seconds",0).toDate(),moment().set("hours",23).set("minutes",59).set("seconds",59).toDate()] } },
@@ -36,11 +34,7 @@ const job = new cron.CronJob('0 1 0 * * *', function () { // 00:01
             mailOptions.to = lecture.subject.teacher.email;
     
             // send the email to the student
-            transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    console.log(error);
-                }
-            })
+            transporter.sendEmail(mailOptions);
         })
         console.log("Mandate notifiche ai teachers per le lezioni di oggi")
     })
@@ -48,31 +42,41 @@ const job = new cron.CronJob('0 1 0 * * *', function () { // 00:01
         if(err)
             console.log(err);
     })
-});
+}
+
+/**************TEST**************/
+if(process.env.NODE_ENV == "test")
+    reminderTodayLecture()
+/**************TEST**************/
+
+
+//seconds, minutes, hours, DayOfMonth, Month, DayOfWeek, Year
+const job = new cron.CronJob('0 1 0 * * *', reminderTodayLecture);
 job.start(); // avvio il job
 
 module.exports = function () {
 
 
     router.get('/:teacher_id/nextLecture', function (req, res) {
-        if (req.params && req.params.teacher_id) {
+        if (req.params && Number(req.params.teacher_id)) {
             db['lectures'].findOne({
                 include: [{
                     model: db.subjects,
                     as: 'subject',
                     where: { teacher_id: req.params.teacher_id }
-                }],
+                },{model: db.users,as:'lecture_bookings'}],
                 where: { date: { [Op.gte]: moment() } },
                 order: [['date']]
             })
                 .then((lecture) => {
-                    lecture.dataValues.studentsBookedNumber = lecture.dataValues.users.length;
-                    delete lecture.dataValues.users;
-                    res.send(lecture);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    res.status(500).end();
+                    if(lecture){
+                        lecture.dataValues.studentsBookedNumber = lecture.dataValues.lecture_bookings.length;
+                        res.status(200).send(lecture);
+                    }
+                    else{
+                        res.status(500).end();
+                    }
+                    
                 })
         }
         else {
@@ -101,6 +105,6 @@ module.exports = function () {
             attributes: []
         }]
     });
-
+    
     return router;
 }

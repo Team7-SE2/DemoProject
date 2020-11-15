@@ -1,6 +1,7 @@
 const db = require("../models/index")
 const request = require('supertest')
 const app = require('../app');
+const moment = require('moment');
 
 test('check if the model bookings is correctly istantiated', () => {
     expect(db['bookings']).not.toBeNull();
@@ -45,7 +46,7 @@ describe('API test', function () {
     it('POST lectures', function (done) {
         request(app)
             .post('/api/lectures')
-            .send({ duration: 1.5, id: 1 })
+            .send({ duration: 1.5, id: 1 , subject_id:1, date: moment().add(1,"hours").toDate()})
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(201, done);
@@ -64,16 +65,60 @@ describe('API test', function () {
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
+    it('GET users/:userID FAIL', function (done) {
+        request(app)
+            .get('/api/lectures/users/A')
+            .set('Accept', 'application/json')
+            .expect(500, done);
+    });
+    it('GET users/:userID ', function (done) {
+        request(app)
+            .get('/api/lectures/users/5')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
 
     //==================== bookings API test ====================
 
     it('POST bookings', function (done) {
         request(app)
-            .post('/api/bookings')
-            .send({ user_id: 1, lecture_id: 1 })
+            .post('/api/bookings/student')
+            .send({ user_id: 1, lecture_id: 1, email:"prova@prova.it" })
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(201, done);
+    });
+    it('POST bookings 2', function (done) {
+        request(app)
+            .post('/api/bookings/student')
+            .send({ user_id: 1, lecture_id: 2, email:"prova@prova.it" })
+            .set('Accept', 'application/json')
+            .expect(201, done);
+    });
+    it('POST bookings 3', function (done) {
+        request(app)
+            .post('/api/bookings/student')
+            .send({ user_id: 1, lecture_id: 15, email:"prova@prova.it" })
+            .set('Accept', 'application/json')
+            .expect(201, done);
+    });
+    it('POST bookings FAIL', function (done) {
+        request(app)
+            .post('/api/bookings/student')
+            .send({ user_id: 2, lecture_id: 2})
+            .set('Accept', 'application/json')
+            .expect(500, done);
+    });
+    it('POST bookings FAIL 2', function (done) {
+        try {
+            request(app)
+            .post('/api/bookings/student')
+            .send({ user_id: 5, lecture_id: 2, email:"prova@prova.it"})
+            .set('Accept', 'application/json')
+            .expect(500,done);
+        } catch (error) {
+            expect(error).not.toBeNull();
+        }
+        
     });
     it('GET bookings', function (done) {
         request(app)
@@ -114,6 +159,54 @@ describe('API test', function () {
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
+    it('GET/:id teaching_loads 2', function (done) {
+        request(app)
+            .get('/api/teaching_loads/students/2')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+    it('GET/:id teaching_loads 3', function (done) {
+        request(app)
+            .get('/api/teaching_loads/students/2/lectures')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+    it('GET/:id teaching_loads FAIL', function (done) {
+        request(app)
+            .get('/api/teaching_loads/students/0')
+            .set('Accept', 'application/json')
+            .expect(500, done);
+    });
+    it('GET/:id teaching_loads FAIL 2', function (done) {
+        request(app)
+            .get('/api/teaching_loads/students/0/lectures')
+            .set('Accept', 'application/json')
+            .expect(500, done);
+    });
+    it('GET/:id teaching_loads FAIL 3', function (done) {
+        request(app)
+            .get('/api/teaching_loads/students/5')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+    it('GET/:id teaching_loads FAIL 4', function (done) {
+        request(app)
+            .get('/api/teaching_loads/students/5/lectures')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+    it('GET/:id teaching_loads FAIL 5', function (done) {
+        request(app)
+            .get('/api/teaching_loads/students/A')
+            .set('Accept', 'application/json')
+            .expect(500, done);
+    });
+    it('GET/:id teaching_loads FAIL 6', function (done) {
+        request(app)
+            .get('/api/teaching_loads/students/A/lectures')
+            .set('Accept', 'application/json')
+            .expect(500, done);
+    });
     
     //==================== teachers API test ====================
 
@@ -123,6 +216,27 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, done);
+    });
+
+    it('GET teachers/nextLecture', function (done) {
+        request(app)
+            .get('/api/teachers/2/nextLecture')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+
+    it('GET teachers/nextLecture FAIL', function (done) {
+        request(app)
+            .get('/api/teachers/0/nextLecture')
+            .set('Accept', 'application/json')
+            .expect(500, done);
+    });
+
+    it('GET teachers/nextLecture FAIL 2', function (done) {
+        request(app)
+            .get('/api/teachers/1/nextLecture')
+            .set('Accept', 'application/json')
+            .expect(500, done);
     });
 
     //==================== students API test ====================
@@ -140,6 +254,20 @@ describe('API test', function () {
     it('DELETE bookings', function (done) {
         request(app)
             .del('/api/bookings/students/1/lectures/1')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200, done);
+    });
+    it('DELETE bookings', function (done) {
+        request(app)
+            .del('/api/bookings/students/1/lectures/2')
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(200, done);
+    });
+    it('DELETE bookings', function (done) {
+        request(app)
+            .del('/api/bookings/students/1/lectures/15')
             .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .expect(200, done);

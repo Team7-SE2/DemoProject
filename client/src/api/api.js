@@ -160,7 +160,7 @@ async function bookLecture (user_id, lecture_id, email){
         lecture_id: lecture_id,
         email: email
     };
-    const url = `/api/bookings/students/${user_id}/lectures/${lecture_id}`;
+    const url = `/api/bookings/student`;
     //const url = "/api/bookings";
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL
