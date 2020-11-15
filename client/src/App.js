@@ -10,7 +10,9 @@ import { Switch } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import ListStudentsCourses from "./components/ListStudentsCourses";
 import StudentCourseLectures from "./components/StudentCourseLectures";
+import TeacherCourseLectures from "./components/TeacherCourseLectures"
 import ListTeachersCourses from "./components/ListTeachersCourses";
+import StudentList from "./components/StudentList";
 import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
 import HomeCalendar from "./components/HomeCalendar.js";
@@ -22,6 +24,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     let course = { subjectID: " " };
+    let lecture ={};
 
     this.state = {
       authUser: null,
@@ -29,8 +32,10 @@ class App extends React.Component {
       login_error: null,
       courses: [],
       lectures: [],
+      students: [],
       logged: false,
       course: course,
+      lecture: lecture,
       bookedLectures: null
     }
     this.initialState = { ...this.state };
@@ -94,7 +99,23 @@ class App extends React.Component {
       });
   }
 
-  showTeachersLectures = () => {
+  showTeachersLectures = (course) => {
+    API.getStudentCourseLectures(course.id)
+    .then((lectures) => {
+      this.setState({ course: course });
+      this.setState({ lectures: lectures });
+      this.props.history.push("/teacher/courses/" + course.subjectID + "/lectures");
+
+    });
+  }
+
+  getStudentsList=(lecture)=>{
+    API.getStudentListforLecture(lecture.id)
+    .then((students) => {
+      this.setState({ students: students,lecture: lecture});
+      this.props.history.push("/teacher/lectures/"+lecture.id+"/students");
+
+    });
 
   }
 
@@ -124,18 +145,11 @@ class App extends React.Component {
 
   loadInitialDataTeacher = () => {
 
-    /*API.getTeacherLectures(this.state.info_user.ID_User)
-      .then((lectures) => {
-
-      })*/
       API.getTeacherSubjects(this.state.info_user.ID_User)
         .then((courses) => {
           this.setState({ courses: courses })
         }
         );
-      
-    
-
   }
 
 
@@ -280,7 +294,7 @@ class App extends React.Component {
                         <h3>My Courses</h3>
                       </Card.Header>
                       <Card.Body>
-                        <ListTeachersCourses courses={this.state.courses} showLectures={this.showLectures} />
+                        <ListTeachersCourses courses={this.state.courses} showLectures={this.showTeachersLectures} />
                       </Card.Body>
                     </Card>
                   </Col>
@@ -296,6 +310,30 @@ class App extends React.Component {
                   </Col>
 
                 </Row>
+              </Route>
+              <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/lectures"}>
+                <Row className="vheight-100 ">
+                  <Col sm={3} className="below-nav" />
+                  <Col sm={6} className="below-nav">
+                    <TeacherCourseLectures lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} />
+                  </Col>
+                  <Col sm={3} className="below-nav" />
+
+                </Row>
+
+              </Route>
+
+
+              <Route exact path={"/teacher/lectures/"+this.state.lecture.id+"/students"}>
+                <Row className="vheight-100 ">
+                  <Col sm={3} className="below-nav" />
+                  <Col sm={6} className="below-nav">
+                    <StudentList students={this.state.students} lecture={this.state.lecture}/>
+                  </Col>
+                  <Col sm={3} className="below-nav" />
+
+                </Row>
+
               </Route>
 
 

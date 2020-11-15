@@ -138,6 +138,21 @@ async function getStudentCourseLectures (courseID){
     }
 }
 
+async function getStudentListforLecture(lectureId){
+    let url = "/api/bookings?lecture_id="+lectureId+"&user.role_id=5"; 
+    const response = await fetch(url); 
+    const studentListJson = await response.json(); 
+
+    if (response.ok) {
+        return(studentListJson.map((student)=>student));  
+    }
+    else {
+        console.log("studentListJson Error"); 
+        let err = {status: response.status, errObj: studentListJson};
+        throw err; 
+    }
+}
+
 
 async function bookLecture (user_id, lecture_id, email){
     let obj = {
@@ -366,5 +381,5 @@ async function bookRequestType(ReqType) {
 }
 
 
-const API = {getStudentCourses,getStudentCourseLectures,getBookedLectures,getLectures,getTeacherLectures,deleteBookedLecture,getTeacherSubjects, bookLecture, userLogin,userLogout, getStudentBookings, getbookings, bookRequestType };
+const API = {getStudentListforLecture,getStudentCourses,getStudentCourseLectures,getBookedLectures,getLectures,getTeacherLectures,deleteBookedLecture,getTeacherSubjects, bookLecture, userLogin,userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;
