@@ -16,10 +16,10 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import { AuthContext } from '../auth/AuthContext'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import API from '../api/api.js';
-
+import {Redirect} from 'react-router-dom';
 import "../Calendar.css";
 const today = new Date()
 const tomorrow = new Date(today)
@@ -68,89 +68,52 @@ class HomeCalendar extends React.PureComponent {
     this.commitChanges = this.commitChanges.bind(this);
     this.onEditingAppointmentChange = this.onEditingAppointmentChange.bind(this);
 
-    if(props.isStudent){
-      if(props.isMyCalendar)
+    if (props.isStudent) {
+      if (props.isMyCalendar)
         this.studentMyCalendar();
-  
-      else 
+
+      else
         this.studentCalendar();
     } else {
       this.teacherCalendar();
     }
-    
-}
-handleChange = (event) =>{
-  var newData = [];
-  var id = parseInt(event.target.id)
 
-  var index = selectedChecks.findIndex(x => x == id)
+  }
+  handleChange = (event) => {
+    var newData = [];
+    var id = parseInt(event.target.id)
 
-  if (index === -1){
-    selectedChecks.push(id)
-  } else 
-    selectedChecks.splice(index, 1)
-  
-  newData = this.state.data2.filter((d) => selectedChecks.includes(d.location))
-  console.log(newData)
-  this.setState({
-    data: newData
-  });
-}
+    var index = selectedChecks.findIndex(x => x == id)
 
-checkBoxMount() {
+    if (index === -1) {
+      selectedChecks.push(id)
+    } else
+      selectedChecks.splice(index, 1)
 
-  return instances.map((instance) => {
-        return <FormControlLabel
-          control={<Checkbox id = {instance.id} style ={{color: instance.color}} defaultChecked={true} /*checked={true} */onChange={this.handleChange}/>}
-          label={instance.description}
-        />
-      })
+    newData = this.state.data2.filter((d) => selectedChecks.includes(d.location))
+    console.log(newData)
+    this.setState({
+      data: newData
+    });
+  }
 
-}
+  checkBoxMount() {
+
+    return instances.map((instance) => {
+      return <FormControlLabel
+        control={<Checkbox id={instance.id} style={{ color: instance.color }} defaultChecked={true} /*checked={true} */ onChange={this.handleChange} />}
+        label={instance.description}
+      />
+    })
+
+  }
 
   componentDidMount() {
-    
+
   }
 
   studentMyCalendar = () => {
 
-    API.getStudentCourses(this.state.userID)
-    .then((courses) => {
-      resources = [{
-        fieldName: 'location',
-        title: 'Location',
-        instances: instances
-      }];
-      console.log(courses)
-      API.getStudentBookings(this.state.userID)
-      .then((books) => {
-        books.forEach((b) => {
-  
-          var index = selectedChecks.findIndex(x => parseInt(x)==parseInt(b.location))
-          if(index === -1){
-            var courseIndex = courses.findIndex(course => parseInt(course.id)==parseInt(b.location))
-            instances.push({ 
-              id: parseInt(b.location),
-              description: courses[courseIndex].description,
-              color: colors[parseInt(b.location)] 
-            })
-            selectedChecks.push(parseInt(b.location))
-          }
-        })
-        this.setState({data: books, data2: books})
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  
-  }
-  
-  studentCalendar = () => {
-  
     API.getStudentCourses(this.state.userID)
       .then((courses) => {
         resources = [{
@@ -158,37 +121,74 @@ checkBoxMount() {
           title: 'Location',
           instances: instances
         }];
-  
         console.log(courses)
-  
-        API.getLectures(this.state.userID)
-        .then((books) => {
-          books.forEach((b) => {
-            console.log(b.location)
-            var index = instances.findIndex(x => parseInt(x.id)==parseInt(b.location))
-            if(index === -1){
-              var courseIndex = courses.findIndex(course => parseInt(course.id)==parseInt(b.location))
-              instances.push({ 
-                id: parseInt(b.location),
-                description: courses[courseIndex].description,
-                color: colors[parseInt(b.location)] 
-              })
-              //instances.push(parseInt(b.location))
-            }
-  
+        API.getStudentBookings(this.state.userID)
+          .then((books) => {
+            books.forEach((b) => {
+
+              var index = selectedChecks.findIndex(x => parseInt(x) == parseInt(b.location))
+              if (index === -1) {
+                var courseIndex = courses.findIndex(course => parseInt(course.id) == parseInt(b.location))
+                instances.push({
+                  id: parseInt(b.location),
+                  description: courses[courseIndex].description,
+                  color: colors[parseInt(b.location)]
+                })
+                selectedChecks.push(parseInt(b.location))
+              }
+            })
+            this.setState({ data: books, data2: books })
           })
-          console.log(instances)
-          this.setState({data: books, data2: books})
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    })
-  
+          .catch((err) => {
+            console.log(err);
+          })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+  }
+
+  studentCalendar = () => {
+
+    API.getStudentCourses(this.state.userID)
+      .then((courses) => {
+        resources = [{
+          fieldName: 'location',
+          title: 'Location',
+          instances: instances
+        }];
+
+        console.log(courses)
+
+        API.getLectures(this.state.userID)
+          .then((books) => {
+            books.forEach((b) => {
+              console.log(b.location)
+              var index = instances.findIndex(x => parseInt(x.id) == parseInt(b.location))
+              if (index === -1) {
+                var courseIndex = courses.findIndex(course => parseInt(course.id) == parseInt(b.location))
+                instances.push({
+                  id: parseInt(b.location),
+                  description: courses[courseIndex].description,
+                  color: colors[parseInt(b.location)]
+                })
+                //instances.push(parseInt(b.location))
+              }
+
+            })
+            console.log(instances)
+            this.setState({ data: books, data2: books })
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+      })
+
   }
 
   teacherCalendar = () => {
-  
+
     API.getTeacherSubjects(this.state.userID)
       .then((courses) => {
         resources = [{
@@ -198,29 +198,29 @@ checkBoxMount() {
         }];
         console.log(courses)
         API.getTeacherLectures(this.state.userID)
-        .then((books) => {
-          console.log(books)
-          books.forEach((b) => {
+          .then((books) => {
+            console.log(books)
+            books.forEach((b) => {
 
-            var index = instances.findIndex(x => parseInt(x.id)==parseInt(b.location))
-            if(index === -1){
-              var courseIndex = courses.findIndex(course => parseInt(course.id)==parseInt(b.location))
-              instances.push({ 
-                id: parseInt(b.location),
-                description: courses[courseIndex].description,
-                color: colors[parseInt(b.location)] 
-              })
-              //instances.push(parseInt(b.location))
-            }
-  
+              var index = instances.findIndex(x => parseInt(x.id) == parseInt(b.location))
+              if (index === -1) {
+                var courseIndex = courses.findIndex(course => parseInt(course.id) == parseInt(b.location))
+                instances.push({
+                  id: parseInt(b.location),
+                  description: courses[courseIndex].description,
+                  color: colors[parseInt(b.location)]
+                })
+                //instances.push(parseInt(b.location))
+              }
+
+            })
+            this.setState({ data: books, data2: books })
           })
-          this.setState({data: books, data2: books})
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    })
-  
+          .catch((err) => {
+            console.log(err);
+          })
+      })
+
   }
   onEditingAppointmentChange(editingAppointment) {
     this.setState({ editingAppointment });
@@ -268,72 +268,78 @@ checkBoxMount() {
     const { classes } = this.props;
 
     return (
-        <>
-            {this.state.isMyCalendar ? <><div style= {{"width":"100%"}}>
+      <AuthContext.Consumer>
+        {(context) => (
+
+          <>
+            {context.authErr && <Redirect to="/login"></Redirect>}
+            {this.state.isMyCalendar ? <><div style={{ "width": "100%" }}>
               <br></br>
               <br></br>
               <br></br>
               <h2><b>My bookings calendar</b></h2>
               <br></br>
-              </div>
+            </div>
               <h5><b>Chose the subjects to show</b></h5>
-              <FormGroup style= {{"width":"100%"}} row>
-              {this.checkBoxMount()}
+              <FormGroup style={{ "width": "100%" }} row>
+                {this.checkBoxMount()}
               </FormGroup></> : <></>
             }
-            
+
             <Paper>
-                <Scheduler
+              <Scheduler
                 data={data}
                 height={660}
-                >
-                
+              >
+
                 <ViewState
-                    currentDate={currentDate}
+                  currentDate={currentDate}
                 />
                 <EditingState
-                    onCommitChanges={this.commitChanges}
-                    //onEditingAppointmentChange={this.onEditingAppointmentChange}
-                    //onAddedAppointmentChange={this.onAddedAppointmentChange}
+                  onCommitChanges={this.commitChanges}
+                //onEditingAppointmentChange={this.onEditingAppointmentChange}
+                //onAddedAppointmentChange={this.onAddedAppointmentChange}
                 />
                 <WeekView
-                    startDayHour={startDayHour}
-                    endDayHour={endDayHour}
+                  startDayHour={startDayHour}
+                  endDayHour={endDayHour}
                 />
                 <MonthView />
                 <AllDayPanel />
                 <EditRecurrenceMenu />
                 <Appointments />
-                
+
                 <Resources
-                    data={resources}
+                  data={resources}
                 />
                 <AppointmentTooltip
-                    //showOpenButton
-                    showCloseButton
-                    //showDeleteButton
+                  //showOpenButton
+                  showCloseButton
+                //showDeleteButton
                 />
                 <Toolbar />
                 <ViewSwitcher />
-                
-                <DragDropProvider />
-                </Scheduler>
 
-                <Dialog
+                <DragDropProvider />
+              </Scheduler>
+
+              <Dialog
                 open={confirmationVisible}
                 onClose={this.cancelDelete}
-                >
+              >
                 <DialogActions>
-                    <Button onClick={this.toggleConfirmationVisible} color="primary" variant="outlined">
+                  <Button onClick={this.toggleConfirmationVisible} color="primary" variant="outlined">
                     Cancel
                     </Button>
                 </DialogActions>
-                </Dialog>
+              </Dialog>
 
-                
+
             </Paper>
-    
-        </>
+
+          </>
+        )}
+      </AuthContext.Consumer>
     );
   }
 }

@@ -45,61 +45,61 @@ async function userLogout() {
     */
 }
 
-async function getStudentCourses(studentId){
+async function getStudentCourses(studentId) {
 
-    let url = "/api/teaching_loads/students/" + studentId; 
-    const response = await fetch(url); 
-    const studentCoursesJson = await response.json(); 
+    let url = "/api/teaching_loads/students/" + studentId;
+    const response = await fetch(url);
+    const studentCoursesJson = await response.json();
 
     if (response.ok) {
-        return( studentCoursesJson.map((course)=>course));  // have to do parsing
+        return (studentCoursesJson.map((course) => course));  // have to do parsing
     }
     else {
-        console.log("studentCoursesJson Error"); 
-        let err = {status: response.status, errObj: studentCoursesJson};
-        throw err; 
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: studentCoursesJson };
+        throw err;
+    }
+
+}
+async function getSubject(subjectId) {
+
+    let url = "/api/subjects?id=" + subjectId;
+    const response = await fetch(url);
+    const studentCoursesJson = await response.json();
+
+    if (response.ok) {
+        return (studentCoursesJson.map((course) => course));  // have to do parsing
+    }
+    else {
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: studentCoursesJson };
+        throw err;
     }
 
 }
 
-async function getSubject(subjectId){
 
-    let url = "/api/subjects?id=" + subjectId; 
-    const response = await fetch(url); 
-    const studentCoursesJson = await response.json(); 
+async function getStudentBookings(studentId) {
 
-    if (response.ok) {
-        return( studentCoursesJson.map((course)=>course));  // have to do parsing
-    }
-    else {
-        console.log("studentCoursesJson Error"); 
-        let err = {status: response.status, errObj: studentCoursesJson};
-        throw err; 
-    }
-
-}
-
-async function getStudentBookings(studentId){
-
-    let url = "/api/bookings?user_id=" + studentId; 
-    const response = await fetch(url); 
-    const studentBookingsJson = await response.json(); 
+    let url = "/api/bookings?user_id=" + studentId;
+    const response = await fetch(url);
+    const studentBookingsJson = await response.json();
     let id = 1;
     if (response.ok) {
         console.log(studentBookingsJson)
-        let array = studentBookingsJson.map( async (book) => {
-            
+        let array = studentBookingsJson.map(async (book) => {
+
             let startDate = new Date(book.lecture.date);
 
             let endDate = new Date(startDate);
-            endDate.setHours( startDate.getHours() + book.lecture.duration )
+            endDate.setHours(startDate.getHours() + book.lecture.duration)
 
             let subjectDescription = '';
 
             await getSubject(book.lecture.subject_id).then((subject) => {
                 subjectDescription = subject[0].description;
             })
-            
+
             return {
                 location: book.lecture.subject_id,
                 id: id++,
@@ -108,7 +108,7 @@ async function getStudentBookings(studentId){
                 endDate: endDate,
                 ownerId: book.user_id,
             }
-        }); 
+        });
 
         console.log(array)
 
@@ -116,25 +116,25 @@ async function getStudentBookings(studentId){
 
     }
     else {
-        console.log("studentCoursesJson Error"); 
-        let err = {status: response.status, errObj: studentBookingsJson};
-        throw err; 
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: studentBookingsJson };
+        throw err;
     }
 
 }
 
-async function getStudentCourseLectures (courseID){
-    let url = "/api/lectures?subject_id=" + courseID; 
-    const response = await fetch(url); 
-    const studentCourseLecturesJson = await response.json(); 
-
+async function getStudentCourseLectures(courseID) {
+    let url = "/api/lectures?subject_id=" + courseID;
+    const response = await fetch(url);
+    const studentCourseLecturesJson = await response.json();
+    console.log("response: " + response);
     if (response.ok) {
-        return(studentCourseLecturesJson.map((lecture)=>lecture));  
+        return (studentCourseLecturesJson.map((lecture) => lecture));
     }
     else {
-        console.log("studentCoursesJson Error"); 
-        let err = {status: response.status, errObj: studentCourseLecturesJson};
-        throw err; 
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: studentCourseLecturesJson };
+        throw err;
     }
 }
 
@@ -154,7 +154,7 @@ async function getStudentListforLecture(lectureId){
 }
 
 
-async function bookLecture (user_id, lecture_id, email){
+async function bookLecture(user_id, lecture_id, email) {
     let obj = {
         user_id: user_id,
         lecture_id: lecture_id,
@@ -178,12 +178,15 @@ async function bookLecture (user_id, lecture_id, email){
             } else {
                 // analyze the cause of error
                 console.log(response);
+                response.json()
+                    .then((obj) => { reject(obj); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
             }
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
 }
 
-async function deleteBookedLecture(user_id, lecture_id){
+async function deleteBookedLecture(user_id, lecture_id) {
 
     const url = `/api/bookings/students/${user_id}/lectures/${lecture_id}`;
     return new Promise((resolve, reject) => {
@@ -201,45 +204,48 @@ async function deleteBookedLecture(user_id, lecture_id){
             } else {
                 // analyze the cause of error
                 console.log(response);
+                response.json()
+                    .then((obj) => { reject(obj); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+
             }
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
 }
-
-async function getBookedLectures (user_id){
-    let url = "/api/bookings?user_id="+user_id;
+async function getBookedLectures(user_id) {
+    let url = "/api/bookings?user_id=" + user_id;
     const response = await fetch(url);
     const BookedLecturesJson = await response.json();
-    console.log("aaa: "+BookedLecturesJson);
-    if(response.ok){
+    console.log("aaa: " + BookedLecturesJson);
+    if (response.ok) {
         return (BookedLecturesJson.map((l) => l));
     }
     else {
         console.log("GetBookedLectures Error");
-        let err = {status: response.status, errObj: BookedLecturesJson};
-        throw err; 
+        let err = { status: response.status, errObj: BookedLecturesJson };
+        throw err;
     }
 }
 
-async function getLectures (user_id){
-    let url = "api/teaching_loads/students/"+user_id+'/lectures';
-    const response = await fetch(url); 
-    const coursesJson = await response.json(); 
+async function getLectures(user_id) {
+    let url = "api/teaching_loads/students/" + user_id + '/lectures';
+    const response = await fetch(url);
+    const coursesJson = await response.json();
     let id = 1;
     if (response.ok) {
         console.log(coursesJson)
         let array = [];
-        coursesJson.forEach( (course) => {
-            
+        coursesJson.forEach((course) => {
+
             let lectures = course.lectures.map((lecture) => {
 
                 let startDate = new Date(lecture.date);
 
                 let endDate = new Date(startDate);
-                endDate.setHours( startDate.getHours() + lecture.duration )
-    
+                endDate.setHours(startDate.getHours() + lecture.duration)
+
                 let subjectDescription = lecture.subject ? lecture.subject.description : '';
-                
+
                 return {
                     location: course.id,
                     id: id++,
@@ -252,32 +258,32 @@ async function getLectures (user_id){
             })
             lectures.forEach((l) => array.push(l))
             //array.push(lectures)
-        }); 
+        });
 
         console.log(array)
         return await Promise.all(array);
 
     }
     else {
-        console.log("studentCoursesJson Error"); 
-        let err = {status: response.status, errObj: coursesJson};
-        throw err; 
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: coursesJson };
+        throw err;
     }
 }
 
-async function getTeacherLectures (user_id){
+async function getTeacherLectures(user_id) {
     let url = `/api/lectures/users/${user_id}`;
-    const response = await fetch(url); 
-    const lecturesJson = await response.json(); 
+    const response = await fetch(url);
+    const lecturesJson = await response.json();
     let id = 1;
     if (response.ok) {
         console.log(lecturesJson)
         let array = [];
-        lecturesJson.forEach( (lecture) => {
+        lecturesJson.forEach((lecture) => {
             let startDate = new Date(lecture.date);
 
             let endDate = new Date(startDate);
-            endDate.setHours( startDate.getHours() + lecture.duration )
+            endDate.setHours(startDate.getHours() + lecture.duration)
             array.push({
                 location: lecture.subject_id,
                 id: id++,
@@ -303,30 +309,31 @@ async function getTeacherLectures (user_id){
             })
             lectures.forEach((l) => array.push(l))*/
             //array.push(lectures)
-        }); 
+        });
 
         console.log("array: " + JSON.stringify(array))
         return await Promise.all(array);
 
     }
     else {
-        console.log("studentCoursesJson Error"); 
-        let err = {status: response.status, errObj: lecturesJson};
-        throw err; 
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: lecturesJson };
+        throw err;
     }
 }
-async function getTeacherSubjects (teacher_id){
+
+async function getTeacherSubjects(teacher_id) {
     let url = "/api/subjects?teacher_id=" + teacher_id; //CI MANCA L?URL 
-    const response = await fetch(url); 
-    const teacherSubjectsJson = await response.json(); 
+    const response = await fetch(url);
+    const teacherSubjectsJson = await response.json();
 
     if (response.ok) {
-        return(teacherSubjectsJson.map((subject)=>subject));  
+        return (teacherSubjectsJson.map((subject) => subject));
     }
     else {
-        console.log("teacherSubjectsJson Error"); 
-        let err = {status: response.status, errObj: teacherSubjectsJson};
-        throw err; 
+        console.log("teacherSubjectsJson Error");
+        let err = { status: response.status, errObj: teacherSubjectsJson };
+        throw err;
     }
 }
 
