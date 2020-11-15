@@ -3,21 +3,25 @@ import Paper from '@material-ui/core/Paper';
 import Nav from 'react-bootstrap/Nav';
 import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
+import moment from'moment';
+import API from '../api/api';
+const StudentList = (props) => {
 
-const ListTeachersCourses = (props) => {
+ 
 
-  let { courses ,showLectures} = props;
-  const test = courses.map((course) => {
+
+  let { students,lecture,getStudentList} = props;
+
+
+  const test = students.map((student) => {
     return {
-      id: course.id,
-      subjectID: course.subjectID,
-      description: course.description,
-      ' ':  <div key={course.subjectID} onClick={() => showLectures(course)}> 
-      
-          <Nav.Link className="active" >View Details</Nav.Link>
-    </div>,
+      id: student.user.userID,
+      name: student.user.name,
+      surname: student.user.surname
     }
-  })
+  });
+
+  
 
   /*const compareKey = (a, b) => {
 
@@ -30,9 +34,9 @@ const ListTeachersCourses = (props) => {
   const [pageSizes] = useState([5, 10, 15, 0]);
 
   const [columns] = useState([
-    { name: 'subjectID', title: 'Subject ID'},
-    { name: 'description', title: 'Description'},
-    {name: ' ', title: " "}
+    { name: 'id', title: 'ID'},
+    { name: 'name', title: 'Name'},
+    {name: 'surname', title: 'Surname'}
   ]);
   const [integratedSortingColumnExtensions] = useState([
     //{ columnName: 'subjectID', compare: compareKey },
@@ -44,7 +48,8 @@ const ListTeachersCourses = (props) => {
 
   return (
     <>
-    
+    <h6><b>Date: {moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}</b></h6>
+        <br></br>
     <Paper>
       <Grid
         rows={test}
@@ -70,4 +75,4 @@ const ListTeachersCourses = (props) => {
   );
 }
 
-export default ListTeachersCourses;
+export default StudentList;
