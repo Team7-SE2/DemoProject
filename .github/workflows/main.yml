@@ -20,6 +20,8 @@ jobs:
       run:  npm install
     - name: Install Jest globally
       run:  sudo npm install -g jest
+    - name: Install jest-sonar-reporter globally
+      run:  sudo npm install -g jest-sonar-reporter
     - name: Run Tests
       run:  npm --prefix ./server run test
     - name: SonarCloud Scan
