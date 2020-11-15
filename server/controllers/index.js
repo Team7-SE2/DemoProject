@@ -16,8 +16,8 @@ var { Validator, ValidationError } = require('express-json-validator-middleware'
 module.exports = function (app) {
 
     // Initialize a Validator instance first
-    var validator = new Validator({allErrors: true}); // pass in options to the Ajv instance
-    
+    var validator = new Validator({ allErrors: true }); // pass in options to the Ajv instance
+
     // Define a shortcut function
     var validate = validator.validate;
 
@@ -25,66 +25,66 @@ module.exports = function (app) {
     router.use(express.json());
 
     // used to check login password
-    var apiCheckPassword = function(dbHash, password) {
-  
+    var apiCheckPassword = function (dbHash, password) {
+
         console.log("hash of: " + password);
         var check = bcrypt.compareSync(password, dbHash);
-      
+
         console.log(check)
-      
+
         return check;
-      
+
     }
 
-    router.post('/api/login', function(req,res){
+    router.post('/api/login', function (req, res) {
+        if (req.body.email && req.body.password) {
+            const email = req.body.email;
+            const password = req.body.password;
 
-        const email = req.body.email;
-        const password = req.body.password;
+            db['users'].findOne({
 
-        db['users'].findOne({
-
-            where:{
-                email: email
-            }
-
-        }).then((user) => {
-            if(!user){
-                res.status(404).end(); // Invalid e-mail
-            }
-            else{
-                // check password hash encrypt
-                if(!apiCheckPassword(user.dataValues.password, password)){
-
-                    res.status(404).end(); // Invalid password
-
-                } else {
-
-                    //AUTHENTICATION SUCCESS
-                    const token = jsonwebtoken.sign({ user: user.dataValues.id, email: user.dataValues.email }, jwtSecret, { expiresIn: expireTime});
-                    res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000*expireTime });
-                    res.send({id: user.dataValues.id, name: user.dataValues.name, email: user.dataValues.email, role_id: user.dataValues.role_id});
-
+                where: {
+                    email: email
                 }
-            }
-        })
-        .catch((err)=>{
-            console.log(err);
-            res.status(500).end();
-        })
-        
+
+            }).then((user) => {
+                if (!user) {
+                    res.status(404).end(); // Invalid e-mail
+                }
+                else {
+                    // check password hash encrypt
+                    if (!apiCheckPassword(user.dataValues.password, password)) {
+
+                        res.status(404).end(); // Invalid password
+
+                    } else {
+
+                        //AUTHENTICATION SUCCESS
+                        const token = jsonwebtoken.sign({ user: user.dataValues.id, email: user.dataValues.email }, jwtSecret, { expiresIn: expireTime });
+                        res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * expireTime });
+                        res.send({ id: user.dataValues.id, name: user.dataValues.name, email: user.dataValues.email, role_id: user.dataValues.role_id });
+
+                    }
+                }
+            })
+        }
+        else {
+            res.status(500).send("Some paramas missing");
+        }
     })
 
     router.use(cookieParser());
 
     // For the rest of the code, all APIs require authentication
-    router.use(
-        jwt({
-            secret: jwtSecret,
-            getToken: req => req.cookies.token,
-            algorithms: ['HS256'] 
-        })
-    );
-
+    if(process.env.NODE_ENV != "test"){
+        router.use(
+            jwt({
+                secret: jwtSecret,
+                getToken: req => req.cookies.token,
+                algorithms: ['HS256']
+            })
+        );
+    }
     router.use('/api/users', require('./users.js')());
     router.use('/api/bookings', require('./bookings.js')());
     router.use('/api/teaching_loads', require('./teaching_loads.js')());

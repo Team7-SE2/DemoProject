@@ -16,6 +16,35 @@ test('check if the model lectures is correctly istantiated', () => {
 
 
 describe('API test', function () {
+    //==================== LOGIN =============================
+    it('LOGIN NOK', function (done) {
+        request(app)
+        .post('/api/login')
+        .send({ password: "123"})
+        .set('Accept', 'application/json')
+        .expect(500, done);
+    })
+    it('LOGIN NOK 2', function (done) {
+        request(app)
+        .post('/api/login')
+        .send({ email: "prova2@prova.it",password: "123"})
+        .set('Accept', 'application/json')
+        .expect(404, done);
+    })
+    it('LOGIN NOK 3', function (done) {
+        request(app)
+        .post('/api/login')
+        .send({ email: "prova@prova.it", password: "125"})
+        .set('Accept', 'application/json')
+        .expect(404, done);
+    })
+    it('LOGIN OK', function (done) {
+        request(app)
+        .post('/api/login')
+        .send({ email: "prova@prova.it", password: "123"})
+        .set('Accept', 'application/json')
+        .expect(200, done);
+    })
 
     //==================== users API test ====================
     it('POST users', function (done) {
@@ -23,21 +52,18 @@ describe('API test', function () {
             .post('/api/users')
             .send({ name: "name_prova", surname: "surname_prova", id: 1 })
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(201, done);
     });
     it('GET users', function (done) {
         request(app)
             .get('/api/users')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('GET/:id users', function (done) {
         request(app)
             .get('/api/users/1')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
 
@@ -48,21 +74,18 @@ describe('API test', function () {
             .post('/api/lectures')
             .send({ duration: 1.5, id: 1 , subject_id:1, date: moment().add(1,"hours").toDate()})
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(201, done);
     });
     it('GET lectures', function (done) {
         request(app)
             .get('/api/lectures')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('GET/:id lectures', function (done) {
         request(app)
             .get('/api/lectures/1')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('GET users/:userID FAIL', function (done) {
@@ -124,14 +147,12 @@ describe('API test', function () {
         request(app)
             .get('/api/bookings')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('GET/:id bookings', function (done) {
         request(app)
             .get('/api/bookings/students/1/lectures/1')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
 
@@ -142,21 +163,18 @@ describe('API test', function () {
             .post('/api/teaching_loads')
             .send({ user_id: 1, subject_id: 1 })
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(201, done);
     });
     it('GET teaching_loads', function (done) {
         request(app)
             .get('/api/teaching_loads')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('GET/:id teaching_loads', function (done) {
         request(app)
             .get('/api/teaching_loads/students/1/subjects/1')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('GET/:id teaching_loads 2', function (done) {
@@ -214,7 +232,6 @@ describe('API test', function () {
         request(app)
             .get('/api/teachers')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
 
@@ -245,7 +262,6 @@ describe('API test', function () {
         request(app)
             .get('/api/students')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
 
@@ -255,35 +271,30 @@ describe('API test', function () {
         request(app)
             .del('/api/bookings/students/1/lectures/1')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('DELETE bookings', function (done) {
         request(app)
             .del('/api/bookings/students/1/lectures/2')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('DELETE bookings', function (done) {
         request(app)
             .del('/api/bookings/students/1/lectures/15')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('DELETE teaching_loads', function (done) {
         request(app)
             .del('/api/teaching_loads/students/1/subjects/1')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
     });
     it('DELETE lectures', function (done) {
         request(app)
             .del('/api/lectures/1')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
 
     });
@@ -291,7 +302,6 @@ describe('API test', function () {
         request(app)
             .del('/api/users/1')
             .set('Accept', 'application/json')
-            .expect('Content-Type', /json/)
             .expect(200, done);
 
     });
