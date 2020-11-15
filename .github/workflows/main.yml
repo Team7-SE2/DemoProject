@@ -17,9 +17,9 @@ jobs:
     - name: Get main
       run: git fetch origin main
     - name: Install dependencies
-      run:  npm install
+      run:  npm --prefix ./server install
     - name: Install Jest globally
-      run:  sudo npm install -g jest
+      run:  sudo npm --prefix ./server install -g jest
     - name: Install jest-sonar-reporter globally
       run:  sudo npm install -g jest-sonar-reporter
     - name: Run Tests
