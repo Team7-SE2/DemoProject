@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
 
-// Nodemailer transporter settings
-var transporter = nodemailer.createTransport({
+var emailHelper = {};
+emailHelper.transporter = nodemailer.createTransport({
     service: 'gmail',
     secure: false,
     port: 25,
@@ -13,4 +13,8 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-module.exports = transporter;
+emailHelper.sendEmail = async function (mailOptions) {
+    emailHelper.transporter.sendMail(mailOptions)
+}
+
+module.exports = emailHelper;

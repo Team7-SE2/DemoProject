@@ -21,7 +21,7 @@ module.exports = function () {
     router.get('/students/:user_id', function (req, res) {
         
         // get only users with ROLE-STUDENT
-        if (req.params && req.params.user_id) {
+        if (req.params && Number(req.params.user_id)) {
             db['users'].findOne({
                 where: { 
                     id: req.params.user_id 
@@ -32,12 +32,14 @@ module.exports = function () {
                 attributes: []
             })
             .then((student) => {
-                // send the student's teaching load
-                res.send(student.dataValues.subjects);
-            })
-            .catch((err) => {
-                console.log(err);
-                res.status(500).end();
+                if(student){
+                    // send the student's teaching load
+                    res.send(student.dataValues.subjects);
+                }
+                else{
+                    res.send([]);
+                }
+
             })
         }
         else {
@@ -51,7 +53,7 @@ module.exports = function () {
     router.get('/students/:user_id/lectures', function (req, res) {
         
         // get only users with ROLE-STUDENT
-        if (req.params && req.params.user_id) {
+        if (req.params && Number(req.params.user_id)) {
             db['users'].findOne({
                 where: { 
                     id: req.params.user_id 
@@ -66,12 +68,14 @@ module.exports = function () {
                 attributes: []
             })
             .then((student) => {
-                // send the student's teaching load
-                res.send(student.dataValues.subjects);
-            })
-            .catch((err) => {
-                console.log(err);
-                res.status(500).end();
+                if(student){
+                    // send the student's teaching load
+                    res.send(student.dataValues.subjects);
+                }
+                else{
+                    res.send({});
+                }
+                
             })
         }
         else {
