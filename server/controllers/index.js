@@ -48,26 +48,24 @@ module.exports = function (app) {
             }
 
         }).then((user) => {
-
-            // check if user was correctly retrieved
-            if(user === undefined){
+            if(!user){
                 res.status(404).end(); // Invalid e-mail
             }
+            else{
+                // check password hash encrypt
+                if(!apiCheckPassword(user.dataValues.password, password)){
 
-            // check password hash encrypt
-            if(!apiCheckPassword(user.dataValues.password, password)){
+                    res.status(404).end(); // Invalid password
 
-                res.status(404).end(); // Invalid password
+                } else {
 
-            } else {
+                    //AUTHENTICATION SUCCESS
+                    const token = jsonwebtoken.sign({ user: user.dataValues.id, email: user.dataValues.email }, jwtSecret, { expiresIn: expireTime});
+                    res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000*expireTime });
+                    res.send({id: user.dataValues.id, name: user.dataValues.name, email: user.dataValues.email, role_id: user.dataValues.role_id});
 
-                //AUTHENTICATION SUCCESS
-                const token = jsonwebtoken.sign({ user: user.dataValues.id, email: user.dataValues.email }, jwtSecret, { expiresIn: expireTime});
-                res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000*expireTime });
-                res.send({id: user.dataValues.id, name: user.dataValues.name, email: user.dataValues.email, role_id: user.dataValues.role_id});
-
+                }
             }
-
         })
         .catch((err)=>{
             console.log(err);
