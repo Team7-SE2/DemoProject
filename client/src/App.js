@@ -13,7 +13,6 @@ import StudentCourseLectures from "./components/StudentCourseLectures";
 import ListTeachersCourses from "./components/ListTeachersCourses";
 import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
-import Demo from "./components/Calendar.js";
 import HomeCalendar from "./components/HomeCalendar.js";
 import Card from "react-bootstrap/Card"
 import "./App.css";
