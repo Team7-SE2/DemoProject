@@ -1,6 +1,7 @@
-
 server/node_modules/
 client/node_modules/
 server/coverage/
+client/coverage/
 .scannerwork/
 server/test-report.xml
+client/test-report.xml

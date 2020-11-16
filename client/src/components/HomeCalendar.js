@@ -1,18 +1,15 @@
 import * as React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
-import { indigo, blue, teal, yellow, red, green } from '@material-ui/core/colors';
+import { indigo, blue, teal, red, green } from '@material-ui/core/colors';
 import {
-  Scheduler, DayView, Appointments, MonthView, WeekView, Toolbar,
-  DateNavigator, ViewSwitcher, TodayButton, Resources, AppointmentTooltip, DragDropProvider,
+  Scheduler, Appointments, MonthView, WeekView, Toolbar,
+  ViewSwitcher,Resources, AppointmentTooltip, DragDropProvider,
   EditRecurrenceMenu, AllDayPanel
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import FormGroup from '@material-ui/core/FormGroup';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -143,9 +140,6 @@ class HomeCalendar extends React.PureComponent {
             console.log(err);
           })
       })
-      .catch((err) => {
-        console.log(err);
-      });
 
   }
 
@@ -219,6 +213,9 @@ class HomeCalendar extends React.PureComponent {
           .catch((err) => {
             console.log(err);
           })
+      })
+      .catch((err) => {
+        console.log(err);
       })
 
   }
