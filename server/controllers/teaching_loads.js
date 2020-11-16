@@ -92,7 +92,7 @@ module.exports = function () {
     });
 
     // Create REST resource
-    var teachingLoadsResource = finale.resource({
+    finale.resource({
         model: db.teaching_loads,
         endpoints: ['/','/students/:user_id/subjects/:subject_id'],  //MANAGE GET, POST, PUT, DELETE
         include: [

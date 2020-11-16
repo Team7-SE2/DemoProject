@@ -21,7 +21,7 @@ module.exports = function () {
     });
 
     // Create REST resource
-    var bookingsResource = finale.resource({
+    finale.resource({
         model: db.bookings,
         endpoints: ['/', '/students/:user_id/lectures/:lecture_id'], //MANAGE GET, POST, PUT, DELETE
         include: [

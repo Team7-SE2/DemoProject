@@ -23,7 +23,7 @@ module.exports = function () {
     });
 
     // Create REST resource
-    var subjectsResource = finale.resource({
+    finale.resource({
         model: db.subjects,
         endpoints: ['/','/:id'], //MANAGE GET, POST, PUT, DELETE
         include: [{
