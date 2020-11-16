@@ -18,7 +18,7 @@ jobs:
       run: git fetch origin main
     - name: Install dependencies server
       run:  npm --prefix ./server install
-    - name: Install dependencies server
+    - name: Install dependencies client
       run:  npm --prefix ./client install
     - name: Install Jest globally
       run:  sudo npm --prefix ./server install -g jest
