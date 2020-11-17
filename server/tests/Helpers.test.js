@@ -32,3 +32,10 @@ test('check mail mechanism OK', () => {
 //         expect(error).toBe();
 //     }
 // })
+test('check helper events.js 2 ', () => {
+
+    // if the file doesn't exists it throws an exception and the test will fail
+    var events = require('../helpers/events')()
+ 
+    expect(events).not.toBeNull();
+});

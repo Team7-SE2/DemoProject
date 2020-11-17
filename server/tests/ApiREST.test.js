@@ -16,6 +16,7 @@ test('check if the model lectures is correctly istantiated', () => {
 
 
 describe('API test', function () {
+
     //==================== LOGIN =============================
     it('LOGIN NOK', function (done) {
         request(app)
@@ -45,6 +46,15 @@ describe('API test', function () {
         .set('Accept', 'application/json')
         .expect(200, done);
     })
+    it('PUT lectures', function (done) {
+        request(app)
+        .put('/api/lectures/2')
+        .send({ date: moment().add(1,"hours").toDate()})
+        .set('Accept', 'application/json')
+        .expect(200, done);
+    })
+    
+    
 
     //==================== users API test ====================
     it('POST users', function (done) {
@@ -76,6 +86,7 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(201, done);
     });
+    
     it('GET lectures', function (done) {
         request(app)
             .get('/api/lectures')
