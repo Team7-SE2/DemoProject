@@ -11,15 +11,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const expireTime = 300; //seconds
 
-var { Validator, ValidationError } = require('express-json-validator-middleware');
-
 module.exports = function (app) {
-
-    // Initialize a Validator instance first
-    var validator = new Validator({ allErrors: true }); // pass in options to the Ajv instance
-
-    // Define a shortcut function
-    validator.validate;
 
     // Process body content
     router.use(express.json());
@@ -27,7 +19,7 @@ module.exports = function (app) {
     // used to check login password
     var apiCheckPassword = function (dbHash, password) {
 
-        console.log("hash of: " + password);
+        //console.log("hash of: " + password);
         var check = bcrypt.compareSync(password, dbHash);
 
         console.log(check)
