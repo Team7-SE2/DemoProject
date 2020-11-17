@@ -73,11 +73,11 @@ it('renders HomeCalendar 3', () => {
 // 		expect(x).not.toBeNull();
 // 	})
 //   });
-it('renders App', () => {
-	render(<React.StrictMode>
-		 		<Router>
-		 		<App />
-		 		</Router>
-		 		</React.StrictMode>);
-	expect(screen.getByText("Don't share your password with anyone")).toBeInTheDocument();
-  });
+// it('renders App', () => {
+// 	render(<React.StrictMode>
+// 		 		<Router>
+// 		 		<App />
+// 		 		</Router>
+// 		 		</React.StrictMode>);
+// 	expect(screen.getByText("Don't share your password with anyone")).toBeInTheDocument();
+//   });
