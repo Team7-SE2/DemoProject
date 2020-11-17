@@ -3,14 +3,13 @@ import {
   ProSidebar,
   Menu,
   MenuItem,
-  SubMenu,
   SidebarHeader,
   SidebarFooter,
   SidebarContent,
 } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
-import { FaBook, FaCalendar, FaGithub, FaToggleOn } from 'react-icons/fa';
+import { FaBook, FaCalendar, FaGithub } from 'react-icons/fa';
 import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
