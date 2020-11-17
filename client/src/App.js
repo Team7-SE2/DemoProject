@@ -134,7 +134,9 @@ class App extends React.Component {
       .then((courses) => {
         this.setState({ courses: courses })
       }
-      );
+      ).catch((err) => {
+        this.handleErrors(err);
+      });
     API.getBookedLectures(this.state.info_user.ID_User)
       .then((bookedLectures) => {
         const myBookedLectures = [];

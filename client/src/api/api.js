@@ -24,7 +24,7 @@ async function userLogin(username, password) {
 
 async function userLogout() {
     //Fake API, parlare con Gaetano
-    return new Promise((resolve, reject) =>  {
+    return new Promise((resolve, reject) => {
         resolve(null);
     });
     /*
@@ -46,18 +46,19 @@ async function userLogout() {
 }
 
 async function getStudentCourses(studentId) {
+    if (studentId) {
+        let url = "/api/teaching_loads/students/" + studentId;
+        const response = await fetch(url);
+        const studentCoursesJson = await response.json();
 
-    let url = "/api/teaching_loads/students/" + studentId;
-    const response = await fetch(url);
-    const studentCoursesJson = await response.json();
-
-    if (response.ok) {
-        return (studentCoursesJson.map((course) => course));  // have to do parsing
-    }
-    else {
-        console.log("studentCoursesJson Error");
-        let err = { status: response.status, errObj: studentCoursesJson };
-        throw err;
+        if (response.ok) {
+            return (studentCoursesJson.map((course) => course));  // have to do parsing
+        }
+        else {
+            console.log("studentCoursesJson Error");
+            let err = { status: response.status, errObj: studentCoursesJson };
+            throw err;
+        }
     }
 
 }
@@ -138,18 +139,18 @@ async function getStudentCourseLectures(courseID) {
     }
 }
 
-async function getStudentListforLecture(lectureId){
-    let url = "/api/bookings?lecture_id="+lectureId+"&user.role_id=5"; 
-    const response = await fetch(url); 
-    const studentListJson = await response.json(); 
+async function getStudentListforLecture(lectureId) {
+    let url = "/api/bookings?lecture_id=" + lectureId + "&user.role_id=5";
+    const response = await fetch(url);
+    const studentListJson = await response.json();
 
     if (response.ok) {
-        return(studentListJson.map((student)=>student));  
+        return (studentListJson.map((student) => student));
     }
     else {
-        console.log("studentListJson Error"); 
-        let err = {status: response.status, errObj: studentListJson};
-        throw err; 
+        console.log("studentListJson Error");
+        let err = { status: response.status, errObj: studentListJson };
+        throw err;
     }
 }
 
@@ -386,5 +387,5 @@ async function bookRequestType(ReqType) {
 }
 
 
-const API = {getStudentListforLecture,getStudentCourses,getStudentCourseLectures,getBookedLectures,getLectures,getTeacherLectures,deleteBookedLecture,getTeacherSubjects, bookLecture, userLogin,userLogout, getStudentBookings, getbookings, bookRequestType };
+const API = { getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;
