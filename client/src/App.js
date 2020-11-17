@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from 'react';
+import { IntlProvider } from 'react-intl';
 import Header from "./components/Header";
 import Login from "./components/Login"
 import Container from "react-bootstrap/Container";
@@ -14,8 +15,10 @@ import ListCourses from "./components/ListCourses";
 import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
 import HomeCalendar from "./components/HomeCalendar.js";
+import Aside from "./components/Aside.js";
 import Card from "react-bootstrap/Card"
 import "./App.css";
+import zIndex from '@material-ui/core/styles/zIndex';
 
 class App extends React.Component {
 
@@ -212,16 +215,31 @@ class App extends React.Component {
       authErr: this.state.authErr,
       loginUser: this.login
     }
-
-
+    
     return (
       <AuthContext.Provider value={value}>
+        
         <Container fluid>
-
-          <Header userLogout={this.userLogout} role_id={this.state.info_user.role_id} logged = {this.state.logged} />
-
-          <Container fluid>
-
+        <Row >
+        {this.state.logged ? <Col className="LeftBarCol" sm={2}>
+        <Aside className="LeftBar"
+                      //image={image}
+                      collapsed={false}
+                      rtl={false}
+                      toggled={false}
+                      handleToggleSidebar={false}
+                      style={{height:'100%'}}
+                      userLogout={this.userLogout} 
+                      role_id={this.state.info_user.role_id} 
+                      logged = {this.state.logged}
+                    /> 
+        </Col>: <></>}
+        
+        <Col sm={10}>
+          {this.state.logged ? <Header userLogout={this.userLogout} role_id={this.state.info_user.role_id} logged = {this.state.logged} /> : <></>}
+          
+                    
+            <Row className="vheight-100">
             <Switch>
 
               <Route exact path="/">
@@ -237,11 +255,10 @@ class App extends React.Component {
 
               <Route exact path="/student">
               {this.state.logged ? <Redirect to="/student" /> : <Redirect to="/login" />}
-
-                <Row >
-
+              <Container fluid>
+                <Row className="vheight-100"/* style={{paddingTop: '5%'}}*/>
                   <Col sm={5} className="below-nav">
-                    <Card>
+                    <Card className="CardClass">
                       <Card.Header className="text-center">
                         <h3>My teaching load</h3>
                       </Card.Header>
@@ -251,7 +268,7 @@ class App extends React.Component {
                     </Card>
                   </Col>
                   <Col sm={7} className="below-nav" >
-                    <Card>
+                    <Card className="CardClass">
                       <Card.Header className="text-center">
                         <h3>Available Lectures Calendar</h3>
                       </Card.Header>
@@ -260,8 +277,8 @@ class App extends React.Component {
                       </Card.Body>
                     </Card>
                   </Col>
-
-                </Row>
+                  </Row>
+                </Container>
 
               </Route>
 
@@ -272,6 +289,7 @@ class App extends React.Component {
               </Route>
 
               <Route exact path={"/student/courses/" + this.state.course.subjectID + "/lectures"}>
+              <Container fluid>
                 <Row className="vheight-100 ">
                   <Col sm={3} className="below-nav" />
                   <Col sm={6} className="below-nav">
@@ -280,15 +298,17 @@ class App extends React.Component {
                   <Col sm={3} className="below-nav" />
 
                 </Row>
+                </Container>
 
               </Route>
 
 
               <Route exact path="/teacher">
               {this.state.logged ? <Redirect to="/teacher" /> : <Redirect to="/login" />}
-                <Row >
+              <Container fluid>
+                <Row className="vheight-100 ">
                   <Col sm={5} className="below-nav">
-                    <Card>
+                    <Card className="CardClass">
                       <Card.Header className="text-center">
                         <h3>My Courses</h3>
                       </Card.Header>
@@ -298,7 +318,7 @@ class App extends React.Component {
                     </Card>
                   </Col>
                   <Col sm={7} className="below-nav" >
-                    <Card>
+                    <Card className="CardClass">
                       <Card.Header className="text-center">
                         <h3>Lectures Calendar</h3>
                       </Card.Header>
@@ -309,8 +329,10 @@ class App extends React.Component {
                   </Col>
 
                 </Row>
+                </Container>
               </Route>
               <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/lectures"}>
+              <Container fluid>
                 <Row className="vheight-100 ">
                   <Col sm={3} className="below-nav" />
                   <Col sm={6} className="below-nav">
@@ -319,19 +341,22 @@ class App extends React.Component {
                   <Col sm={3} className="below-nav" />
 
                 </Row>
+                </Container>
 
               </Route>
 
 
               <Route exact path={"/teacher/lectures/" + this.state.lecture.id + "/students"}>
+              <Container fluid>
                 <Row className="vheight-100 ">
                   <Col sm={3} className="below-nav" />
                   <Col sm={6} className="below-nav">
-                    <StudentList students={this.state.students} lecture={this.state.lecture} />
+                    <StudentList students={this.state.students} course={this.state.course} lecture={this.state.lecture} />
                   </Col>
                   <Col sm={3} className="below-nav" />
 
                 </Row>
+                </Container>
 
               </Route>
 
@@ -340,8 +365,10 @@ class App extends React.Component {
 
 
             </Switch>
-          </Container>
+            </Row>
 
+          </Col>
+        </Row>
         </Container>
       </AuthContext.Provider >
 

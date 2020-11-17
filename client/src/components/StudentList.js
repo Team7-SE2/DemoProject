@@ -5,12 +5,14 @@ import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 import moment from'moment';
 import API from '../api/api';
+import Card from "react-bootstrap/Card"
+
 const StudentList = (props) => {
 
  
 
 
-  let { students,lecture,getStudentList} = props;
+  let { students, course, lecture,getStudentList} = props;
 
 
   const test = students.map((student) => {
@@ -48,29 +50,34 @@ const StudentList = (props) => {
 
   return (
     <>
-    <h6><b>Date: {moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}</b></h6>
-        <br></br>
-    <Paper>
-      <Grid
-        rows={test}
-        columns={columns}
-      >
-        <PagingState
-          defaultCurrentPage={0}
-          //pageSize={10}
-        />
-        <SortingState
-            columnExtensions={sortingStateColumnExtensions}
-        />
-        <IntegratedSorting
-          columnExtensions={integratedSortingColumnExtensions}
-        />
-        <IntegratedPaging />
-        <Table />
-        <TableHeaderRow showSortingControls />
-        <PagingPanel pageSizes={pageSizes}/>
-      </Grid>
-    </Paper>
+    <Card className="CardClass">
+            <Card.Header className="text-center">
+              <h4><b>{course.description} - Lecture Date: {moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}</b></h4>
+            </Card.Header>
+            <Card.Body>
+                <Paper>
+                    <Grid
+                        rows={test}
+                        columns={columns}
+                    >
+                        <PagingState
+                        defaultCurrentPage={0}
+                        pageSize={10}
+                        />
+                        <SortingState
+                            columnExtensions={sortingStateColumnExtensions}
+                        />
+                        <IntegratedSorting
+                        columnExtensions={integratedSortingColumnExtensions}
+                        />
+                        <IntegratedPaging />
+                        <Table />
+                        <TableHeaderRow showSortingControls />
+                        <PagingPanel pageSizes={pageSizes}/>
+                    </Grid>
+                </Paper>
+            </Card.Body>
+        </Card>
     </>
   );
 }

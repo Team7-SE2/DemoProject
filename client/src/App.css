@@ -40,3 +40,54 @@
 button:focus {
   outline: none;
 }
+/*
+.fixed-top{
+  z-index: 1;
+}*/
+
+.LeftBarCol{
+  padding-left: 0
+}
+
+.LeftBar{
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+}
+
+.HeaderAccount{
+  position: absolute;
+  top: 5%;
+  right: 1%;
+  z-index: 2000;
+}
+
+.TopHeader{
+  z-index: 1;
+  height: 35% !important;
+  /*background-color: #283644;*/
+  background-color: #1A2325
+}
+
+.CardClass{
+  z-index: 2;
+}
+
+.badgeRed{
+  background-color: rgb(255, 73, 73);
+  padding-left: 15%;
+  padding-right: 15%;
+  border-radius: 20%;
+  padding-bottom: 10%;
+  color: black;
+}
+
+.pageTitle{
+  position: absolute;
+  top: 5%;
+  left: 18%;
+  z-index: 2000;
+  color: white;
+}

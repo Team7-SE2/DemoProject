@@ -7,10 +7,10 @@ import { NavLink } from 'react-router-dom';
 const Header = (props) => {
   let { userLogout,role_id, logged } = props;
   return (
-    <AuthContext.Consumer>
+    <AuthContext.Consumer >
       {(context) => (
      
-        <Navbar className="navbar navbar-dark bg-dark" expand="sm" fixed="top">
+        <Navbar className="navbar navbar-dark TopHeader" expand="sm" fixed="top">
 
           <Navbar.Brand >
             <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-book" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -20,24 +20,13 @@ const Header = (props) => {
          Learning Platform
         </Navbar.Brand>
 
-          <Nav className="mr-auto">
-            {context.authUser && role_id==5 && logged &&
-              <Nav.Link as={NavLink} to="/student"  >My teaching load</Nav.Link>
-            }
-            {
-              context.authUser && role_id==4 && logged &&
-              <Nav.Link as={NavLink} to="/teacher"  >My courses</Nav.Link>
-            }
 
-
-          </Nav>
-
-
-          <Nav className="ml-md-auto">
+          <Navbar.Brand className="pageTitle"> <h5>TEACHING LOAD</h5></Navbar.Brand>
+          <Nav className="ml-md-auto HeaderAccount">
             {context.authUser &&
               <>
               {logged &&<>
-                <Navbar.Brand>Welcome {context.authUser.nome}!</Navbar.Brand>
+                <Navbar.Brand><h4>Welcome {context.authUser.nome}!</h4></Navbar.Brand>
                 <Nav.Link onClick={userLogout}>Logout</Nav.Link></>}
               </>}
             {!context.authUser && <Nav.Link as={NavLink} to="/login">Login</Nav.Link>}
