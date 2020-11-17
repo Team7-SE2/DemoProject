@@ -67,12 +67,12 @@ class HomeCalendar extends React.PureComponent {
 
     if (props.isStudent) {
       if (props.isMyCalendar)
-        this.studentMyCalendar();
+        this.studentMyCalendar(props.userId);
 
       else
-        this.studentCalendar();
+        this.studentCalendar(props.userId);
     } else {
-      this.teacherCalendar();
+      this.teacherCalendar(props.userId);
     }
 
   }
@@ -110,9 +110,9 @@ class HomeCalendar extends React.PureComponent {
 
   }
 
-  studentMyCalendar = () => {
+  studentMyCalendar = (userID) => {
 
-    API.getStudentCourses(this.state.userID)
+    API.getStudentCourses(userID)
       .then((courses) => {
         resources = [{
           fieldName: 'location',
@@ -120,7 +120,7 @@ class HomeCalendar extends React.PureComponent {
           instances: instances
         }];
         console.log(courses)
-        API.getStudentBookings(this.state.userID)
+        API.getStudentBookings(userID)
           .then((books) => {
             books.forEach((b) => {
 
@@ -145,9 +145,9 @@ class HomeCalendar extends React.PureComponent {
 
   }
 
-  studentCalendar = () => {
+  studentCalendar = (userID) => {
 
-    API.getStudentCourses(this.state.userID)
+    API.getStudentCourses(userID)
       .then((courses) => {
         resources = [{
           fieldName: 'location',
@@ -157,7 +157,7 @@ class HomeCalendar extends React.PureComponent {
 
         console.log(courses)
 
-        API.getLectures(this.state.userID)
+        API.getLectures(userID)
           .then((books) => {
             books.forEach((b) => {
               console.log(b.location)
@@ -183,9 +183,9 @@ class HomeCalendar extends React.PureComponent {
 
   }
 
-  teacherCalendar = () => {
+  teacherCalendar = (userID) => {
 
-    API.getTeacherSubjects(this.state.userID)
+    API.getTeacherSubjects(userID)
       .then((courses) => {
         resources = [{
           fieldName: 'location',
@@ -193,7 +193,7 @@ class HomeCalendar extends React.PureComponent {
           instances: instances
         }];
         console.log(courses)
-        API.getTeacherLectures(this.state.userID)
+        API.getTeacherLectures(userID)
           .then((books) => {
             console.log(books)
             books.forEach((b) => {
