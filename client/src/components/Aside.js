@@ -1,5 +1,4 @@
 import React from 'react';
-import { useIntl } from 'react-intl';
 import {
   ProSidebar,
   Menu,
@@ -18,7 +17,6 @@ import { NavLink } from 'react-router-dom';
 
 const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_id, logged }) => {
   
-  const intl = useIntl();
   return (
     <AuthContext.Consumer >
       {(context) => (
@@ -45,7 +43,7 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
             textAlign: 'center'
           }}
         >
-          {intl.formatMessage({ id: 'LEARNING PLATFORM' })}
+          LEARNING PLATFORM
         </div>
       </SidebarHeader>
 
@@ -55,60 +53,31 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
             icon={<FaBook />}
             suffix={
               <span className="badgeRed" style={{ fontSize: 12 }}>
-                {intl.formatMessage({ id: 'new' })}
+                new
               </span>
             }
           >
             <Nav >
             {
               context.authUser && role_id===5 && logged &&
-              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/student"  >{intl.formatMessage({ id: 'Teaching Load' })}</Nav.Link>
+              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/student"  >Teaching Load</Nav.Link>
             }
             {
               context.authUser && role_id===4 && logged &&
-              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/teacher"  >{intl.formatMessage({ id: 'My Courses' })}</Nav.Link>
+              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/teacher"  >My Courses</Nav.Link>
             }
           </Nav>
           </MenuItem>
-          <MenuItem 
+          <>
+          {context.authUser && role_id===5 && logged && <MenuItem 
             icon={<FaCalendar />}  
-            suffix={<span className="badgeRed" style={{ fontSize: 12 }}>{intl.formatMessage({ id: 'new' })}</span>} > 
-            {intl.formatMessage({ id: 'My calendar' })}
+            suffix={<span className="badgeRed" style={{ fontSize: 12 }}>new</span>} > 
+            My calendar
           </MenuItem>
+          }
+          </>
         </Menu>
-        <Menu iconShape="circle">
-          <SubMenu
-            suffix={<span className="badge yellow">3</span>}
-            title={intl.formatMessage({ id: 'sample #1' })}
-            icon={<FaToggleOn />}
-          >
-            <MenuItem>{intl.formatMessage({ id: 'submenu' })} 1</MenuItem>
-            <MenuItem>{intl.formatMessage({ id: 'submenu' })} 2</MenuItem>
-            <MenuItem>{intl.formatMessage({ id: 'submenu' })} 3</MenuItem>
-          </SubMenu>
-          <SubMenu
-            prefix={<span className="badge gray">3</span>}
-            title={intl.formatMessage({ id: 'sample #2' })}
-            icon={<FaToggleOn />}
-          >
-            <MenuItem>{intl.formatMessage({ id: 'submenu' })} 1</MenuItem>
-            <MenuItem>{intl.formatMessage({ id: 'submenu' })} 2</MenuItem>
-            <MenuItem>{intl.formatMessage({ id: 'submenu' })} 3</MenuItem>
-          </SubMenu>
-          <SubMenu title={intl.formatMessage({ id: 'sample #3' })} icon={<FaToggleOn />}>
-            <MenuItem>{intl.formatMessage({ id: 'submenu' })} 1 </MenuItem>
-            <MenuItem>{intl.formatMessage({ id: 'submenu' })} 2 </MenuItem>
-            <SubMenu title={`${intl.formatMessage({ id: 'submenu' })} 3`}>
-              <MenuItem>{intl.formatMessage({ id: 'submenu' })} 3.1 </MenuItem>
-              <MenuItem>{intl.formatMessage({ id: 'submenu' })} 3.2 </MenuItem>
-              <SubMenu title={`${intl.formatMessage({ id: 'submenu' })} 3.3`}>
-                <MenuItem>{intl.formatMessage({ id: 'submenu' })} 3.3.1 </MenuItem>
-                <MenuItem>{intl.formatMessage({ id: 'submenu' })} 3.3.2 </MenuItem>
-                <MenuItem>{intl.formatMessage({ id: 'submenu' })} 3.3.3 </MenuItem>
-              </SubMenu>
-            </SubMenu>
-          </SubMenu>
-        </Menu>
+        
       </SidebarContent>
 
       <SidebarFooter style={{ textAlign: 'center' }}>
@@ -125,7 +94,7 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
             rel="noopener noreferrer"
           >
             <FaGithub />
-            <span> {intl.formatMessage({ id: 'viewSource' })}</span>
+            <span> View Source</span>
           </a>
         </div>
       </SidebarFooter>
