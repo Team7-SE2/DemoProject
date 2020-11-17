@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import { IntlProvider } from 'react-intl';
+import React  from 'react';
 import Header from "./components/Header";
 import Login from "./components/Login"
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Redirect, Route, Link } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { Switch } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import StudentList from "./components/StudentList";
@@ -16,7 +15,6 @@ import HomeCalendar from "./components/HomeCalendar.js";
 import Aside from "./components/Aside.js";
 import Card from "react-bootstrap/Card"
 import "./App.css";
-import zIndex from '@material-ui/core/styles/zIndex';
 import CourseLectures from './components/CourseLectures';
 
 class App extends React.Component {
@@ -61,11 +59,11 @@ class App extends React.Component {
         this.setState({ authUser: info });
         this.setState({ ID_User: info.ID_User })
 
-        if (info.role_id == 5) {
+        if (info.role_id === 5) {
           this.loadInitialDataStudent();
           this.props.history.push("/student");
         }
-        if (info.role_id == 4) {
+        if (info.role_id === 4) {
           this.loadInitialDataTeacher();
           this.props.history.push("/teacher");
         }
@@ -141,7 +139,7 @@ class App extends React.Component {
       .then((bookedLectures) => {
         const myBookedLectures = [];
         bookedLectures.forEach(elem => {
-          if (elem.user_id == this.state.info_user.ID_User)
+          if (elem.user_id === this.state.info_user.ID_User)
             myBookedLectures.push(elem);
         });
         this.setState({ bookedLectures: myBookedLectures });

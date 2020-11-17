@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState} from 'react'
 import moment from 'moment';
 import Button from "react-bootstrap/Button";
 import Paper from '@material-ui/core/Paper';
@@ -13,7 +13,7 @@ const CourseLectures = (props) => {
     function checkPrenotation (bookedLectures, lectureID){
 
         console.log(bookedLectures);
-        return bookedLectures.find((bl) => bl.lecture_id==lectureID); 
+        return bookedLectures.find((bl) => bl.lecture_id===lectureID); 
 
     }
     const test = lectures.map((lecture) => {
@@ -25,8 +25,8 @@ const CourseLectures = (props) => {
                             justifyContent: "center",
                             alignItems: "center"
                         }}>
-                        {role_id==5 && <>{checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button>: <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>}</>}
-                        {role_id==4 && <Button color="primary" onClick={() => getListStudents(lecture)}> View list of students </Button>}
+                        {role_id===5 && <>{checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button>: <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>}</>}
+                        {role_id===4 && <Button color="primary" onClick={() => getListStudents(lecture)}> View list of students </Button>}
                     </div>
         }
     })

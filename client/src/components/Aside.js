@@ -11,7 +11,7 @@ import {
 } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
-import { FaBook, FaCalendar, FaList, FaGithub, FaRegLaughWink, FaHeart, FaToggleOn } from 'react-icons/fa';
+import { FaBook, FaCalendar, FaGithub, FaToggleOn } from 'react-icons/fa';
 import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
@@ -61,11 +61,11 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
           >
             <Nav >
             {
-              context.authUser && role_id==5 && logged &&
+              context.authUser && role_id===5 && logged &&
               <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/student"  >{intl.formatMessage({ id: 'Teaching Load' })}</Nav.Link>
             }
             {
-              context.authUser && role_id==4 && logged &&
+              context.authUser && role_id===4 && logged &&
               <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/teacher"  >{intl.formatMessage({ id: 'My Courses' })}</Nav.Link>
             }
           </Nav>

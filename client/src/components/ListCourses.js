@@ -15,8 +15,8 @@ const ListCourses = (props) => {
       description: course.description,
       ' ':  <div key={course.subjectID} onClick={() => showLectures(course)}> 
       
-      {role_id==5 && <Nav.Link className="active" >Book your seat</Nav.Link>}
-      {role_id==4 && <Nav.Link className="active" >View details</Nav.Link>}
+      {role_id===5 && <Nav.Link className="active" >Book your seat</Nav.Link>}
+      {role_id===4 && <Nav.Link className="active" >View details</Nav.Link>}
 
     </div>,
     }

@@ -244,8 +244,6 @@ async function getLectures(user_id) {
                 let endDate = new Date(startDate);
                 endDate.setHours(startDate.getHours() + lecture.duration)
 
-                let subjectDescription = lecture.subject ? lecture.subject.description : '';
-
                 return {
                     location: course.id,
                     id: id++,

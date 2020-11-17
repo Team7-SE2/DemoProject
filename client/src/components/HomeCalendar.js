@@ -80,7 +80,7 @@ class HomeCalendar extends React.PureComponent {
     var newData = [];
     var id = parseInt(event.target.id)
 
-    var index = selectedChecks.findIndex(x => x == id)
+    var index = selectedChecks.findIndex(x => x === id)
 
     if (index === -1) {
       selectedChecks.push(id)
@@ -123,9 +123,9 @@ class HomeCalendar extends React.PureComponent {
           .then((books) => {
             books.forEach((b) => {
 
-              var index = selectedChecks.findIndex(x => parseInt(x) == parseInt(b.location))
+              var index = selectedChecks.findIndex(x => parseInt(x) === parseInt(b.location))
               if (index === -1) {
-                var courseIndex = courses.findIndex(course => parseInt(course.id) == parseInt(b.location))
+                var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
                 instances.push({
                   id: parseInt(b.location),
                   description: courses[courseIndex].description,
@@ -159,9 +159,9 @@ class HomeCalendar extends React.PureComponent {
           .then((books) => {
             books.forEach((b) => {
               console.log(b.location)
-              var index = instances.findIndex(x => parseInt(x.id) == parseInt(b.location))
+              var index = instances.findIndex(x => parseInt(x.id) === parseInt(b.location))
               if (index === -1) {
-                var courseIndex = courses.findIndex(course => parseInt(course.id) == parseInt(b.location))
+                var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
                 instances.push({
                   id: parseInt(b.location),
                   description: courses[courseIndex].description,
@@ -196,9 +196,9 @@ class HomeCalendar extends React.PureComponent {
             console.log(books)
             books.forEach((b) => {
 
-              var index = instances.findIndex(x => parseInt(x.id) == parseInt(b.location))
+              var index = instances.findIndex(x => parseInt(x.id) === parseInt(b.location))
               if (index === -1) {
-                var courseIndex = courses.findIndex(course => parseInt(course.id) == parseInt(b.location))
+                var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
                 instances.push({
                   id: parseInt(b.location),
                   description: courses[courseIndex].description,
@@ -258,12 +258,10 @@ class HomeCalendar extends React.PureComponent {
       currentDate,
       data,
       confirmationVisible,
-      editingFormVisible,
       startDayHour,
       endDayHour,
     } = this.state;
-    const { classes } = this.props;
-
+   
     return (
       <AuthContext.Consumer>
         {(context) => (

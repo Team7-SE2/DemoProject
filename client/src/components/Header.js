@@ -5,7 +5,7 @@ import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
 
 const Header = (props) => {
-  let { userLogout,role_id, logged } = props;
+  let { userLogout, logged } = props;
   return (
     <AuthContext.Consumer >
       {(context) => (

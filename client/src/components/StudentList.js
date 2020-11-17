@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import Paper from '@material-ui/core/Paper';
-import Nav from 'react-bootstrap/Nav';
 import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 import moment from'moment';
-import API from '../api/api';
 import Card from "react-bootstrap/Card"
 
 const StudentList = (props) => {
@@ -12,7 +10,7 @@ const StudentList = (props) => {
  
 
 
-  let { students, course, lecture,getStudentList} = props;
+  let { students, course, lecture} = props;
 
 
   const test = students.map((student) => {

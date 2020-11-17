@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IntlProvider } from 'react-intl';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter as Router} from 'react-router-dom';
-import messages from './messages';
+
 
 //const [locale, setLocale] = useState('en');
 ReactDOM.render(
