@@ -68,11 +68,11 @@ it('renders HomeCalendar 3', () => {
 	render(<HomeCalendar isMyCalendar={true} userId={3} isStudent={false}></HomeCalendar>);
 	expect(screen.getByText('My bookings calendar')).toBeInTheDocument();
   });
-it('renders Api.getStudentCourses', () => {
-	Api.getStudentCourses(3).then((x)=>{
-		expect(x).not.toBeNull();
-	})
-  });
+// it('renders Api.getStudentCourses', () => {
+// 	Api.getStudentCourses(3).then((x)=>{
+// 		expect(x).not.toBeNull();
+// 	})
+//   });
 it('renders App', () => {
 	render(<React.StrictMode>
 		 		<Router>
