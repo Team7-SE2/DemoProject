@@ -232,7 +232,8 @@ async function getLectures(user_id) {
     let url = "api/teaching_loads/students/" + user_id + '/lectures';
     const response = await fetch(url);
     const coursesJson = await response.json();
-    let id = 1;
+    let lectureId = 1;
+    let courseId = 0;
     if (response.ok) {
         console.log(coursesJson)
         let array = [];
@@ -246,8 +247,8 @@ async function getLectures(user_id) {
                 endDate.setHours(startDate.getHours() + lecture.duration)
 
                 return {
-                    location: course.id,
-                    id: id++,
+                    location: courseId,
+                    id: lectureId++,
                     title: course.description,
                     startDate: startDate,
                     endDate: endDate,
@@ -256,7 +257,7 @@ async function getLectures(user_id) {
 
             })
             lectures.forEach((l) => array.push(l))
-            //array.push(lectures)
+            courseId ++;
         });
 
         console.log(array)
