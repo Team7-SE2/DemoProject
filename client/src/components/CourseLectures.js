@@ -6,11 +6,16 @@ import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 import Card from "react-bootstrap/Card"
 
-const TeacherCourseLectures = (props) => {
+const CourseLectures = (props) => {
   
-    let { lectures, course,getListStudents } = props;
+    let { lectures, course, bookLecture, deleteBookedLecture,bookedLectures, role_id, getListStudents  } = props;
   
-   
+    function checkPrenotation (bookedLectures, lectureID){
+
+        console.log(bookedLectures);
+        return bookedLectures.find((bl) => bl.lecture_id==lectureID); 
+
+    }
     const test = lectures.map((lecture) => {
         return {
         id: lecture.id,
@@ -20,7 +25,8 @@ const TeacherCourseLectures = (props) => {
                             justifyContent: "center",
                             alignItems: "center"
                         }}>
-                            <Button color="primary" onClick={() => getListStudents(lecture)}> View list of students </Button>
+                        {role_id==5 && <>{checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button>: <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>}</>}
+                        {role_id==4 && <Button color="primary" onClick={() => getListStudents(lecture)}> View list of students </Button>}
                     </div>
         }
     })
@@ -85,4 +91,4 @@ const TeacherCourseLectures = (props) => {
     );
 }
 
-export default TeacherCourseLectures;
+export default CourseLectures;

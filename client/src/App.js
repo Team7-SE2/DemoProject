@@ -8,8 +8,6 @@ import Col from "react-bootstrap/Col";
 import { Redirect, Route, Link } from 'react-router-dom';
 import { Switch } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import StudentCourseLectures from "./components/StudentCourseLectures";
-import TeacherCourseLectures from "./components/TeacherCourseLectures"
 import StudentList from "./components/StudentList";
 import ListCourses from "./components/ListCourses";
 import API from './api/api.js';
@@ -19,6 +17,7 @@ import Aside from "./components/Aside.js";
 import Card from "react-bootstrap/Card"
 import "./App.css";
 import zIndex from '@material-ui/core/styles/zIndex';
+import CourseLectures from './components/CourseLectures';
 
 class App extends React.Component {
 
@@ -293,7 +292,7 @@ class App extends React.Component {
                 <Row className="vheight-100 ">
                   <Col sm={3} className="below-nav" />
                   <Col sm={6} className="below-nav">
-                    <StudentCourseLectures lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} />
+                    <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures}/>
                   </Col>
                   <Col sm={3} className="below-nav" />
 
@@ -336,7 +335,7 @@ class App extends React.Component {
                 <Row className="vheight-100 ">
                   <Col sm={3} className="below-nav" />
                   <Col sm={6} className="below-nav">
-                    <TeacherCourseLectures lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} />
+                    <CourseLectures role_id = {this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} />
                   </Col>
                   <Col sm={3} className="below-nav" />
 
