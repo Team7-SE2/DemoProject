@@ -60,7 +60,7 @@ const StudentList = (props) => {
                     >
                         <PagingState
                         defaultCurrentPage={0}
-                        pageSize={10}
+                        //pageSize={10}
                         />
                         <SortingState
                             columnExtensions={sortingStateColumnExtensions}
