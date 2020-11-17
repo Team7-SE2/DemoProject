@@ -1,23 +1,17 @@
 import React from 'react';
-import { IntlProvider } from 'react-intl';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter as Router} from 'react-router-dom';
 
-
-//const [locale, setLocale] = useState('en');
 ReactDOM.render(
-                
-                <IntlProvider /*locale={locale} messages={messages[locale]}*/>
                 
                 <React.StrictMode>
                 <Router>
                 <App />
                 </Router>
-                </React.StrictMode>
-                </IntlProvider>,
+                </React.StrictMode>,
                 document.getElementById('root')
                 );
 
