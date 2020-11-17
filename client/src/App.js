@@ -16,6 +16,7 @@ import Aside from "./components/Aside.js";
 import Card from "react-bootstrap/Card"
 import "./App.css";
 import CourseLectures from './components/CourseLectures';
+import moment from 'moment';
 
 class App extends React.Component {
 
@@ -91,7 +92,7 @@ class App extends React.Component {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
         this.setState({ course: course });
-        this.setState({ lectures: lectures });
+        this.setState({ lectures: lectures.filter((s)=>moment(s.date).isAfter(moment().add("days",1).set("hours",0).set("minutes",0).set("seconds",0))) });
         this.props.history.push("/student/courses/" + course.subjectID + "/lectures");
 
       })
@@ -104,7 +105,7 @@ class App extends React.Component {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
         this.setState({ course: course });
-        this.setState({ lectures: lectures });
+        this.setState({ lectures: lectures.filter((s)=>moment(s.date).isAfter(moment().set("hours",0).set("minutes",0).set("seconds",0))) });
         this.props.history.push("/teacher/courses/" + course.subjectID + "/lectures");
 
       })
@@ -162,21 +163,6 @@ class App extends React.Component {
       );
   }
 
-
-  getRequestTypes = () => {
-
-    API.getRequestTypes()
-      .then((requestTypes) => {
-
-        this.setState({ requestTypes: requestTypes });
-
-      })
-      .catch((err) => {
-        console.log(err);
-        this.handleErrors(err);
-      });
-
-  }
 
 
   handleErrors(err) {
@@ -350,7 +336,7 @@ class App extends React.Component {
                 <Row className="vheight-100 ">
                   <Col sm={3} className="below-nav" />
                   <Col sm={6} className="below-nav">
-                    <StudentList students={this.state.students} course={this.state.course} lecture={this.state.lecture} />
+                    <StudentList students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id = {this.state.info_user.role_id} />
                   </Col>
                   <Col sm={3} className="below-nav" />
 

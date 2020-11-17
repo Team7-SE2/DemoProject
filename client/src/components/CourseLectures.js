@@ -5,18 +5,46 @@ import Paper from '@material-ui/core/Paper';
 import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 import Card from "react-bootstrap/Card"
+import PaperInsideCard from './PaperInsideCard';
 
 const CourseLectures = (props) => {
   
     let { lectures, course, bookLecture, deleteBookedLecture,bookedLectures, role_id, getListStudents  } = props;
   
-    function checkPrenotation (bookedLectures, lectureID){
+    function checkPrenotation (bookedLectures2, lectureID){
 
-        console.log(bookedLectures);
-        return bookedLectures.find((bl) => bl.lecture_id===lectureID); 
+        console.log(bookedLectures2);
+        return bookedLectures2.find((bl) => bl.lecture_id===lectureID); 
 
     }
+
+    const compareDate = (a, b) => {
+
+        console.log(a,b)
+        const millisA = new Date(a).getTime();
+        const millisB = new Date(b).getTime();
+    
+        return millisA - millisB;
+    
+    };
+    
+    const [integratedSortingColumnExtensions] = useState([
+        { columnName: 'lectureDate', compare: compareDate },
+    ]);
+    
+    
+    const [columns] = useState([
+        //{ name: 'id', title: 'ID'},
+        { name: 'lectureDate',title: 'Lecture Date'},
+        { name: ' '}
+    ]);
+    
+    const [sortingStateColumnExtensions] = useState([
+        { columnName: ' ', sortingEnabled: false },
+    ]);
+
     const test = lectures.map((lecture) => {
+        
         return {
         id: lecture.id,
         lectureDate: moment(new Date(lecture.date)).format("LLL"),
@@ -31,62 +59,18 @@ const CourseLectures = (props) => {
         }
     })
 
-    const compareDate = (a, b) => {
-
-        console.log(a,b)
-        const millisA = new Date(a).getTime();
-        const millisB = new Date(b).getTime();
-  
-        return millisA - millisB;
-  
-    };
-    
-    const [integratedSortingColumnExtensions] = useState([
-        { columnName: 'lectureDate', compare: compareDate },
-    ]);
-
-    const [pageSizes] = useState([5, 10, 15, 0]);
-
-    const [columns] = useState([
-        //{ name: 'id', title: 'ID'},
-        { name: 'lectureDate',title: 'Lecture Date'},
-        { name: ' '}
-    ]);
-    
-    const [sortingStateColumnExtensions] = useState([
-        { columnName: ' ', sortingEnabled: false },
-    ]);
 
     return (
         <>
-        <Card className="CardClass">
-            <Card.Header className="text-center">
-                <h4><b>{course.description} - lectures</b></h4>
-            </Card.Header>
-            <Card.Body>
-                <Paper>
-                    <Grid
-                        rows={test}
-                        columns={columns}
-                    >
-                        <PagingState
-                        defaultCurrentPage={0}
-                        //pageSize={10}
-                        />
-                        <SortingState
-                            columnExtensions={sortingStateColumnExtensions}
-                        />
-                        <IntegratedSorting
-                        columnExtensions={integratedSortingColumnExtensions}
-                        />
-                        <IntegratedPaging />
-                        <Table />
-                        <TableHeaderRow showSortingControls />
-                        <PagingPanel pageSizes={pageSizes}/>
-                    </Grid>
-                </Paper>
-            </Card.Body>
-        </Card>
+        <PaperInsideCard
+        CardHeader = {course.description + " lectures"}
+        columns = {columns}
+        sortingStateColumnExtensions = {sortingStateColumnExtensions}
+        integratedSortingColumnExtensions = {integratedSortingColumnExtensions}
+        test = {test}
+        
+        
+        ></PaperInsideCard>
         </>
     );
 }
