@@ -1,13 +1,9 @@
 import React, { useState } from 'react'
-import Paper from '@material-ui/core/Paper';
-import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
-import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 import moment from'moment';
-import Card from "react-bootstrap/Card"
 import PaperInsideCard from "./PaperInsideCard"
 const StudentList = (props) => {
 
-  let { role_id,students, course, lecture} = props;
+  let {students, course, lecture} = props;
 
 
   const test = students.map((student) => {

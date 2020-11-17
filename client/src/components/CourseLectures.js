@@ -1,10 +1,6 @@
 import React, { useState} from 'react'
 import moment from 'moment';
 import Button from "react-bootstrap/Button";
-import Paper from '@material-ui/core/Paper';
-import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
-import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
-import Card from "react-bootstrap/Card"
 import PaperInsideCard from './PaperInsideCard';
 
 const CourseLectures = (props) => {
