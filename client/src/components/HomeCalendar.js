@@ -84,7 +84,8 @@ class HomeCalendar extends React.PureComponent {
 
     if (index === -1) {
       selectedChecks.push(id)
-    } else
+    }
+    else
       selectedChecks.splice(index, 1)
 
     newData = this.state.data2.filter((d) => selectedChecks.includes(d.location))

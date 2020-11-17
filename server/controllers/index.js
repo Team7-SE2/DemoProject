@@ -19,7 +19,7 @@ module.exports = function (app) {
     var validator = new Validator({ allErrors: true }); // pass in options to the Ajv instance
 
     // Define a shortcut function
-    var validate = validator.validate;
+    validator.validate;
 
     // Process body content
     router.use(express.json());

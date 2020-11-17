@@ -17,38 +17,6 @@ const Op = db.Sequelize.Op;
 
 module.exports = function () {
 
-    // API GET student TEACHING LOADS 
-    router.get('/students/:user_id', function (req, res) {
-        
-        // get only users with ROLE-STUDENT
-        if (req.params && Number(req.params.user_id)) {
-            db['users'].findOne({
-                where: { 
-                    id: req.params.user_id 
-                },
-                include: [{
-                    model: db.subjects,
-                }],
-                attributes: []
-            })
-            .then((student) => {
-                if(student){
-                    // send the student's teaching load
-                    res.send(student.dataValues.subjects);
-                }
-                else{
-                    res.send([]);
-                }
-
-            })
-        }
-        else {
-            console.log("Some params missing requesting sudent's load!");
-            res.status(500).end();
-        }
-
-    })
-
     // API GET student TEACHING LOADS lectures
     router.get('/students/:user_id/lectures', function (req, res) {
         
@@ -79,12 +47,43 @@ module.exports = function () {
             })
         }
         else {
-            console.log("Some params missing requesting sudent's load!");
+            console.log("Some params missing requesting sudent's load lecture!");
             res.status(500).end();
         }
 
     })
+    
+    // API GET student TEACHING LOADS 
+    router.get('/students/:user_id', function (req, res) {
+        
+        // get only users with ROLE-STUDENT
+        if (req.params && Number(req.params.user_id)) {
+            db['users'].findOne({
+                where: { 
+                    id: req.params.user_id 
+                },
+                include: [{
+                    model: db.subjects,
+                }],
+                attributes: []
+            })
+            .then((student) => {
+                if(student){
+                    // send the student's teaching load
+                    res.send(student.dataValues.subjects);
+                }
+                else{
+                    res.send([]);
+                }
 
+            })
+        }
+        else {
+            console.log("Some params missing requesting sudent's load 2!");
+            res.status(500).end();
+        }
+
+    })
     // Initialize finale
     finale.initialize({
         app: router,

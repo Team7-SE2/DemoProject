@@ -6,9 +6,6 @@ const event = require("../helpers/events");
 
 if (process.env.NODE_ENV && process.env.NODE_ENV == "test"){
     config.storage = "../server/databaseTest.sqlite"
-    setTimeout(function(){
-        process.exit();
-    },20000)
 }
     
 
