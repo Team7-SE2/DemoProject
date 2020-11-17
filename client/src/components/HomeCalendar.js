@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Paper from '@material-ui/core/Paper';
 import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
-import { indigo, blue, teal, red, green } from '@material-ui/core/colors';
+import { indigo, amber, blue, teal, red, green, orange, purple, blueGrey, common } from '@material-ui/core/colors';
 import {
   Scheduler, Appointments, MonthView, WeekView, Toolbar,
   ViewSwitcher,Resources, AppointmentTooltip, DragDropProvider,
@@ -31,7 +31,7 @@ const styles = theme => ({
   },
 });
 
-const colors = [teal[300], red[300], green[300], blue[300], indigo[300]]
+const colors = [teal[300], red[300], orange[300], blue[300], green[300], indigo[300], blueGrey[300], purple[300], amber[300], common[300]]
 let instances = []
 let selectedChecks = [];
 
@@ -84,7 +84,8 @@ class HomeCalendar extends React.PureComponent {
 
     if (index === -1) {
       selectedChecks.push(id)
-    } else
+    }
+    else
       selectedChecks.splice(index, 1)
 
     newData = this.state.data2.filter((d) => selectedChecks.includes(d.location))
@@ -125,15 +126,16 @@ class HomeCalendar extends React.PureComponent {
 
               var index = selectedChecks.findIndex(x => parseInt(x) === parseInt(b.location))
               if (index === -1) {
-                var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
+                //var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
                 instances.push({
                   id: parseInt(b.location),
-                  description: courses[courseIndex].description,
+                  description: courses[b.location].description,
                   color: colors[parseInt(b.location)]
                 })
                 selectedChecks.push(parseInt(b.location))
               }
             })
+            console.log(instances)
             this.setState({ data: books, data2: books })
           })
           .catch((err) => {
@@ -161,10 +163,10 @@ class HomeCalendar extends React.PureComponent {
               console.log(b.location)
               var index = instances.findIndex(x => parseInt(x.id) === parseInt(b.location))
               if (index === -1) {
-                var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
+                //var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
                 instances.push({
                   id: parseInt(b.location),
-                  description: courses[courseIndex].description,
+                  description: courses[b.location].description,
                   color: colors[parseInt(b.location)]
                 })
                 //instances.push(parseInt(b.location))

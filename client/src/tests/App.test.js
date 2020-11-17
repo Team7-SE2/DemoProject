@@ -4,10 +4,8 @@ import { render, screen } from '@testing-library/react';
 import App from '../App';
 import {BrowserRouter as Router} from 'react-router-dom';
 import renderer from 'react-test-renderer';
-//import StudentCourseLectures from '../components/StudentCourseLectures.js'
 import StudentList from '../components/StudentList';
-import StudentCourseLectures from '../components/StudentCourseLectures';
-import TeacherCourseLectures from '../components/TeacherCourseLectures';
+import CourseLectures from '../components/CourseLectures';
 import ListCourses from '../components/ListCourses';
 import HomeCalendar from '../components/HomeCalendar';
 import Api from '../api/api'
@@ -29,25 +27,35 @@ import Api from '../api/api'
 // 		</React.StrictMode>,div);
 // })
 it('renders StudentList', () => {
-	render(<StudentList students={[{user:{userID:"AA",name:"AA",surname:"AA"}}]} lecture={{}}></StudentList>);
+	render(<StudentList students={[{user:{userID:"AA",name:"AA",surname:"AA"}}]} lecture={{}} course={{description:"..."}}></StudentList>);
 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
   });
-it('renders StudentCourseLectures', () => {
-	render(<StudentCourseLectures lectures={[]} course={{}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]}></StudentCourseLectures>);
-	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
-  });
-it('renders StudentCourseLectures 2', () => {
-	render(<StudentCourseLectures lectures={[{id:1,date:new Date()}]} course={{}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]}></StudentCourseLectures>);
-	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
-  });
-it('renders TeacherCourseLectures', () => {
-	render(<TeacherCourseLectures lectures={[]} course={{}} getListStudents={App.getListStudents}></TeacherCourseLectures>);
-	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
-  });
-it('renders TeacherCourseLectures 2', () => {
-	render(<TeacherCourseLectures lectures={[{id:1,date:new Date()}]} course={{}} getListStudents={App.getListStudents}></TeacherCourseLectures>);
-	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
-  });
+// it('renders StudentCourseLectures', () => {
+// 	render(<StudentCourseLectures lectures={[]} course={{}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]}></StudentCourseLectures>);
+// 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+//   });
+// it('renders StudentCourseLectures 2', () => {
+// 	render(<StudentCourseLectures lectures={[{id:1,date:new Date()}]} course={{}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]}></StudentCourseLectures>);
+// 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+//   });
+// it('renders TeacherCourseLectures', () => {
+// 	render(<TeacherCourseLectures lectures={[]} course={{}} getListStudents={App.getListStudents}></TeacherCourseLectures>);
+// 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+//   });
+// it('renders TeacherCourseLectures 2', () => {
+// 	render(<TeacherCourseLectures lectures={[{id:1,date:new Date()}]} course={{}} getListStudents={App.getListStudents}></TeacherCourseLectures>);
+// 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+//   });
+it('renders CourseLectures' ,() => {
+	//lectures, course, bookLecture, deleteBookedLecture,bookedLectures, role_id, getListStudents
+	render(<CourseLectures lectures={[{id:1,date:new Date()}]} course={{description:""}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]} getListStudents={App.getListStudents} role_id={4}></CourseLectures>);
+ 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+})
+it('renders CourseLectures 2' ,() => {
+	//lectures, course, bookLecture, deleteBookedLecture,bookedLectures, role_id, getListStudents
+	render(<CourseLectures lectures={[{id:1,date:new Date()}]} course={{description:""}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]} getListStudents={App.getListStudents} role_id={5}></CourseLectures>);
+ 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+})
 it('renders ListCourses', () => {
 	render(<ListCourses courses={[]} showLectures={App.showLectures} role_id={5}></ListCourses>);
 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
