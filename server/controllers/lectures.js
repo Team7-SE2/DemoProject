@@ -59,7 +59,7 @@ module.exports = function () {
             })
         }
         else {
-            console.log("Some params missing requesting sudent's load!");
+            console.log("Some params missing requesting sudent's load 1!");
             res.status(500).end();
         }
 
