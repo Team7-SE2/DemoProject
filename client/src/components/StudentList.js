@@ -31,7 +31,7 @@ const StudentList = (props) => {
   return (
     <>
      <PaperInsideCard
-        CardHeader = {course.description +" - Lecture Date: "+ moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}
+        CardHeader = {<>{course.description} <br></br>Lecture Date:  {moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}</>}
         columns = {columns}
         sortingStateColumnExtensions = {sortingStateColumnExtensions}
         integratedSortingColumnExtensions = {integratedSortingColumnExtensions}

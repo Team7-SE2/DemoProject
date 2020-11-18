@@ -308,7 +308,7 @@ class App extends React.Component {
                         </Card>
                       </Col>
                     </Row>
-                    <Row className="vheight-100 " style={{ marginTop: '-14em' }}>
+                    <Row className="vheight-100 " style={{ marginTop: '-18em' }}>
                       <Col sm={1}></Col>
                       <Col sm={10} className="below-nav">
                         <Card>
