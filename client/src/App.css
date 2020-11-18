@@ -45,10 +45,6 @@ button:focus {
   z-index: 1;
 }*/
 
-.LeftBarCol{
-  padding-left: 0
-}
-
 .LeftBar{
   height: 100%;
   position: fixed;
@@ -61,18 +57,19 @@ button:focus {
   position: absolute;
   top: 5%;
   right: 1%;
-  z-index: 2000;
+  /*z-index: 2000;*/
 }
 
 .TopHeader{
-  z-index: 1;
-  height: 35% !important;
+  /*z-index: 1;*/
+  position: relative;
+  height: 300px;
   /*background-color: #283644;*/
   background-color: #1A2325
 }
 
-.CardClass{
-  z-index: 2;
+.CardNoPaddingTop{
+  padding-top: 0;
 }
 
 .badgeRed{
@@ -87,8 +84,7 @@ button:focus {
 .pageTitle{
   position: absolute;
   top: 5%;
-  left: 18%;
-  z-index: 2000;
+  left: 5%;
   color: white;
 }
 

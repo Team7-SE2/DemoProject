@@ -42,36 +42,31 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
             textAlign: 'center'
           }}
         >
-          LEARNING PLATFORM
+          <h5>LEARNING PLATFORM</h5>
         </div>
       </SidebarHeader>
 
       <SidebarContent>
-        <Menu iconShape="circle">
+        <Menu iconShape="circle" style={{paddingLeft:'5px'}}>
           <MenuItem
             icon={<FaBook />}
-            suffix={
-              <span className="badgeRed" style={{ fontSize: 12 }}>
-                new
-              </span>
-            }
           >
             <Nav >
             {
               context.authUser && role_id===5 && logged &&
-              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/student"  >Teaching Load</Nav.Link>
+              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/student"  ><h6>Teaching Load</h6></Nav.Link>
             }
             {
               context.authUser && role_id===4 && logged &&
-              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/teacher"  >My Courses</Nav.Link>
+              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/teacher"  ><h6>My Courses</h6></Nav.Link>
             }
           </Nav>
           </MenuItem>
           <>
           {context.authUser && role_id===5 && logged && <MenuItem 
             icon={<FaCalendar />}  
-            suffix={<span className="badgeRed" style={{ fontSize: 12 }}>new</span>} > 
-            My calendar
+            > 
+            <h6>My calendar</h6>
           </MenuItem>
           }
           </>

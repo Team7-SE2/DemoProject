@@ -75,7 +75,7 @@ it('renders Header', () => {
   });
 it('renders Header 2', () => {
 	render(<Header userLogout={App.userLogout} logged={false}></Header>);
-	expect(screen.getByText('Learning Platform')).toBeInTheDocument();
+	expect(screen.getByText('TEACHING LOAD')).toBeInTheDocument();
   });
 it('renders Aside logged true', () => {
 	render(<Router><Aside className="LeftBar"

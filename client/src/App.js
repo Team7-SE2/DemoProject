@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import Header from "./components/Header";
 import Login from "./components/Login"
 import Container from "react-bootstrap/Container";
@@ -92,7 +92,7 @@ class App extends React.Component {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
         this.setState({ course: course });
-        this.setState({ lectures: lectures.filter((s)=>moment(s.date).isAfter(moment().add("days",1).set("hours",0).set("minutes",0).set("seconds",0))) });
+        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().add("days", 1).set("hours", 0).set("minutes", 0).set("seconds", 0))) });
         this.props.history.push("/student/courses/" + course.subjectID + "/lectures");
 
       })
@@ -105,7 +105,7 @@ class App extends React.Component {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
         this.setState({ course: course });
-        this.setState({ lectures: lectures.filter((s)=>moment(s.date).isAfter(moment().set("hours",0).set("minutes",0).set("seconds",0))) });
+        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
         this.props.history.push("/teacher/courses/" + course.subjectID + "/lectures");
 
       })
@@ -166,7 +166,7 @@ class App extends React.Component {
 
 
   handleErrors(err) {
-    this.setState({logged: false});
+    this.setState({ logged: false });
     this.props.history.push("/login");
   }
 
@@ -200,160 +200,162 @@ class App extends React.Component {
       authErr: this.state.authErr,
       loginUser: this.login
     }
-    
+
     return (
       <AuthContext.Provider value={value}>
-        
-        <Container fluid>
-        <Row >
-        {this.state.logged ? <Col className="LeftBarCol" sm={2}>
-        <Aside className="LeftBar"
-                      //image={image}
-                      collapsed={false}
-                      rtl={false}
-                      toggled={false}
-                      handleToggleSidebar={false}
-                      style={{height:'100%'}}
-                      userLogout={this.userLogout} 
-                      role_id={this.state.info_user.role_id} 
-                      logged = {this.state.logged}
-                    /> 
-        </Col>: <></>}
-        
-      <Col >
-          {this.state.logged ? <Header userLogout={this.userLogout} role_id={this.state.info_user.role_id} logged = {this.state.logged} /> : <></>}
-          
-                    
-            <Row className="vheight-100">
-            <Switch>
 
-              <Route exact path="/">
-                {this.state.logged ? <Redirect to="/" /> : <Redirect to="/login" />}
+        <Container style={{ maxWidth: '100%', overflowX: 'hidden', padding: '0px' }}>
+          <Row >
+            {this.state.logged ? <Col sm={2}>
+              <div style={{ position: "fixed", height: '100%' }}>
+                <Aside
+                  //image={image}
+                  collapsed={false}
+                  rtl={false}
+                  toggled={false}
+                  handleToggleSidebar={false}
+                  style={{ height: '100%' }}
+                  userLogout={this.userLogout}
+                  role_id={this.state.info_user.role_id}
+                  logged={this.state.logged}
+                />
+              </div>
+            </Col> : <></>}
 
-              </Route>
+            <Col >
+              {this.state.logged ? <Header userLogout={this.userLogout} role_id={this.state.info_user.role_id} logged={this.state.logged} /> : <></>}
 
-              <Route path="/login">
-                <Container fluid className ="backgroundLogin">
-                  <Login userLogin={this.userLogin} loginError={this.state.loginError} />
-                </Container>
-              </Route>
+              <Switch>
 
-              <Route exact path="/student">
-              {this.state.logged ? <Redirect to="/student" /> : <Redirect to="/login" />}
-              <Container fluid>
-                <Row className="vheight-100"/* style={{paddingTop: '5%'}}*/>
-                  <Col sm={5} className="below-nav">
-                    <Card className="CardClass">
-                      <Card.Header className="text-center">
-                        <h3>My teaching load</h3>
-                      </Card.Header>
-                      <Card.Body>
-                        <ListCourses courses={this.state.courses} showLectures={this.showStudentsLectures} role_id={this.state.info_user.role_id} />
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  <Col sm={7} className="below-nav" >
-                    <Card className="CardClass">
-                      <Card.Header className="text-center">
-                        <h3>Available Lectures Calendar</h3>
-                      </Card.Header>
-                      <Card.Body>
-                      <HomeCalendar userId={this.state.ID_User} isStudent={true}></HomeCalendar>
-                      </Card.Body>
-                    </Card>
-                  </Col>
+                <Route exact path="/">
+                  {this.state.logged ? <Redirect to="/" /> : <Redirect to="/login" />}
+
+                </Route>
+
+                <Route path="/login">
+                  <Container fluid className="backgroundLogin">
+                    <Login userLogin={this.userLogin} loginError={this.state.loginError} />
+                  </Container>
+                </Route>
+
+                <Route exact path="/student">
+                  {this.state.logged ? <Redirect to="/student" /> : <Redirect to="/login" />}
+                  <Container fluid style={{ marginTop: '-18em' }}>
+                    <Row className="vheight-100"/* style={{paddingTop: '5%'}}*/>
+                      <Col sm={2}></Col>
+                      <Col sm={8} className="below-nav">
+                        <Card>
+                          <Card.Header className="text-center">
+                            <h3>My teaching load</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            <ListCourses courses={this.state.courses} showLectures={this.showStudentsLectures} role_id={this.state.info_user.role_id} />
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                    <Row className="vheight-100"/* style={{paddingTop: '5%'}}*/>
+                      <Col sm={1}></Col>
+                      <Col sm={10} className="below-nav" style={{ paddingTop: 0 }}>
+                        <Card>
+                          <Card.Header className="text-center">
+                            <h3>Available Lectures Calendar</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            <HomeCalendar userId={this.state.ID_User} isStudent={true}></HomeCalendar>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                  </Container>
+
+                </Route>
+
+                <Route exact path="/student/calendar">
+                  <Row >
+                    <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
                   </Row>
-                </Container>
+                </Route>
 
-              </Route>
+                <Route exact path={"/student/courses/" + this.state.course.subjectID + "/lectures"}>
+                  <Container fluid style={{ marginTop: '-18em' }}>
+                    <Row className="vheight-100 ">
+                      <Col sm={3} className="below-nav" />
+                      <Col sm={6} className="below-nav">
+                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} />
+                      </Col>
+                      <Col sm={3} className="below-nav" />
 
-              <Route exact path="/student/calendar">
-                <Row >
-                  <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
-                </Row>
-              </Route>
+                    </Row>
+                  </Container>
 
-              <Route exact path={"/student/courses/" + this.state.course.subjectID + "/lectures"}>
-              <Container fluid>
-                <Row className="vheight-100 ">
-                  <Col sm={3} className="below-nav" />
-                  <Col sm={6} className="below-nav">
-                    <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures}/>
-                  </Col>
-                  <Col sm={3} className="below-nav" />
-
-                </Row>
-                </Container>
-
-              </Route>
+                </Route>
 
 
-              <Route exact path="/teacher">
-              {this.state.logged ? <Redirect to="/teacher" /> : <Redirect to="/login" />}
-              <Container fluid>
-                <Row className="vheight-100 ">
-                  <Col sm={5} className="below-nav">
-                    <Card className="CardClass">
-                      <Card.Header className="text-center">
-                        <h3>My Courses</h3>
-                      </Card.Header>
-                      <Card.Body>
-                      <ListCourses courses={this.state.courses} showLectures={this.showTeachersLectures} role_id={this.state.info_user.role_id} />
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                  <Col sm={7} className="below-nav" >
-                    <Card className="CardClass">
-                      <Card.Header className="text-center">
-                        <h3>Lectures Calendar</h3>
-                      </Card.Header>
-                      <Card.Body>
-                        <HomeCalendar userId={this.state.ID_User} isStudent={false}></HomeCalendar>
-                      </Card.Body>
-                    </Card>
-                  </Col>
+                <Route exact path="/teacher">
+                  {this.state.logged ? <Redirect to="/teacher" /> : <Redirect to="/login" />}
+                  <Container fluid style={{ marginTop: '-18em' }}>
+                    <Row className="vheight-100 ">
+                      <Col sm={2}></Col>
+                      <Col sm={8} className="below-nav">
+                        <Card>
+                          <Card.Header className="text-center">
+                            <h3>My Courses</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            <ListCourses courses={this.state.courses} showLectures={this.showTeachersLectures} role_id={this.state.info_user.role_id} />
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                    <Row className="vheight-100 " style={{ marginTop: '-14em' }}>
+                      <Col sm={1}></Col>
+                      <Col sm={10} className="below-nav">
+                        <Card>
+                          <Card.Header className="text-center">
+                            <h3>Lectures Calendar</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            <HomeCalendar userId={this.state.ID_User} isStudent={false}></HomeCalendar>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Route>
+                <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/lectures"}>
+                  <Container fluid style={{ marginTop: '-18em' }}>
+                    <Row className="vheight-100 ">
+                      <Col sm={3} className="below-nav" />
+                      <Col sm={6} className="below-nav">
+                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} />
+                      </Col>
+                      <Col sm={3} className="below-nav" />
 
-                </Row>
-                </Container>
-              </Route>
-              <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/lectures"}>
-              <Container fluid>
-                <Row className="vheight-100 ">
-                  <Col sm={3} className="below-nav" />
-                  <Col sm={6} className="below-nav">
-                    <CourseLectures role_id = {this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} />
-                  </Col>
-                  <Col sm={3} className="below-nav" />
+                    </Row>
+                  </Container>
 
-                </Row>
-                </Container>
-
-              </Route>
-
-
-              <Route exact path={"/teacher/lectures/" + this.state.lecture.id + "/students"}>
-              <Container fluid>
-                <Row className="vheight-100 ">
-                  <Col sm={3} className="below-nav" />
-                  <Col sm={6} className="below-nav">
-                    <StudentList students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id = {this.state.info_user.role_id} />
-                  </Col>
-                  <Col sm={3} className="below-nav" />
-
-                </Row>
-                </Container>
-
-              </Route>
+                </Route>
 
 
+                <Route exact path={"/teacher/lectures/" + this.state.lecture.id + "/students"}>
+                  <Container fluid style={{ marginTop: '-18em' }}>
+                    <Row className="vheight-100 ">
+                      <Col sm={3} className="below-nav" />
+                      <Col sm={6} className="below-nav">
+                        <StudentList students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} />
+                      </Col>
+                      <Col sm={3} className="below-nav" />
 
+                    </Row>
+                  </Container>
 
+                </Route>
 
-            </Switch>
-            </Row>
+              </Switch>
 
-          </Col>
-        </Row>
+            </Col>
+          </Row>
         </Container>
       </AuthContext.Provider >
 
