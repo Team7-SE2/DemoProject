@@ -220,7 +220,7 @@ class App extends React.Component {
                     /> 
         </Col>: <></>}
         
-        <Col sm={10}>
+      <Col >
           {this.state.logged ? <Header userLogout={this.userLogout} role_id={this.state.info_user.role_id} logged = {this.state.logged} /> : <></>}
           
                     
@@ -233,7 +233,7 @@ class App extends React.Component {
               </Route>
 
               <Route path="/login">
-                <Container fluid>
+                <Container fluid className ="backgroundLogin">
                   <Login userLogin={this.userLogin} loginError={this.state.loginError} />
                 </Container>
               </Route>

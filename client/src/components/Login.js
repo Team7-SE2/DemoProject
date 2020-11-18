@@ -22,17 +22,17 @@ class Login extends React.Component {
 
     render() {
         return <Row className="vheight-100">
-            <Col sm={1} />
+            <Col sm={4} />
             <Col sm={4} className="below-nav" >
 
                 <Card style={{marginTop: "100px"}}>
-                    <Card.Header style={{fontSize: "200%"}}><b>LOGIN </b> </Card.Header>
-                    <Card.Body>
-                        <Form onSubmit={this.validateForm} >
-                            <Form.Row>
+                    <Card.Header className="text-center" style={{fontSize: "200%"}}><b>LOGIN </b> </Card.Header>
+                    <Card.Body style={{alignSelf: "center"}}>
+                        <Form onSubmit={this.validateForm}  >
+                            <Form.Row >
                                 <Form.Group controlId="formBasicEmail">
-                                    <Form.Label>Username</Form.Label>
-                                    <Form.Control type="text" placeholder="Insert your username"
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="text" placeholder="Insert your username" size
                                         name='username'
                                         value={this.state.username}
                                         onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
@@ -51,12 +51,12 @@ class Login extends React.Component {
                       </Form.Text>
                                 </Form.Group>
                             </Form.Row>
-                            <Form.Row>
-                                <Form.Group controlId="Submit">
+                            
+                                <div className = "text-center" controlId = "Submit">
                                     <Button onClick={this.doLogin} variant="dark" type="submit">LOGIN</Button>
 
-                                </Form.Group>
-                            </Form.Row>
+                                </div>
+                            
                         </Form>
 
                         {this.props.loginError &&
@@ -68,18 +68,15 @@ class Login extends React.Component {
 
                 </Card>
             </Col>
-            <Col  sm={1} />
+            <Col  sm={4} />
+            
 
-
-
-             <Col style={{backgroundImage: `url(${sfondo})`, backgroundPosition : "center center" ,backgroundRepeat  : 'no-repeat' }} sm={6} >
-
-                 </Col>
                 
 
             
             
         </Row>
+    
     }
 }
 
