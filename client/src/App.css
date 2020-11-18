@@ -45,23 +45,24 @@ button:focus {
   z-index: 1;
 }*/
 
-.LeftBar{
+/* .LeftBar{
   height: 100%;
   position: fixed;
   top: 0;
   left: 0;
   overflow-x: hidden;
-}
+  z-index: 9999;
+} */
 
 .HeaderAccount{
   position: absolute;
   top: 5%;
   right: 1%;
-  /*z-index: 2000;*/
+  z-index: 2000;
 }
 
 .TopHeader{
-  /*z-index: 1;*/
+  /* z-index: 1; */
   position: relative;
   height: 300px;
   /*background-color: #283644;*/

@@ -207,7 +207,7 @@ class App extends React.Component {
         <Container style={{ maxWidth: '100%', overflowX: 'hidden', padding: '0px' }}>
           <Row >
             {this.state.logged ? <Col sm={2}>
-              <div style={{ position: "fixed", height: '100%' }}>
+              <div style={{ position: "fixed", height: '100%',zIndex:9999 }}>
                 <Aside
                   //image={image}
                   collapsed={false}
@@ -253,10 +253,9 @@ class App extends React.Component {
                           </Card.Body>
                         </Card>
                       </Col>
-                    </Row>
-                    <Row className="vheight-100"/* style={{paddingTop: '5%'}}*/>
+                      <Col sm={2}></Col>
                       <Col sm={1}></Col>
-                      <Col sm={10} className="below-nav" style={{ paddingTop: 0 }}>
+                      <Col sm={10} className="below-nav">
                         <Card>
                           <Card.Header className="text-center">
                             <h3>Available Lectures Calendar</h3>
@@ -267,6 +266,7 @@ class App extends React.Component {
                         </Card>
                       </Col>
                     </Row>
+                      
                   </Container>
 
                 </Route>

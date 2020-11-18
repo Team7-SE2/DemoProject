@@ -10,9 +10,9 @@ const Header = (props) => {
     <AuthContext.Consumer >
       {(context) => (
      
-        <Navbar className="navbar navbar-dark TopHeader" expand="sm">
+        <Navbar className="navbar navbar-dark TopHeader" expand="lg">
 
-          <Navbar.Brand className="pageTitle HeaderAccount"> <h5>TEACHING LOAD</h5></Navbar.Brand>
+          {/* <Navbar.Brand className="pageTitle HeaderAccount"> <h5>TEACHING LOAD</h5></Navbar.Brand> */}
           <Nav className="ml-md-auto HeaderAccount">
             {context.authUser &&
               <>
