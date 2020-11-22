@@ -65,6 +65,8 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
           <>
           {context.authUser && role_id===5 && logged && <MenuItem 
             icon={<FaCalendar />}  
+            
+            suffix={<span className="badgeRed">new</span>} 
             > 
             <Nav >
             {

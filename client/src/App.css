@@ -81,6 +81,9 @@ button:focus {
   padding-bottom: 10%;
   color: black;
 }
+.suffix-wrapper{
+  padding-bottom: 3%;
+}
 
 .pageTitle{
   position: absolute;
