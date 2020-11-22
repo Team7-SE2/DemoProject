@@ -66,7 +66,12 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
           {context.authUser && role_id===5 && logged && <MenuItem 
             icon={<FaCalendar />}  
             > 
-            <h6>My calendar</h6>
+            <Nav >
+            {
+              context.authUser && role_id===5 && logged &&
+              <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/student/calendar"  ><h6>My Bookings</h6></Nav.Link>
+            }
+          </Nav>
           </MenuItem>
           }
           </>

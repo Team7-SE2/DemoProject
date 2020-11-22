@@ -5,7 +5,7 @@ import { indigo, amber, blue, teal, red, green, orange, purple, blueGrey, common
 import {
   Scheduler, Appointments, MonthView, WeekView, Toolbar,
   ViewSwitcher,Resources, AppointmentTooltip, DragDropProvider,
-  EditRecurrenceMenu, AllDayPanel
+  EditRecurrenceMenu, AllDayPanel, DateNavigator
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
@@ -96,7 +96,7 @@ class HomeCalendar extends React.PureComponent {
   }
 
   checkBoxMount() {
-
+    console.log(instances)
     return instances.map((instance) => {
       return <FormControlLabel
         control={<Checkbox id={instance.id} style={{ color: instance.color }} defaultChecked={true} /*checked={true} */ onChange={this.handleChange} />}
@@ -119,9 +119,12 @@ class HomeCalendar extends React.PureComponent {
           title: 'Location',
           instances: instances
         }];
+        console.log("courses")
         console.log(courses)
         API.getStudentBookings(userID)
           .then((books) => {
+            console.log("books")
+            console.log(books)
             books.forEach((b) => {
 
               var index = selectedChecks.findIndex(x => parseInt(x) === parseInt(b.location))
@@ -129,7 +132,7 @@ class HomeCalendar extends React.PureComponent {
                 //var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
                 instances.push({
                   id: parseInt(b.location),
-                  description: courses[b.location].description,
+                  description: b.title,//courses[b.location].description,
                   color: colors[parseInt(b.location)]
                 })
                 selectedChecks.push(parseInt(b.location))
@@ -255,6 +258,10 @@ class HomeCalendar extends React.PureComponent {
     });
   }
 
+  currentDateChange = (currentDate) => {
+    this.setState({ currentDate });
+  };
+
   render() {
     const {
       currentDate,
@@ -270,17 +277,16 @@ class HomeCalendar extends React.PureComponent {
 
           <>
             {context.authErr && <Redirect to="/login"></Redirect>}
-            {this.state.isMyCalendar ? <><div style={{ "width": "100%" }}>
-              <br></br>
-              <br></br>
-              <br></br>
-              <h2><b>My bookings calendar</b></h2>
-              <br></br>
-            </div>
+            {this.state.isMyCalendar ? <Paper style={{
+              paddingLeft: '2%',
+              paddingTop: '2%',
+              paddingBottom: '2%',
+              marginBottom: '2%'
+            }}>
               <h5><b>Chose the subjects to show</b></h5>
               <FormGroup style={{ "width": "100%" }} row>
                 {this.checkBoxMount()}
-              </FormGroup></> : <></>
+              </FormGroup></Paper> : <></>
             }
 
             <Paper>
@@ -291,6 +297,7 @@ class HomeCalendar extends React.PureComponent {
 
                 <ViewState
                   currentDate={currentDate}
+                  onCurrentDateChange={this.currentDateChange}
                 />
                 <EditingState
                   onCommitChanges={this.commitChanges}
@@ -315,6 +322,7 @@ class HomeCalendar extends React.PureComponent {
                 //showDeleteButton
                 />
                 <Toolbar />
+                <DateNavigator />
                 <ViewSwitcher />
 
                 <DragDropProvider />

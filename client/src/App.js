@@ -271,10 +271,22 @@ class App extends React.Component {
 
                 </Route>
 
-                <Route exact path="/student/calendar">
-                  <Row >
-                    <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
-                  </Row>
+                <Route exact path="/student/calendar">                    
+                    <Container fluid style={{ marginTop: '-18em' }}>
+                      <Row className="vheight-100 " style={{ marginTop: '-18em' }}>
+                        <Col sm={1}></Col>
+                        <Col sm={10} className="below-nav">
+                          <Card>
+                            <Card.Header className="text-center">
+                              <h3>Lectures Calendar</h3>
+                            </Card.Header>
+                            <Card.Body>
+                              <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
+                    </Container>
                 </Route>
 
                 <Route exact path={"/student/courses/" + this.state.course.subjectID + "/lectures"}>
