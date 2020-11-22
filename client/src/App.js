@@ -278,7 +278,7 @@ class App extends React.Component {
                         <Col sm={10} className="below-nav">
                           <Card>
                             <Card.Header className="text-center">
-                              <h3>Lectures Calendar</h3>
+                              <h3>My Bookings Calendar</h3>
                             </Card.Header>
                             <Card.Body>
                               <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>

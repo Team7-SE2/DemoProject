@@ -31,9 +31,12 @@ const styles = theme => ({
   },
 });
 
-const colors = [teal[300], red[300], orange[300], blue[300], green[300], indigo[300], blueGrey[300], purple[300], amber[300], common[300]]
-let instances = []
+const colors = [teal[300], orange[300], red[300], blue[300], green[300], indigo[300], blueGrey[300], purple[300], amber[300], common[300]]
+let courseInstances = []
+let teacherInstances = []
+let roomInstances = []
 let selectedChecks = [];
+let instances = [];
 
 
 /* eslint-disable-next-line react/no-multi-comp */
@@ -57,6 +60,9 @@ class HomeCalendar extends React.PureComponent {
       isMyCalendar: props.isMyCalendar
     };
     instances = [];
+    courseInstances = []
+    teacherInstances = []
+    roomInstances = []
     selectedChecks = [];
 
     this.toggleConfirmationVisible = this.toggleConfirmationVisible.bind(this);
@@ -88,7 +94,7 @@ class HomeCalendar extends React.PureComponent {
     else
       selectedChecks.splice(index, 1)
 
-    newData = this.state.data2.filter((d) => selectedChecks.includes(d.location))
+    newData = this.state.data2.filter((d) => selectedChecks.includes(d.courseId))
     console.log(newData)
     this.setState({
       data: newData
@@ -96,8 +102,7 @@ class HomeCalendar extends React.PureComponent {
   }
 
   checkBoxMount() {
-    console.log(instances)
-    return instances.map((instance) => {
+    return courseInstances.map((instance) => {
       return <FormControlLabel
         control={<Checkbox id={instance.id} style={{ color: instance.color }} defaultChecked={true} /*checked={true} */ onChange={this.handleChange} />}
         label={instance.description}
@@ -112,77 +117,134 @@ class HomeCalendar extends React.PureComponent {
 
   studentMyCalendar = (userID) => {
 
-    API.getStudentCourses(userID)
-      .then((courses) => {
-        resources = [{
-          fieldName: 'location',
-          title: 'Location',
-          instances: instances
-        }];
-        console.log("courses")
-        console.log(courses)
         API.getStudentBookings(userID)
           .then((books) => {
-            console.log("books")
-            console.log(books)
+
+            courseInstances = []
+            teacherInstances = []
+            roomInstances = []
+            selectedChecks = [];
+            resources = [
+              {
+                fieldName: 'courseId',
+                instances: courseInstances
+              },{
+                fieldName: 'roomId',
+                title: 'Location',
+                instances: roomInstances
+              },
+              {
+                fieldName: 'teacherId',
+                title: 'Teacher',
+                instances: teacherInstances
+              }
+            ];
+            
             books.forEach((b) => {
 
-              var index = selectedChecks.findIndex(x => parseInt(x) === parseInt(b.location))
+              // check Lecture Color
+              var index = courseInstances.findIndex(x => parseInt(x.id) === parseInt(b.courseId))
               if (index === -1) {
-                //var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
-                instances.push({
-                  id: parseInt(b.location),
-                  description: b.title,//courses[b.location].description,
-                  color: colors[parseInt(b.location)]
+                courseInstances.push({
+                  id: parseInt(b.courseId),
+                  description: b.title,
+                  color: colors[parseInt(b.courseId)]
                 })
-                selectedChecks.push(parseInt(b.location))
+                selectedChecks.push(parseInt(b.courseId))
               }
+              
+              // check Room color
+              var roomIndex = roomInstances.findIndex(x => parseInt(x.id) === parseInt(b.roomId))
+              if (roomIndex === -1) {
+                roomInstances.push({
+                  id: parseInt(b.roomId),
+                  text: b.room,
+                })
+              }
+              
+              // check Teacher Color
+              var teacherIndex = teacherInstances.findIndex(x => parseInt(x.id) === parseInt(b.teacherId))
+              if(teacherIndex === -1){
+                teacherInstances.push({
+                  id: parseInt(b.teacherId),
+                  text: b.teacher
+                })
+              }
+
             })
-            console.log(instances)
+            console.log(courseInstances)
             this.setState({ data: books, data2: books })
           })
           .catch((err) => {
             console.log(err);
           })
-      })
 
   }
 
   studentCalendar = (userID) => {
 
-    API.getStudentCourses(userID)
-      .then((courses) => {
-        resources = [{
-          fieldName: 'location',
-          title: 'Location',
-          instances: instances
-        }];
-
-        console.log(courses)
-
         API.getLectures(userID)
           .then((books) => {
+            
+            courseInstances = []
+            teacherInstances = []
+            roomInstances = []
+            selectedChecks = [];
+            resources = [
+              {
+                fieldName: 'courseId',
+                instances: courseInstances
+              },{
+                fieldName: 'roomId',
+                title: 'Location',
+                instances: roomInstances
+              },
+              {
+                fieldName: 'teacherId',
+                title: 'Teacher',
+                instances: teacherInstances
+              }
+            ];
+
             books.forEach((b) => {
-              console.log(b.location)
-              var index = instances.findIndex(x => parseInt(x.id) === parseInt(b.location))
-              if (index === -1) {
-                //var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
-                instances.push({
-                  id: parseInt(b.location),
-                  description: courses[b.location].description,
-                  color: colors[parseInt(b.location)]
+
+              // check Lecture color
+              var lectureIndex = courseInstances.findIndex(x => parseInt(x.id) === parseInt(b.courseId))
+              if (lectureIndex === -1) {
+                courseInstances.push({
+                  id: parseInt(b.courseId),
+                  description: b.title,
+                  text: b.title,
+                  color: colors[parseInt(b.courseId)]
                 })
-                //instances.push(parseInt(b.location))
+              }
+
+              // check Room color
+              var roomIndex = roomInstances.findIndex(x => parseInt(x.id) === parseInt(b.roomId))
+              if (roomIndex === -1) {
+                roomInstances.push({
+                  id: parseInt(b.roomId),
+                  text: b.room,
+                })
+              }
+              
+              // check Teacher Color
+              var teacherIndex = teacherInstances.findIndex(x => parseInt(x.id) === parseInt(b.teacherId))
+              if(teacherIndex === -1){
+                teacherInstances.push({
+                  id: parseInt(b.teacherId),
+                  text: b.teacher
+                })
               }
 
             })
-            console.log(instances)
+            
             this.setState({ data: books, data2: books })
           })
           .catch((err) => {
             console.log(err);
           })
-      })
+      //})
 
   }
 
@@ -198,18 +260,43 @@ class HomeCalendar extends React.PureComponent {
         console.log(courses)
         API.getTeacherLectures(userID)
           .then((books) => {
+            
+            courseInstances = []
+            teacherInstances = []
+            roomInstances = []
+            selectedChecks = [];
+            resources = [
+              {
+                fieldName: 'courseId',
+                instances: courseInstances
+              },{
+                fieldName: 'roomId',
+                title: 'Location',
+                instances: roomInstances
+              }
+            ];
+
             console.log(books)
             books.forEach((b) => {
 
-              var index = instances.findIndex(x => parseInt(x.id) === parseInt(b.location))
-              if (index === -1) {
-                var courseIndex = courses.findIndex(course => parseInt(course.id) === parseInt(b.location))
-                instances.push({
-                  id: parseInt(b.location),
-                  description: courses[courseIndex].description,
-                  color: colors[parseInt(b.location)]
+              // check Lecture color
+              var lectureIndex = courseInstances.findIndex(x => parseInt(x.id) === parseInt(b.courseId))
+              if (lectureIndex === -1) {
+                courseInstances.push({
+                  id: parseInt(b.courseId),
+                  description: b.title,
+                  text: b.title,
+                  color: colors[parseInt(b.courseId)]
                 })
-                //instances.push(parseInt(b.location))
+              }
+
+              // check Room color
+              var roomIndex = roomInstances.findIndex(x => parseInt(x.id) === parseInt(b.roomId))
+              if (roomIndex === -1) {
+                roomInstances.push({
+                  id: parseInt(b.roomId),
+                  text: b.room,
+                })
               }
 
             })
@@ -315,6 +402,7 @@ class HomeCalendar extends React.PureComponent {
 
                 <Resources
                   data={resources}
+                  mainResourceName={'courseId'}
                 />
                 <AppointmentTooltip
                   //showOpenButton

@@ -101,13 +101,17 @@ async function getStudentBookings(studentId) {
                 subjectDescription = subject[0].description;
             })
 
-            return {
-                location: book.lecture.subject_id,
+            return {                
+                courseId: book.lecture.subject_id,
                 id: id++,
                 title: subjectDescription,
                 startDate: startDate,
                 endDate: endDate,
                 ownerId: book.user_id,
+                roomId: 1,
+                room: 'Room 1',
+                teacher: 'Teacher Vetrò',
+                teacherId: 1
             }
         });
 
@@ -246,13 +250,19 @@ async function getLectures(user_id) {
                 let endDate = new Date(startDate);
                 endDate.setHours(startDate.getHours() + lecture.duration)
 
+                console.log(course)
+
                 return {
-                    location: courseId,
+                    courseId: course.id,
                     id: lectureId++,
                     title: course.description,
                     startDate: startDate,
                     endDate: endDate,
                     ownerId: user_id,
+                    roomId: 1,
+                    room: 'Room 1',
+                    teacher: 'Teacher Vetrò',
+                    teacherId: course.teacher_id
                 }
 
             })
@@ -285,30 +295,22 @@ async function getTeacherLectures(user_id) {
             let endDate = new Date(startDate);
             endDate.setHours(startDate.getHours() + lecture.duration)
             array.push({
-                location: lecture.subject_id,
+                /*location: lecture.subject_id,
+                id: id++,
+                title: lecture.subject.description,
+                startDate: startDate,
+                endDate: endDate,
+                ownerId: user_id,*/
+
+                courseId: lecture.subject_id,
                 id: id++,
                 title: lecture.subject.description,
                 startDate: startDate,
                 endDate: endDate,
                 ownerId: user_id,
+                roomId: 1,
+                room: 'Room 1'
             })
-            /*let lectures = lecture.lectures.map((lecture) => {
-
-                
-                let subjectDescription = lecture.subject ? lecture.subject.description : '';
-                
-                return {
-                    location: course.id,
-                    id: id++,
-                    title: course.description,
-                    startDate: startDate,
-                    endDate: endDate,
-                    ownerId: user_id,
-                }
-
-            })
-            lectures.forEach((l) => array.push(l))*/
-            //array.push(lectures)
         });
 
         console.log("array: " + JSON.stringify(array))
