@@ -204,8 +204,8 @@ class App extends React.Component {
     return (
       <AuthContext.Provider value={value}>
 
-        <Container style={{ maxWidth: '100%', overflowX: 'hidden', padding: '0px' }}>
-          <Row >
+        <Container className="backgroundPages" style={{ maxWidth: '100%', overflowX: 'hidden', padding: '0px' }}>
+          <Row className="vheight-100">
             {this.state.logged ? <Col sm={2}>
               <div style={{ position: "fixed", height: '100%',zIndex:9999 }}>
                 <Aside
@@ -240,8 +240,8 @@ class App extends React.Component {
 
                 <Route exact path="/student">
                   {this.state.logged ? <Redirect to="/student" /> : <Redirect to="/login" />}
-                  <Container fluid style={{ marginTop: '-18em' }}>
-                    <Row className="vheight-100"/* style={{paddingTop: '5%'}}*/>
+                  <Container fluid>
+                    <Row /* style={{paddingTop: '5%'}}*/>
                       <Col sm={2}></Col>
                       <Col sm={8} className="below-nav">
                         <Card>
@@ -272,8 +272,8 @@ class App extends React.Component {
                 </Route>
 
                 <Route exact path="/student/calendar">                    
-                    <Container fluid style={{ marginTop: '-18em' }}>
-                      <Row className="vheight-100 " style={{ marginTop: '-18em' }}>
+                    <Container fluid>
+                      <Row >
                         <Col sm={1}></Col>
                         <Col sm={10} className="below-nav">
                           <Card>
@@ -290,8 +290,8 @@ class App extends React.Component {
                 </Route>
 
                 <Route exact path={"/student/courses/" + this.state.course.subjectID + "/lectures"}>
-                  <Container fluid style={{ marginTop: '-18em' }}>
-                    <Row className="vheight-100 ">
+                  <Container fluid>
+                    <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
                         <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} />
@@ -306,8 +306,8 @@ class App extends React.Component {
 
                 <Route exact path="/teacher">
                   {this.state.logged ? <Redirect to="/teacher" /> : <Redirect to="/login" />}
-                  <Container fluid style={{ marginTop: '-18em' }}>
-                    <Row className="vheight-100 ">
+                  <Container fluid>
+                    <Row >
                       <Col sm={2}></Col>
                       <Col sm={8} className="below-nav">
                         <Card>
@@ -320,7 +320,7 @@ class App extends React.Component {
                         </Card>
                       </Col>
                     </Row>
-                    <Row className="vheight-100 " style={{ marginTop: '-18em' }}>
+                    <Row >
                       <Col sm={1}></Col>
                       <Col sm={10} className="below-nav">
                         <Card>
@@ -336,8 +336,8 @@ class App extends React.Component {
                   </Container>
                 </Route>
                 <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/lectures"}>
-                  <Container fluid style={{ marginTop: '-18em' }}>
-                    <Row className="vheight-100 ">
+                  <Container fluid>
+                    <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
                         <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} />
@@ -351,8 +351,8 @@ class App extends React.Component {
 
 
                 <Route exact path={"/teacher/lectures/" + this.state.lecture.id + "/students"}>
-                  <Container fluid style={{ marginTop: '-18em' }}>
-                    <Row className="vheight-100 ">
+                  <Container fluid>
+                    <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
                         <StudentList students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} />
