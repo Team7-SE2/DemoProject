@@ -82,14 +82,33 @@ describe('API test', function () {
     it('POST lectures', function (done) {
         request(app)
             .post('/api/lectures')
-            .send({ duration: 1.5, id: 1 , subject_id:1, date: moment().add(1,"hours").toDate()})
+            .send({ duration: 1.5, id: 1 , subject_id:1, date: moment().add(1,"hours").toDate(), remote: 1})
             .set('Accept', 'application/json')
             .expect(201, done);
     });
+    it('PUT lectures remote', function (done) {
+        request(app)
+        .put('/api/lectures/2')
+        .send({ remote: true})
+        .set('Accept', 'application/json')
+        .expect(200, done);
+    })
     
     it('GET lectures', function (done) {
         request(app)
             .get('/api/lectures')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+    it('GET lectures deleted', function (done) {
+        request(app)
+            .get('/api/lectures/includeDeleted')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+    it('GET lectures deleted startDate end Date', function (done) {
+        request(app)
+            .get('/api/lectures/includeDeleted?startDate=2020-05-11&endDate=2021-01-22')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -160,6 +179,13 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
+
+    it('GET bookings excludedLecturesCanceled', function (done) {
+        request(app)
+            .get('/api/bookings/excludeLecturesCanceled')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });   
     it('GET/:id bookings', function (done) {
         request(app)
             .get('/api/bookings/students/1/lectures/1')
