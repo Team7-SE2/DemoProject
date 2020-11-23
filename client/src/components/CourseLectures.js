@@ -2,6 +2,8 @@ import React, { useState} from 'react'
 import moment from 'moment';
 import Button from "react-bootstrap/Button";
 import PaperInsideCard from './PaperInsideCard';
+import { FaUsers, FaTrashAlt} from 'react-icons/fa';
+import Nav from 'react-bootstrap/Nav';
 
 const CourseLectures = (props) => {
   
@@ -26,33 +28,67 @@ const CourseLectures = (props) => {
     
     const [integratedSortingColumnExtensions] = useState([
         { columnName: 'lectureDate', compare: compareDate },
+        { columnName: 'View list of students'},
+        { columnName: 'Delete the lecture'},
     ]);
     
-    
-    const [columns] = useState([
+   
+
+    const [columns] = useState(
+        role_id === 4 ?
+        [
         //{ name: 'id', title: 'ID'},
         { name: 'lectureDate',title: 'Lecture Date'},
-        { name: ' '}
-    ]);
+        { name: 'View list of students', title: 'View list of students' },
+        { name: 'Delete the lecture', title: 'Delete the lecture' }
+        ]
+        :
+        [ { name: 'lectureDate',title: 'Lecture Date'},
+           { name: 'book',title: ' '}]
+    );
     
     const [sortingStateColumnExtensions] = useState([
         { columnName: ' ', sortingEnabled: false },
     ]);
 
     const test = lectures.map((lecture) => {
-        
+        if(role_id == 4){
         return {
         id: lecture.id,
         lectureDate: moment(new Date(lecture.date)).format("LLL"),
-        ' ':   <div style={{
+        'View list of students':   <div style={{
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center"
                         }}>
-                        {role_id===5 && <>{checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button>: <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>}</>}
-                        {role_id===4 && <Button color="primary" onClick={() => getListStudents(lecture)}> View list of students </Button>}
+                        <Button><FaUsers size={20} onClick={() => getListStudents(lecture)}> </FaUsers></Button>
+                    </div>,
+        'Delete the lecture':   <div style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
+                        <Button variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>
                     </div>
+
+        
         }
+    }
+
+
+    if(role_id ==5){
+        return{
+            id: lecture.id,
+            lectureDate: moment(new Date(lecture.date)).format("LLL"),
+            book:   <div style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center"
+            }}>
+            {checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button>: <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>}
+             </div>,
+        }
+    }
     })
 
 

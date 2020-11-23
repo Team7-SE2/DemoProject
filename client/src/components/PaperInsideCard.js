@@ -15,11 +15,11 @@ const PaperInsideCard = (props) => {
     let { CardHeader, sortingStateColumnExtensions, integratedSortingColumnExtensions, columns, test } = props;
     return (
         <>
-            <Card className="CardClass">
-                <Card.Header className="text-center">
+            <Card className="CardClass" >
+                <Card.Header className="text-center" >
                     <h4><b>{CardHeader} </b></h4>
                 </Card.Header>
-                <Card.Body>
+                <Card.Body style = {{textAlignLast: "center"}}>
                     <Paper>
                         <Grid
                             rows={test}

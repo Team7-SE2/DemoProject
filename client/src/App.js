@@ -338,11 +338,11 @@ class App extends React.Component {
                 <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/lectures"}>
                   <Container fluid>
                     <Row >
-                      <Col sm={3} className="below-nav" />
-                      <Col sm={6} className="below-nav">
+                      <Col sm={2} className="below-nav" />
+                      <Col sm={8} className="below-nav">
                         <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} />
                       </Col>
-                      <Col sm={3} className="below-nav" />
+                      <Col sm={2} className="below-nav" />
 
                     </Row>
                   </Container>

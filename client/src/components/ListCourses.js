@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Paper from '@material-ui/core/Paper';
+import Button from "react-bootstrap/Button";
 import Nav from 'react-bootstrap/Nav';
 import { SortingState, PagingState, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
@@ -13,10 +14,10 @@ const ListCourses = (props) => {
       id: course.id,
       subjectID: course.subjectID,
       description: course.description,
-      ' ':  <div key={course.subjectID} onClick={() => showLectures(course)}> 
+      ' ':  <div key={course.subjectID} onClick={() => showLectures(course)} style = {{textAlign : "center"}}> 
       
-      {role_id===5 && <Nav.Link className="active" >Book your seat</Nav.Link>}
-      {role_id===4 && <Nav.Link className="active" >View details</Nav.Link>}
+      {role_id===5 && <Button variant="primary">Book your seat</Button>}
+      {role_id===4 && <Button variant="primary">View details</Button>}
 
     </div>,
     }
