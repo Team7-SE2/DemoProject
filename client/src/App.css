@@ -95,3 +95,9 @@ button:focus {
   background: rgb(242,242,241);
   background: linear-gradient(180deg,rgba(53,53,53,1) 300px, rgba(242,242,241,1) 300px);
 }
+
+.MuiTableCell-root{
+  font-size: 1.1rem !important;
+  /*text-align: center !important*/ 
+}
+
