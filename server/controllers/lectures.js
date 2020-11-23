@@ -4,6 +4,7 @@ var finale = require('finale-rest')
 var db = require('../models/index');
 var moment = require('moment');
 const Op = db.Sequelize.Op;
+var transporter = require('../helpers/email');
 
 /*
     *** API LIST ***
@@ -70,7 +71,7 @@ module.exports = function () {
     });
 
     // Create REST resource
-    finale.resource({
+    var LecturesResource = finale.resource({
         model: db.lectures,
         endpoints: ['/','/:id'], //MANAGE GET, POST, PUT, DELETE
         search: [
@@ -88,5 +89,38 @@ module.exports = function () {
         paranoid:false
         
     });
+    
+    LecturesResource.delete.fetch(function(req,res,context){
+        if(req.params.id){
+            //TODO
+            //vanno cancellati anche i bookings per quella lezione?
+            db['lectures'].findOne({where:{id:req.params.id},
+                include:[{model:db.subjects,as:'subject',
+                    include:[{model:db.users}]}
+                ]})
+                .then((lecture)=>{
+                    if(lecture && lecture.subject && lecture.subject.users){
+                        console.log("Invio una mail a tutti gli studenti che avevano la materia nel carico didattico");
+                        lecture.subject.users.forEach((student)=>{
+                            var mailOptions = {
+                                from: "pulsbsnoreply@gmail.com",
+                                subject: 'Canceled a lecture of '+lecture.subject.description,
+                                text: 'Dear '+student.name+",\nthe lecture of "+lecture.subject.description+" scheduled for "+moment(lecture.date).format('LLL')+" was canceled.\nRegards"
+                            }
+                            // set the teacher email
+                            mailOptions.to = student.email;
+                    
+                            // send the email to the student
+                            transporter.sendEmail(mailOptions);
+                        })
+                    }
+                    console.log("Cancellata lezione con id: "+req.params.id);
+                    context.continue();
+                })
+            }
+        else
+            context.continue();
+    })
+
     return router;
 }

@@ -14,6 +14,20 @@ var transporter = require('../helpers/email');
 */
 module.exports = function () {
 
+    router.get('/excludeLecturesCanceled',(req,res)=>{
+        var paramsQuery = {}
+        paramsQuery = req.query;
+        db['bookings'].findAll({where:paramsQuery,include: [
+            { model: db.users, as: 'user' },
+            { model: db.lectures, as: 'lecture'}
+        ]}).then((bookings)=>{
+            bookings.forEach((booking,index)=>{
+                if(!booking.lecture)
+                    bookings.splice(index, 1);
+            })
+            res.send(bookings);
+        })
+    })
     // Initialize finale
     finale.initialize({
         app: router,
@@ -26,7 +40,7 @@ module.exports = function () {
         endpoints: ['/', '/students/:user_id/lectures/:lecture_id'], //MANAGE GET, POST, PUT, DELETE
         include: [
             { model: db.users, as: 'user' },
-            { model: db.lectures, as: 'lecture' }
+            { model: db.lectures, as: 'lecture'}
         ]
     });
 
