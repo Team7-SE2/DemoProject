@@ -16,30 +16,28 @@ const Op = db.Sequelize.Op;
 
 module.exports = function () {
 
-    // Initialize finale
-    finale.initialize({
-        app: router,
-        sequelize: db
-    });
-
-    // Create REST resource
-    finale.resource({
-        model: db.lectures,
-        endpoints: ['/','/:id'], //MANAGE GET, POST, PUT, DELETE
-        search: [
-            {
-            operator: Op.gt,
-            param: 'startDate',
-            attributes: [ 'date' ]
-          },
-          {
-            operator: Op.lt,
-            param: 'endDate',
-            attributes: [ 'date' ]
-          }
-        ]
-    });
-
+    router.get('/includeDeleted',function (req, res){
+        var paramsQuery = {}
+        paramsQuery = req.query;
+        if (req.query.startDate){
+            paramsQuery.date = {[Op.gt]: moment(req.query.startDate).toDate()}
+        }
+        if (req.query.endDate){
+            paramsQuery.date = {[Op.lt]: moment(req.query.endDate).toDate()}
+        }
+        if (req.query.startDate && req.query.endDate){
+            paramsQuery.date = {
+                [Op.gt]: moment(req.query.startDate).toDate(),
+                [Op.lt]: moment(req.query.endDate).toDate()
+            }
+        }
+        delete paramsQuery.startDate;
+        delete paramsQuery.endDate;
+        db['lectures'].findAll({where: paramsQuery,paranoid:false})
+        .then((lectures)=>{
+            res.send(lectures)
+        })
+    })
     // API teacher LECTURES LOADS 
     router.get('/users/:user_id', function (req, res) {
         
@@ -65,5 +63,30 @@ module.exports = function () {
 
     })
     
+    // Initialize finale
+    finale.initialize({
+        app: router,
+        sequelize: db
+    });
+
+    // Create REST resource
+    finale.resource({
+        model: db.lectures,
+        endpoints: ['/','/:id'], //MANAGE GET, POST, PUT, DELETE
+        search: [
+            {
+            operator: Op.gt,
+            param: 'startDate',
+            attributes: [ 'date' ]
+          },
+          {
+            operator: Op.lt,
+            param: 'endDate',
+            attributes: [ 'date' ]
+          }
+        ],
+        paranoid:false
+        
+    });
     return router;
 }
