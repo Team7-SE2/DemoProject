@@ -7,7 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 
 const CourseLectures = (props) => {
   
-    let { lectures, course, bookLecture, deleteBookedLecture,bookedLectures, role_id, getListStudents  } = props;
+    let { lectures, course, bookLecture, deleteBookedLecture, bookedLectures, role_id, getListStudents, deleteLecture  } = props;
   
     function checkPrenotation (bookedLectures2, lectureID){
 
@@ -68,13 +68,12 @@ const CourseLectures = (props) => {
                             justifyContent: "center",
                             alignItems: "center"
                         }}>
-                        <Button variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>
+                        <Button variant="danger"><FaTrashAlt size={20} onClick={() => {deleteLecture(lecture)}}></FaTrashAlt></Button>
                     </div>
 
         
         }
     }
-
 
     if(role_id ==5){
         return{

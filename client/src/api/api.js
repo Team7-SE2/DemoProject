@@ -389,6 +389,33 @@ async function bookRequestType(ReqType) {
     });
 }
 
+async function deleteLecture(lecture_id) {
+    console.log("lecture_id" + lecture_id)
+    const url = `/api/lectures/${lecture_id}`;
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'DElETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
 
-const API = { getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
+            }
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+
+            } else {
+                // analyze the cause of error
+                console.log(response);
+                response.json()
+                    .then((obj) => { reject(obj); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+    });
+}
+
+
+const API = { deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;

@@ -193,6 +193,16 @@ class App extends React.Component {
       });
   }
 
+  deleteLecture = (lecture) => {
+    API.deleteLecture(lecture.id)
+      .then(() => {
+        this.loadInitialDataStudent();
+      })
+      .catch((err) => {
+        console.log("erroreeeeeee")
+      })
+  }
+
   render() {
 
     const value = {
@@ -294,7 +304,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
-                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} />
+                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} deleteLecture= {this.deleteLecture} />
                       </Col>
                       <Col sm={3} className="below-nav" />
 
@@ -340,7 +350,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={2} className="below-nav" />
                       <Col sm={8} className="below-nav">
-                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} />
+                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} deleteLecture= {this.deleteLecture} />
                       </Col>
                       <Col sm={2} className="below-nav" />
 
