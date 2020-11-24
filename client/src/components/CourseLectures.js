@@ -60,7 +60,24 @@ const CourseLectures = (props) => {
         if (role_id == 4) {
             return {
                 id: lecture.id,
-                lectureDate: moment(new Date(lecture.date)).format("LLL"),
+                lectureDate: lecture.deleted_at == null ? 
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}> 
+                {moment(new Date(lecture.date)).format("LLL")}
+                </div> 
+                :
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textDecoration: "line-through red"
+                }}> 
+                {moment(new Date(lecture.date)).format("LLL")}
+                </div>
+                ,
                 'View list of students': <div style={{
                     display: "flex",
                     justifyContent: "center",
