@@ -196,7 +196,11 @@ class App extends React.Component {
   deleteLecture = (lecture) => {
     API.deleteLecture(lecture.id)
       .then(() => {
-        this.loadInitialDataStudent();
+        this.loadInitialDataTeacher();
+        API.getStudentCourseLectures(lecture.subject_id)
+        .then((lectures)=> {
+          this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
+      });
       })
       .catch((err) => {
         console.log("erroreeeeeee")

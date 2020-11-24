@@ -52,6 +52,9 @@ const CourseLectures = (props) => {
     ]);
 
     const test = lectures.map((lecture) => {
+        console.log("lecture deleted at" + lecture.deleted_at)
+        
+
         if(role_id == 4){
         return {
         id: lecture.id,
@@ -61,14 +64,14 @@ const CourseLectures = (props) => {
                             justifyContent: "center",
                             alignItems: "center"
                         }}>
-                        <Button><FaUsers size={20} onClick={() => getListStudents(lecture)}> </FaUsers></Button>
+                       { lecture.deleted_at == null ? <Button ><FaUsers size={20} onClick={() => getListStudents(lecture)}> </FaUsers></Button> : <Button disabled><FaUsers size={20} > </FaUsers></Button>}
                     </div>,
         'Delete the lecture':   <div style={{
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center"
                         }}>
-                        <Button variant="danger"><FaTrashAlt size={20} onClick={() => {deleteLecture(lecture)}}></FaTrashAlt></Button>
+                        { lecture.deleted_at == null ? <Button variant="danger"><FaTrashAlt size={20} onClick={() => {deleteLecture(lecture)}}></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
                     </div>
 
         
