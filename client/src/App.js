@@ -207,6 +207,10 @@ class App extends React.Component {
       })
   }
 
+  switchRoute = (path) => {
+    this.props.history.push(path);
+  }
+
   render() {
 
     const value = {
@@ -369,7 +373,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
-                        <StudentList students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} />
+                        <StudentList switchRoute = {this.switchRoute} students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} />
                       </Col>
                       <Col sm={3} className="below-nav" />
 

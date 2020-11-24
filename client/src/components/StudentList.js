@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import moment from'moment';
 import PaperInsideCard from "./PaperInsideCard"
+import {FaArrowCircleLeft} from 'react-icons/fa';
+import Button from "react-bootstrap/Button"
 const StudentList = (props) => {
 
-  let {students, course, lecture} = props;
+  let {students, course, lecture, switchRoute} = props;
 
 
   const test = students.map((student) => {
@@ -31,13 +33,11 @@ const StudentList = (props) => {
   return (
     <>
      <PaperInsideCard
-        CardHeader = {<>{course.description} <br></br>Lecture Date:  {moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}</>}
+        CardHeader = {<><Button variant="dark" onClick={() => {switchRoute("/teacher/courses/"+course.subjectID+"/lectures")}}><FaArrowCircleLeft  /> </Button><>{course.description} <br></br>Lecture Date:  {moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}</></>}
         columns = {columns}
         sortingStateColumnExtensions = {sortingStateColumnExtensions}
         integratedSortingColumnExtensions = {integratedSortingColumnExtensions}
         test = {test}
-       
-        
         ></PaperInsideCard>
     </>
   );

@@ -64,14 +64,14 @@ const CourseLectures = (props) => {
                             justifyContent: "center",
                             alignItems: "center"
                         }}>
-                       { lecture.deleted_at == null ? <Button ><FaUsers size={20} onClick={() => getListStudents(lecture)}> </FaUsers></Button> : <Button disabled><FaUsers size={20} > </FaUsers></Button>}
+                       { lecture.deleted_at == null ? <Button onClick={() => getListStudents(lecture)} ><FaUsers size={20} > </FaUsers></Button> : <Button disabled><FaUsers size={20} > </FaUsers></Button>}
                     </div>,
         'Delete the lecture':   <div style={{
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center"
                         }}>
-                        { lecture.deleted_at == null ? <Button variant="danger"><FaTrashAlt size={20} onClick={() => {deleteLecture(lecture)}}></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
+                        { lecture.deleted_at == null ? <Button variant="danger" onClick={() => {deleteLecture(lecture)}}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
                     </div>
 
         
