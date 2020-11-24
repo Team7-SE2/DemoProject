@@ -98,7 +98,7 @@ const CourseLectures = (props) => {
                         justifyContent: "center",
                         alignItems: "center"
                     }}>
-                           {lecture.deleted_at == null ? <Button disabled = {lecture.remote} variant="secondary" onClick={() => {turnOnRemote(lecture)}}> <FaTv  size ={20}></FaTv></Button> :  <Button disabled variant="secondary"> <FaTv  size ={20}></FaTv></Button>}
+                           {lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(30,'minutes')) ? <Button disabled = {lecture.remote} variant="secondary" onClick={() => {turnOnRemote(lecture)}}> <FaTv size ={20}></FaTv></Button> :  <Button disabled variant="secondary"> <FaTv  size ={20}></FaTv></Button>}
                     </div>
             }
         }
