@@ -101,7 +101,7 @@ async function getStudentBookings(studentId) {
                 subjectDescription = subject[0].description;
             })
 
-            return {                
+            return {
                 courseId: book.lecture.subject_id,
                 id: id++,
                 title: subjectDescription,
@@ -267,7 +267,7 @@ async function getLectures(user_id) {
 
             })
             lectures.forEach((l) => array.push(l))
-            courseId ++;
+            courseId++;
         });
 
         console.log(array)
@@ -417,5 +417,32 @@ async function deleteLecture(lecture_id) {
 }
 
 
-const API = { deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
+async function turnOnRemote(lecture_id) {
+    const url = `/api/lectures/${lecture_id}`;
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'PUT',
+            body: JSON.stringify({remote: true}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+
+            } else {
+                // analyze the cause of error
+                console.log(response);
+                response.json()
+                    .then((obj) => { reject(obj); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+    });
+}
+
+const API = { turnOnRemote,deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;

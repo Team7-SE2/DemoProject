@@ -198,9 +198,9 @@ class App extends React.Component {
       .then(() => {
         this.loadInitialDataTeacher();
         API.getStudentCourseLectures(lecture.subject_id)
-        .then((lectures)=> {
-          this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
-      });
+          .then((lectures) => {
+            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
+          });
       })
       .catch((err) => {
         console.log("erroreeeeeee")
@@ -209,6 +209,21 @@ class App extends React.Component {
 
   switchRoute = (path) => {
     this.props.history.push(path);
+  }
+
+  turnOnRemote = (lecture) => {
+    API.turnOnRemote(lecture.id)
+    .then (() => {
+      this.loadInitialDataTeacher();
+      API.getStudentCourseLectures(lecture.subject_id)
+        .then((lectures) => {
+          this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
+        });
+      
+    })
+    .catch(() => {
+      console.log("Errore put");
+    });
   }
 
   render() {
@@ -225,7 +240,7 @@ class App extends React.Component {
         <Container className="backgroundPages" style={{ maxWidth: '100%', overflowX: 'hidden', padding: '0px' }}>
           <Row className="vheight-100">
             {this.state.logged ? <Col sm={2}>
-              <div style={{ position: "fixed", height: '100%',zIndex:9999 }}>
+              <div style={{ position: "fixed", height: '100%', zIndex: 9999 }}>
                 <Aside
                   //image={image}
                   collapsed={false}
@@ -284,27 +299,27 @@ class App extends React.Component {
                         </Card>
                       </Col>
                     </Row>
-                      
+
                   </Container>
 
                 </Route>
 
-                <Route exact path="/student/calendar">                    
-                    <Container fluid>
-                      <Row >
-                        <Col sm={1}></Col>
-                        <Col sm={10} className="below-nav">
-                          <Card>
-                            <Card.Header className="text-center">
-                              <h3>My Bookings Calendar</h3>
-                            </Card.Header>
-                            <Card.Body>
-                              <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-                    </Container>
+                <Route exact path="/student/calendar">
+                  <Container fluid>
+                    <Row >
+                      <Col sm={1}></Col>
+                      <Col sm={10} className="below-nav">
+                        <Card>
+                          <Card.Header className="text-center">
+                            <h3>My Bookings Calendar</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            <HomeCalendar userId={this.state.ID_User} isMyCalendar={true} isStudent={true}></HomeCalendar>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                  </Container>
                 </Route>
 
                 <Route exact path={"/student/courses/" + this.state.course.subjectID + "/lectures"}>
@@ -312,7 +327,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
-                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} deleteLecture= {this.deleteLecture} />
+                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} deleteLecture={this.deleteLecture} />
                       </Col>
                       <Col sm={3} className="below-nav" />
 
@@ -358,7 +373,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={1} className="below-nav" />
                       <Col sm={10} className="below-nav">
-                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} deleteLecture= {this.deleteLecture} />
+                        <CourseLectures turnOnRemote={this.turnOnRemote} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} deleteLecture={this.deleteLecture} />
                       </Col>
                       <Col sm={1} className="below-nav" />
 
@@ -373,7 +388,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
-                        <StudentList switchRoute = {this.switchRoute} students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} />
+                        <StudentList switchRoute={this.switchRoute} students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} />
                       </Col>
                       <Col sm={3} className="below-nav" />
 
