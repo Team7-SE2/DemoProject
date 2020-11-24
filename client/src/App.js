@@ -318,8 +318,8 @@ class App extends React.Component {
                   {this.state.logged ? <Redirect to="/teacher" /> : <Redirect to="/login" />}
                   <Container fluid>
                     <Row >
-                      <Col sm={2}></Col>
-                      <Col sm={8} className="below-nav">
+                      <Col sm={1}></Col>
+                      <Col sm={10} className="below-nav">
                         <Card>
                           <Card.Header className="text-center">
                             <h3>My Courses</h3>
@@ -348,11 +348,11 @@ class App extends React.Component {
                 <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/lectures"}>
                   <Container fluid>
                     <Row >
-                      <Col sm={2} className="below-nav" />
-                      <Col sm={8} className="below-nav">
+                      <Col sm={1} className="below-nav" />
+                      <Col sm={10} className="below-nav">
                         <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} deleteLecture= {this.deleteLecture} />
                       </Col>
-                      <Col sm={2} className="below-nav" />
+                      <Col sm={1} className="below-nav" />
 
                     </Row>
                   </Container>

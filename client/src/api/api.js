@@ -129,7 +129,7 @@ async function getStudentBookings(studentId) {
 }
 
 async function getStudentCourseLectures(courseID) {
-    let url = "/api/lectures?subject_id=" + courseID;
+    let url = "/api/lectures/includeDeleted?subject_id=" + courseID;
     const response = await fetch(url);
     const studentCourseLecturesJson = await response.json();
     console.log("response: " + response);
