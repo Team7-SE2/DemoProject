@@ -6,10 +6,11 @@ import {
   SidebarHeader,
   SidebarFooter,
   SidebarContent,
+  SubMenu
 } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
-import { FaBook, FaCalendar, FaGithub } from 'react-icons/fa';
+import { FaBook, FaCalendar, FaGithub, FaHeart } from 'react-icons/fa';
 import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
@@ -77,7 +78,17 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
           </MenuItem>
           }
           </>
+          <SubMenu
+            prefix={<span className="badge gray">3</span>}
+            title="test2"
+            icon={<FaHeart />}
+          >
+            <MenuItem>Un titolo molto lungo per una materia molto corta</MenuItem>
+            <MenuItem>prova test</MenuItem>
+            <MenuItem>diomadonna</MenuItem>
+          </SubMenu>
         </Menu>
+        
         
       </SidebarContent>
 

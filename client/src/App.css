@@ -98,6 +98,10 @@ button:focus {
 
 .MuiTableCell-root{
   font-size: 1.1rem !important;
+  white-space: break-spaces !important;
   /*text-align: center !important*/ 
 }
 
+.pro-item-content{
+  white-space: break-spaces !important;
+}

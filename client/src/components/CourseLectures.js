@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import PaperInsideCard from './PaperInsideCard';
 import { FaUsers, FaTrashAlt, FaTv } from 'react-icons/fa';
 import Nav from 'react-bootstrap/Nav';
+import { red } from '@material-ui/core/colors';
 
 const CourseLectures = (props) => {
 
@@ -27,9 +28,7 @@ const CourseLectures = (props) => {
     };
 
     const [integratedSortingColumnExtensions] = useState([
-        { columnName: 'lectureDate', compare: compareDate },
-        { columnName: 'View list of students' },
-        { columnName: 'Delete the lecture' },
+        { columnName: 'lectureDate', compare: compareDate }
 
     ]);
 
@@ -41,8 +40,8 @@ const CourseLectures = (props) => {
                 //{ name: 'id', title: 'ID'},
                 { name: 'lectureDate', title: 'Lecture Date' },
                 { name: 'View list of students', title: 'View list of students' },
-                { name: 'Delete the lecture', title: 'Delete the lecture' },
-                { name: 'Switch to remote', title: 'Switch to remote' }
+                { name: 'Switch to remote', title: 'Switch to remote' },
+                { name: 'Delete the lecture', title: 'Delete the lecture' }
             ]
             :
             [{ name: 'lectureDate', title: 'Lecture Date' },
@@ -50,7 +49,9 @@ const CourseLectures = (props) => {
     );
 
     const [sortingStateColumnExtensions] = useState([
-        { columnName: ' ', sortingEnabled: false },
+        { columnName: 'Delete the lecture', sortingEnabled: false },
+        { columnName: 'Switch to remote', sortingEnabled: false },
+        { columnName: 'View list of students', sortingEnabled: false }
     ]);
 
     const test = lectures.map((lecture) => {
@@ -85,21 +86,21 @@ const CourseLectures = (props) => {
                 }}>
                     {lecture.deleted_at == null ? <Button onClick={() => getListStudents(lecture)} ><FaUsers size={20} > </FaUsers></Button> : <Button disabled><FaUsers size={20} > </FaUsers></Button>}
                 </div>,
-                'Delete the lecture': <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}>
-                    {lecture.deleted_at == null ? <Button variant="danger" onClick={() => { deleteLecture(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
-                </div>,
                 'Switch to remote':
                     <div style={{
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center"
                     }}>
-                           {lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(30,'minutes')) ? <Button disabled = {lecture.remote} variant="secondary" onClick={() => {turnOnRemote(lecture)}}> <FaTv size ={20}></FaTv></Button> :  <Button disabled variant="secondary"> <FaTv  size ={20}></FaTv></Button>}
-                    </div>
+                           {lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(30,'minutes')) ? <Button disabled = {lecture.remote} onClick={() => {turnOnRemote(lecture)}}> <FaTv size ={20}></FaTv></Button> :  <Button disabled> <FaTv  size ={20}></FaTv></Button>}
+                    </div>,
+                'Delete the lecture': <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}>
+                    {lecture.deleted_at == null ? <Button variant="danger" onClick={() => { deleteLecture(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
+                </div>
             }
         }
 
@@ -112,7 +113,7 @@ const CourseLectures = (props) => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button> : <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>}
+                    {lecture.deleted_at == null ? checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button> : <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>:<h5 style={{color: "red", fontWeight: "bold"}}>Canceled</h5>}
                 </div>,
             }
         }
