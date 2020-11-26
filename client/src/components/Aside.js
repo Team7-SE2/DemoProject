@@ -10,7 +10,7 @@ import {
 } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
-import { FaBook, FaCalendar, FaGithub, FaHeart } from 'react-icons/fa';
+import { FaBook, FaCalendar, FaGithub, FaHeart,FaRegChartBar} from 'react-icons/fa';
 import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
@@ -84,7 +84,7 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
           <SubMenu
             prefix={<span className="badge gray"></span>}
             title="Statistics"
-            icon={<FaHeart />}
+            icon={<FaRegChartBar />}
           >
           <MenuItem><Nav.Link style={{paddingLeft:0}} as={NavLink}  to={"/teacher/statistics/overall"} >Overall</Nav.Link></MenuItem>
          
