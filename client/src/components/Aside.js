@@ -86,7 +86,7 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
             title="Statistics"
             icon={<FaRegChartBar />}
           >
-          <MenuItem><Nav.Link style={{paddingLeft:0}} as={NavLink}  to={"/teacher/statistics/overall"} >Overall</Nav.Link></MenuItem>
+          <MenuItem><Nav.Link style={{paddingLeft:0, fontWeight: "bold"}} as={NavLink}  to={"/teacher/statistics/overall"} >Overall</Nav.Link></MenuItem>
          
            {courses.map((course)=><MenuItem><Nav.Link style={{paddingLeft:0}} as={NavLink}  to={"/teacher/statistics/"+`${course.subjectID}`} >{course.description}</Nav.Link></MenuItem>)}
         

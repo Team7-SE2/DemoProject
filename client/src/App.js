@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import Header from "./components/Header";
 import Login from "./components/Login"
 import Container from "react-bootstrap/Container";
@@ -13,10 +13,14 @@ import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
 import HomeCalendar from "./components/HomeCalendar.js";
 import Aside from "./components/Aside.js";
-import Card from "react-bootstrap/Card"
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import "./App.css";
 import CourseLectures from './components/CourseLectures';
+import DatePickerComponent from './components/DatePickerComponent';
 import moment from 'moment';
+
 
 class App extends React.Component {
 
@@ -105,7 +109,7 @@ class App extends React.Component {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
         this.setState({ course: course });
-        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
+        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
         this.props.history.push("/teacher/courses/" + course.subjectID + "/lectures");
 
       })
@@ -402,9 +406,44 @@ class App extends React.Component {
                 {this.state.info_user.role_id == 4 ?
                   <>
                     <Route exact path={"/teacher/statistics/overall"}>
-                      <Col sm={5}><h1 style={{ color: "white" }}>OVERALL</h1></Col>
-                      <br />
-                      <Col sm={5}><h1 style={{ color: "white" }}>GRAFICI BELLI</h1></Col>
+                      <Row>
+                        <Col sm={5} style={{paddingLeft:"50px"}}><h1 style={{ color: "white"}}>OVERALL</h1></Col>
+                      </Row>
+                      <Row>
+                        <Col sm={1}></Col>
+                        <Col sm={10}>
+                          <Card>
+                            <Card.Body>
+                              <Form>
+                                <Row>
+                                  <Col sm={2}>
+                                    <Form.Group controlId="exampleForm.SelectCustom">
+                                      <Form.Label>Group By</Form.Label>
+                                      <Form.Control as="select" custom>
+                                        <option>hours</option>
+                                        <option>weeks</option>
+                                        <option>days</option>
+                                        <option>months</option>
+                                      </Form.Control>
+                                    </Form.Group>
+                                  </Col>
+                                  <Col sm={1}></Col>
+                                  <Col sm={3}>
+                                    <DatePickerComponent label={"Start day : "} ></DatePickerComponent>
+                                  </Col>
+                                  <Col sm={3}>
+                                    <DatePickerComponent label={"End day : "}></DatePickerComponent>
+                                  </Col>
+                                  <Col sm={1}></Col>
+                                  <Col sm={1} style={{alignSelf:"center"}}>
+                                    <Button variant="primary">Generate</Button>
+                                  </Col>
+                                </Row>
+                              </Form>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
                     </Route>
                     {this.state.courses.map((course) => <Route exact path={"/teacher/statistics/" + course.subjectID}>
                       <Col sm={5}><h1 style={{ color: "white" }}>{course.description}</h1></Col>
