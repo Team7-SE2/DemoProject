@@ -41,10 +41,26 @@ module.exports = function () {
     })
     // API teacher LECTURES LOADS 
     router.get('/users/:user_id', function (req, res) {
-        
+        var paramsQuery = {}
+        paramsQuery = req.query;
+        if (req.query.startDate){
+            paramsQuery.date = {[Op.gt]: moment(req.query.startDate).toDate()}
+        }
+        if (req.query.endDate){
+            paramsQuery.date = {[Op.lt]: moment(req.query.endDate).toDate()}
+        }
+        if (req.query.startDate && req.query.endDate){
+            paramsQuery.date = {
+                [Op.gt]: moment(req.query.startDate).toDate(),
+                [Op.lt]: moment(req.query.endDate).toDate()
+            }
+        }
+        delete paramsQuery.startDate;
+        delete paramsQuery.endDate;
         // get only users with ROLE-STUDENT
         if (req.params && Number(req.params.user_id)) {
             db['lectures'].findAll({
+                where: paramsQuery,
                 include: [{
                     model: db.subjects,
                     as: 'subject',

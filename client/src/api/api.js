@@ -281,7 +281,7 @@ async function getBookedLectures(user_id) {
 }
 
 async function getLectures(user_id) {
-    let url = "api/teaching_loads/students/" + user_id + '/lectures';
+    let url = "/api/teaching_loads/students/" + user_id + '/lectures';
     const response = await fetch(url);
     const coursesJson = await response.json();
     let lectureId = 1;
@@ -363,6 +363,32 @@ async function getTeacherLectures(user_id) {
 
         console.log("array: " + JSON.stringify(array))
         return await Promise.all(array);
+
+    }
+    else {
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: lecturesJson };
+        throw err;
+    }
+}
+
+async function getTeacherLecturesWithParams(user_id, params) {
+    let paramsString = '';
+    Object.keys(params).forEach((k, index) => {
+        if(index == 0)
+            paramsString = '?' + k + '=' + params[k]
+        else 
+            paramsString += '&' + k + '=' + params[k]
+
+    })
+    let url = `/api/lectures/users/${user_id}` + paramsString;
+    console.log(url)
+    const response = await fetch(url);
+    const lecturesJson = await response.json();
+    let id = 1;
+    if (response.ok) {
+        console.log(lecturesJson)
+        return await Promise.all(lecturesJson);
 
     }
     else {
@@ -492,5 +518,5 @@ async function turnOnRemote(lecture_id) {
     });
 }
 
-const API = { getStudentBookingsexcludeLecturesCanceled,turnOnRemote,deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
+const API = { getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled,turnOnRemote,deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;
