@@ -99,7 +99,7 @@ const CourseLectures = (props) => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {lecture.deleted_at == null ? <Button variant="danger" onClick={() => { deleteLecture(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
+                    {(lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(1,'hours'))) ? <Button variant="danger" onClick={() => { deleteLecture(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
                 </div>
             }
         }
