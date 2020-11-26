@@ -213,17 +213,17 @@ class App extends React.Component {
 
   turnOnRemote = (lecture) => {
     API.turnOnRemote(lecture.id)
-    .then (() => {
-      this.loadInitialDataTeacher();
-      API.getStudentCourseLectures(lecture.subject_id)
-        .then((lectures) => {
-          this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
-        });
-      
-    })
-    .catch(() => {
-      console.log("Errore put");
-    });
+      .then (() => {
+        this.loadInitialDataTeacher();
+        API.getStudentCourseLectures(lecture.subject_id)
+          .then((lectures) => {
+            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
+          });
+
+      })
+      .catch(() => {
+        console.log("Errore put");
+      });
   }
 
   render() {
@@ -242,6 +242,7 @@ class App extends React.Component {
             {this.state.logged ? <Col sm={2}>
               <div style={{ position: "fixed", height: '100%', zIndex: 9999 }}>
                 <Aside
+                  courses={this.state.courses}
                   //image={image}
                   collapsed={false}
                   rtl={false}
@@ -396,6 +397,21 @@ class App extends React.Component {
                   </Container>
 
                 </Route>
+
+
+                {this.state.info_user.role_id == 4 ?
+                  <>
+                    <Route exact path={"/teacher/statistics/overall"}>
+                      <Col sm={5}><h1 style={{ color: "white" }}>OVERALL</h1></Col>
+                      <br />
+                      <Col sm={5}><h1 style={{ color: "white" }}>GRAFICI BELLI</h1></Col>
+                    </Route>
+                    {this.state.courses.map((course) => <Route exact path={"/teacher/statistics/" + course.subjectID}>
+                      <Col sm={5}><h1 style={{ color: "white" }}>{course.description}</h1></Col>
+                      <br />
+                      <Col sm={5}><h1 style={{ color: "white" }}>GRAFICI BELLI</h1></Col>
+                    </Route>)}
+                  </> : <Redirect to="/login" />}
 
               </Switch>
 

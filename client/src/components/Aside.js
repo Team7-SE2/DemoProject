@@ -15,7 +15,7 @@ import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
 
-const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_id, logged }) => {
+const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_id, logged }) => {
   
   return (
     <AuthContext.Consumer >
@@ -78,15 +78,20 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
           </MenuItem>
           }
           </>
+         <>
+         {
+              context.authUser && role_id===4 && logged &&
           <SubMenu
-            prefix={<span className="badge gray">3</span>}
-            title="test2"
+            prefix={<span className="badge gray"></span>}
+            title="Statistics"
             icon={<FaHeart />}
           >
-            <MenuItem>Un titolo molto lungo per una materia molto corta</MenuItem>
-            <MenuItem>prova test</MenuItem>
-            <MenuItem>diomadonna</MenuItem>
-          </SubMenu>
+          <MenuItem><Nav.Link style={{paddingLeft:0}} as={NavLink}  to={"/teacher/statistics/overall"} >Overall</Nav.Link></MenuItem>
+         
+           {courses.map((course)=><MenuItem><Nav.Link style={{paddingLeft:0}} as={NavLink}  to={"/teacher/statistics/"+`${course.subjectID}`} >{course.description}</Nav.Link></MenuItem>)}
+        
+          </SubMenu>}
+         </>
         </Menu>
         
         
@@ -115,5 +120,7 @@ const Aside = ({ collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_
     </AuthContext.Consumer>
   );
 };
+
+
 
 export default Aside;

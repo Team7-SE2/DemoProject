@@ -117,7 +117,7 @@ class HomeCalendar extends React.PureComponent {
 
   studentMyCalendar = (userID) => {
 
-        API.getStudentBookings(userID)
+        API.getStudentBookingsexcludeLecturesCanceled(userID)
           .then((books) => {
 
             courseInstances = []

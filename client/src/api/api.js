@@ -128,6 +128,54 @@ async function getStudentBookings(studentId) {
 
 }
 
+async function getStudentBookingsexcludeLecturesCanceled(studentId) {
+
+    let url = "/api/bookings/excludeLecturesCanceled?user_id=" + studentId;
+    const response = await fetch(url);
+    const studentBookingsJson = await response.json();
+    let id = 1;
+    if (response.ok) {
+        console.log(studentBookingsJson)
+        let array = studentBookingsJson.map(async (book) => {
+
+            let startDate = new Date(book.lecture.date);
+
+            let endDate = new Date(startDate);
+            endDate.setHours(startDate.getHours() + book.lecture.duration)
+
+            let subjectDescription = '';
+
+            await getSubject(book.lecture.subject_id).then((subject) => {
+                subjectDescription = subject[0].description;
+            })
+
+            return {
+                courseId: book.lecture.subject_id,
+                id: id++,
+                title: subjectDescription,
+                startDate: startDate,
+                endDate: endDate,
+                ownerId: book.user_id,
+                roomId: 1,
+                room: 'Room 1',
+                teacher: 'Teacher Vetrò',
+                teacherId: 1
+            }
+        });
+
+        console.log(array)
+
+        return await Promise.all(array);
+
+    }
+    else {
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: studentBookingsJson };
+        throw err;
+    }
+
+}
+
 async function getStudentCourseLectures(courseID) {
     let url = "/api/lectures/includeDeleted?subject_id=" + courseID;
     const response = await fetch(url);
@@ -444,5 +492,5 @@ async function turnOnRemote(lecture_id) {
     });
 }
 
-const API = { turnOnRemote,deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
+const API = { getStudentBookingsexcludeLecturesCanceled,turnOnRemote,deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;
