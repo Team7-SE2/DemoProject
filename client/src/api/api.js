@@ -387,24 +387,18 @@ async function getTeacherLecturesWithParams(user_id, params) {
     let lectures = []
     const lecturesJson = await response.json();
 
-    await lecturesJson.forEach(async (lecture) => {
-
-        getStudentListforLecture(lecture.id).then((students) => {
+    for (const lecture of lecturesJson) {
+        await getStudentListforLecture(lecture.id).then((students) => {
             //let newLecture = lecture;
             lecture.studentsCount = students.length;
             lectures.push(students.length)
+            console.log(students.length)
 
         });
+    }
 
-    })
-
-    console.log(lecturesJson)
-    console.log(lectures)
-
-    let id = 1;
     if (response.ok) {
         return await Promise.all(lecturesJson);
-
     }
     else {
         console.log("studentCoursesJson Error");
