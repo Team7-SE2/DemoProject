@@ -191,6 +191,31 @@ async function getStudentCourseLectures(courseID) {
     }
 }
 
+async function getCourseLectures(params) {
+    let paramsString = '';
+    Object.keys(params).forEach((k, index) => {
+        if(index == 0)
+            paramsString = '?' + k + '=' + params[k]
+        else 
+            paramsString += '&' + k + '=' + params[k]
+
+    });
+
+    let url = "/api/lectures/includeDeleted"+paramsString;
+    console.log(url);
+    const response = await fetch(url);
+    const studentCourseLecturesJson = await response.json();
+    console.log("response: " + response);
+    if (response.ok) {
+        return (studentCourseLecturesJson.map((lecture) => lecture));
+    }
+    else {
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: studentCourseLecturesJson };
+        throw err;
+    }
+}
+
 async function getStudentListforLecture(lectureId) {
     let url = "/api/bookings?lecture_id=" + lectureId + "&user.role_id=5";
     const response = await fetch(url);
@@ -527,5 +552,5 @@ async function turnOnRemote(lecture_id) {
     });
 }
 
-const API = { getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled,turnOnRemote,deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
+const API = { getCourseLectures,getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled,turnOnRemote,deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;

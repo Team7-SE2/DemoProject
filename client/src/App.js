@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import Header from "./components/Header";
 import Login from "./components/Login"
 import Container from "react-bootstrap/Container";
@@ -20,6 +20,7 @@ import "./App.css";
 import CourseLectures from './components/CourseLectures';
 import DatePickerComponent from './components/DatePickerComponent';
 import moment from 'moment';
+import StatisticsComponet from './components/StatisticsComponent';
 
 import { Line } from 'react-chartjs-2'
 
@@ -89,12 +90,12 @@ class App extends React.Component {
         this.setState({ info_user: info });
         this.setState({ authUser: info });
         this.setState({ ID_User: info.ID_User })
-        this.setState({statisticsGroupBy: 'days'})
-        this.setState({startFilterDate: moment().add(-7, "days").startOf("day")})
-        this.setState({endFilterDate: moment().endOf("day")})
+        this.setState({ statisticsGroupBy: 'days' })
+        this.setState({ startFilterDate: moment().add(-7, "days").startOf("day") })
+        this.setState({ endFilterDate: moment().endOf("day") })
 
         console.log("initialTime: " + moment())
-        
+
         if (info.role_id === 5) {
           this.loadInitialDataStudent();
           this.props.history.push("/student");
@@ -164,13 +165,13 @@ class App extends React.Component {
 
   setStateDate = (type, date) => {
 
-    if(type === "startDate") {
+    if (type === "startDate") {
 
-      this.setState({startFilterDate: moment(date)})
+      this.setState({ startFilterDate: moment(date) })
 
     } else if (type === "endDate") {
 
-      this.setState({endFilterDate: moment(date)})
+      this.setState({ endFilterDate: moment(date) })
 
     }
 
@@ -247,7 +248,7 @@ class App extends React.Component {
         this.loadInitialDataTeacher();
         API.getStudentCourseLectures(lecture.subject_id)
           .then((lectures) => {
-            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
+            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
           });
       })
       .catch((err) => {
@@ -261,12 +262,12 @@ class App extends React.Component {
 
   onStatisticGroupByChange = (e) => {
     console.log("filter: " + e.target.value)
-    this.setState({statisticsGroupBy: e.target.value})
+    this.setState({ statisticsGroupBy: e.target.value })
   }
 
   turnOnRemote = (lecture) => {
     API.turnOnRemote(lecture.id)
-      .then (() => {
+      .then(() => {
         this.loadInitialDataTeacher();
         API.getStudentCourseLectures(lecture.subject_id)
           .then((lectures) => {
@@ -278,30 +279,30 @@ class App extends React.Component {
         console.log("Errore put");
       });
   }
-  
-//questa funzione restituisce un array col dataset pronto per il grafico
+
+  //questa funzione restituisce un array col dataset pronto per il grafico
   getDataGrouped = (data, groupBy, startDate, endDate) => {
-    
+
     //groupBy deve essere 'hours','days','months'
     //data deve essere un array e avere il campo created_at (o un campo creato ad hoc timestamp)
-    
+
     var start = moment(startDate).startOf(groupBy)
     var end = moment(endDate).startOf(groupBy)
-    var numSpans = end.diff(start,groupBy);
+    var numSpans = end.diff(start, groupBy);
     var res = []
-    for(let i = 0; i <= numSpans; i ++){
+    for (let i = 0; i <= numSpans; i++) {
       res[i] = 0;
     }
-    data.forEach((d)=>{
-      if(d.date)
-        var index = moment(d.date).startOf(groupBy).diff(start,groupBy);
+    data.forEach((d) => {
+      if (d.date)
+        var index = moment(d.date).startOf(groupBy).diff(start, groupBy);
       else
-        var index = moment(d.created_at).startOf(groupBy).diff(start,groupBy);
-      if(!res[index])
-        res[index]=0;
+        var index = moment(d.created_at).startOf(groupBy).diff(start, groupBy);
+      if (!res[index])
+        res[index] = 0;
       res[index]++;
     })
-    
+
     console.log("res: " + JSON.stringify(res))
     return res;
   }
@@ -309,23 +310,23 @@ class App extends React.Component {
   getTimeSpans = (groupBy, startDate, endDate) => {
 
     //groupBy deve essere 'hours','days','months'
-    
+
     var start = moment(startDate).startOf(groupBy)
     var end = moment(endDate).startOf(groupBy)
-    var numSpans = end.diff(start,groupBy);
+    var numSpans = end.diff(start, groupBy);
     var res = [];
     var formatString = '';
-    switch(groupBy){
-      case 'hours':{formatString = 'll:HH:mm'}break;
-      case 'days':{formatString = 'll'}break;
-      case 'weeks':{formatString = 'll'}break;
-      case 'months':{formatString = 'MMMM'}break;
-      default: {formatString = 'lll'} break;
+    switch (groupBy) {
+      case 'hours': { formatString = 'll:HH:mm' } break;
+      case 'days': { formatString = 'll' } break;
+      case 'weeks': { formatString = 'll' } break;
+      case 'months': { formatString = 'MMMM' } break;
+      default: { formatString = 'lll' } break;
     }
-    for(var i=0; i <= numSpans; i++){
-      res[i] = start.clone().add(i,groupBy).format(formatString);
+    for (var i = 0; i <= numSpans; i++) {
+      res[i] = start.clone().add(i, groupBy).format(formatString);
     }
-    
+
     console.log("label: " + JSON.stringify(res))
     return res;
   }
@@ -334,27 +335,50 @@ class App extends React.Component {
     let startDate = moment(this.state.startFilterDate).toDate();
     let endDate = moment(this.state.endFilterDate).toDate();
     console.log("button pressed")
-    API.getTeacherLecturesWithParams(4, {
+    API.getCourseLectures( {
       startDate: startDate,//moment().add(-3, "days").toISOString(),
-      endDate: endDate //moment().toISOString()
+      endDate: endDate, //moment().toISOString()
+      user_id : 4
     })
-      .then ((data) => {
+      .then((lectures) => {
+        var data = lectures.filter((a) => {
+          return !a.deleted_at;
+        });
         console.log("TEST TIME: " + startDate + " " + endDate)
         /*this.data.labels = data.map((d) => 1)
         this.data.datasets.labels = data.map((d) => d.date)*/
-        console.log(this.data)
-        this.setState({ lectureData: {
-          labels: this.getTimeSpans(this.state.statisticsGroupBy, startDate /*moment().add(-3, "days").toISOString()*/, endDate /*moment().toISOString()*/),
-          datasets: [
-            {
-              label: '# of Bookings',
-              data: this.getDataGrouped( data, this.state.statisticsGroupBy, startDate, endDate),
-              fill: false,
-              backgroundColor: 'rgb(255, 99, 132)',
-              borderColor: 'rgba(255, 99, 132, 0.2)',
-            },
-          ]
-        }})
+        console.log(data)
+        let statistics = {
+          studentsCounts: 0,
+          numberOfLessons: data.length,
+          numberOfLessonsCancelled: 0,
+          numberOfLessonsRemote: 0,
+          nummberOfLessonPresence: 0
+        }
+        lectures.forEach((elem) => {
+          console.log(elem.studentsCount);
+          statistics.studentsCounts += elem.studentsCount;
+          if (elem.deleted_at) statistics.numberOfLessonsCancelled++;
+          else if (elem.remote) statistics.numberOfLessonsRemote++;
+          else statistics.nummberOfLessonPresence++;
+        });
+        this.setState({
+          lectureData: {
+            labels: this.getTimeSpans(this.state.statisticsGroupBy, startDate /*moment().add(-3, "days").toISOString()*/, endDate /*moment().toISOString()*/),
+            datasets: [
+              {
+                label: '# of Bookings',
+                data: this.getDataGrouped(data, this.state.statisticsGroupBy, startDate, endDate),
+                fill: false,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgba(255, 99, 132, 0.2)',
+              },
+            ]
+          },
+          statistics: statistics
+        })
+
+        console.log("state: "+JSON.stringify(this.state.statistics));
       })
       .catch((err) => {
         console.log("err: " + JSON.stringify(err))
@@ -538,9 +562,10 @@ class App extends React.Component {
                   <>
                     <Route exact path={"/teacher/statistics/overall"}>
                       <Row>
-                        <Col sm={5} style={{paddingLeft:"50px"}}><h1 style={{ color: "white"}}>OVERALL</h1></Col>
+                        <Col sm={5} style={{ paddingLeft: "50px" }}><h1 style={{ color: "white" }}>OVERALL</h1></Col>
                       </Row>
                       <br></br>
+
                       <Row>
                         <Col sm={1}></Col>
                         <Col sm={10}>
@@ -554,7 +579,7 @@ class App extends React.Component {
                                   <Col sm={2}>
                                     <Form.Group controlId="exampleForm.SelectCustom">
                                       <Form.Label>Group By</Form.Label>
-                                      <Form.Control defaultValue="days" value={this.state.statisticsGroupBy} as="select" onChange={this.onStatisticGroupByChange}custom>
+                                      <Form.Control defaultValue="days" value={this.state.statisticsGroupBy} as="select" onChange={this.onStatisticGroupByChange} custom>
                                         <option>hours</option>
                                         <option>weeks</option>
                                         <option>days</option>
@@ -564,30 +589,41 @@ class App extends React.Component {
                                   </Col>
                                   <Col sm={1}></Col>
                                   <Col sm={3}>
-                                    <DatePickerComponent label={"Start day : "} type ="startDate" setStateDate = {this.setStateDate} ></DatePickerComponent>
+                                    <DatePickerComponent label={"Start day : "} type="startDate" setStateDate={this.setStateDate} ></DatePickerComponent>
                                   </Col>
                                   <Col sm={3}>
-                                    <DatePickerComponent label={"End day : "} type ="endDate" setStateDate = {this.setStateDate}></DatePickerComponent>
+                                    <DatePickerComponent label={"End day : "} type="endDate" setStateDate={this.setStateDate}></DatePickerComponent>
                                   </Col>
                                   <Col sm={1}></Col>
-                                  <Col sm={1} style={{alignSelf:"center"}}>
+                                  <Col sm={1} style={{ alignSelf: "center" }}>
                                     <Button variant="primary" onClick={this.generateData} >Generate</Button>
                                   </Col>
                                 </Row>
                               </Form>
                             </Card.Body>
                           </Card>
-                          <br></br>
+                        </Col>
+                      </Row>
+                      <br></br>
+                      <Row>
+                        <StatisticsComponet statistics={this.state.statistics} />
+                      </Row>
+                      <br></br>
+
+                      <Row>
+                        <Col sm={1}></Col>
+                        <Col sm={10}>
                           <Card>
                             <Card.Header className="text-center">
-                            <h1 className='title'>Line Chart</h1>
+                              <h1 className='title'>Line Chart</h1>
                             </Card.Header>
                             <Card.Body>
                               <Line data={this.state.lectureData} options={options} />
                             </Card.Body>
-                            
+
                           </Card>
                         </Col>
+
                       </Row>
                     </Route>
                     {this.state.courses.map((course) => <Route exact path={"/teacher/statistics/" + course.subjectID}>
@@ -601,7 +637,7 @@ class App extends React.Component {
 
             </Col>
           </Row>
-        </Container>
+        </Container >
       </AuthContext.Provider >
 
     );
