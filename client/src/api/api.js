@@ -384,10 +384,25 @@ async function getTeacherLecturesWithParams(user_id, params) {
     let url = `/api/lectures/users/${user_id}` + paramsString;
     console.log(url)
     const response = await fetch(url);
+    let lectures = []
     const lecturesJson = await response.json();
+
+    await lecturesJson.forEach(async (lecture) => {
+
+        getStudentListforLecture(lecture.id).then((students) => {
+            //let newLecture = lecture;
+            lecture.studentsCount = students.length;
+            lectures.push(students.length)
+
+        });
+
+    })
+
+    console.log(lecturesJson)
+    console.log(lectures)
+
     let id = 1;
     if (response.ok) {
-        console.log(lecturesJson)
         return await Promise.all(lecturesJson);
 
     }
