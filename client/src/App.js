@@ -517,6 +517,17 @@ class App extends React.Component {
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
+                order: 1
+              },
+              {
+                label: 'Attendances',
+                data: bookingsPerLectureData,
+                fill: false,
+                backgroundColor: 'rgba(54, 162, 235, 1)',
+                //borderColor: 'rgba(54, 162, 235, 1)',
+                type: "line",
+                order: 2
+                //borderWidth: 1,
               }
             ]
           },
