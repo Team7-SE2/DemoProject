@@ -133,7 +133,7 @@ class App extends React.Component {
         this.setState({ startFilterDate: moment().add(-7, "days").startOf("day") })
         this.setState({ endFilterDate: moment().endOf("day") })
 
-        //console.log("initialTime: " + moment())
+        console.log("role_id: " + info.role_id)
 
         if (info.role_id === 5) {
           this.loadInitialDataStudent();
@@ -142,6 +142,9 @@ class App extends React.Component {
         if (info.role_id === 4) {
           this.loadInitialDataTeacher();
           this.props.history.push("/teacher");
+        }
+        if (info.role_id === 3) {
+          this.props.history.push("/bookingManager");
         }
 
       }
@@ -604,6 +607,14 @@ class App extends React.Component {
                   </Container>
                 </Route>
 
+                <Route exact path="/bookingManager">
+                    {this.state.logged ? <Redirect to="/bookingManager" /> : <Redirect to="/login" />}
+                      
+                        <TeacherStatistics title = "OVERALL STATISTICS" statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
+                      
+
+                </Route>
+
                 <Route exact path="/student">
                   {this.state.logged ? <Redirect to="/student" /> : <Redirect to="/login" />}
                   <Container fluid>
@@ -740,7 +751,7 @@ class App extends React.Component {
                       <TeacherStatistics title = {course.description.toUpperCase()} statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
                     </Route>)}
                   </> : <Redirect to="/login" />}
-
+                
               </Switch>
 
             </Col>

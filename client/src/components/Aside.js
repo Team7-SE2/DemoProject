@@ -49,7 +49,8 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
 
       <SidebarContent>
         <Menu iconShape="circle" style={{paddingLeft:'5px'}}>
-          <MenuItem
+          <>
+          {context.authUser && role_id!==3 && logged && <MenuItem
             icon={<FaBook />}
           >
             <Nav >
@@ -62,7 +63,18 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
               <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/teacher"  ><h6>My Courses</h6></Nav.Link>
             }
           </Nav>
-          </MenuItem>
+          </MenuItem>}
+          </>
+          <>
+          {context.authUser && role_id===3 && logged && <MenuItem 
+            icon={<FaRegChartBar />}>
+            <Nav >
+              {
+                <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/bookingManager"  ><h6>Overall Statistics</h6></Nav.Link>
+              }
+            </Nav>
+          </MenuItem>}
+          </>
           <>
           {context.authUser && role_id===5 && logged && <MenuItem 
             icon={<FaCalendar />}  
