@@ -15,7 +15,7 @@ import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
 
-const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_id, logged }) => {
+const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogout, role_id, logged, resetState }) => {
   
   return (
     <AuthContext.Consumer >
@@ -86,9 +86,9 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
             title="Statistics"
             icon={<FaRegChartBar />}
           >
-          <MenuItem><Nav.Link style={{paddingLeft:0, fontWeight: "bold"}} as={NavLink}  to={"/teacher/statistics/overall"} >Overall</Nav.Link></MenuItem>
+          <MenuItem><Nav.Link style={{paddingLeft:0, fontWeight: "bold"}} as={NavLink} onClick={resetState} to={"/teacher/statistics/overall"} >Overall</Nav.Link></MenuItem>
          
-           {courses.map((course)=><MenuItem><Nav.Link style={{paddingLeft:0}} as={NavLink}  to={"/teacher/statistics/"+`${course.subjectID}`} >{course.description}</Nav.Link></MenuItem>)}
+           {courses.map((course)=><MenuItem><Nav.Link style={{paddingLeft:0}} as={NavLink} onClick={resetState} to={"/teacher/statistics/"+`${course.subjectID}?subjectId=${course.id}`} >{course.description}</Nav.Link></MenuItem>)}
         
           </SubMenu>}
          </>

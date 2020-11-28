@@ -23,6 +23,28 @@ import moment from 'moment';
 import StatisticsComponet from './components/StatisticsComponent';
 
 import { Line, Bar, HorizontalBar } from 'react-chartjs-2'
+import TeacherStatistics from './components/TeacherStatistics';
+
+function parseQuery(str) {
+  if (typeof str != "string" || str.length == 0) return {};
+  var query = str.split("?");
+  if (query[1]) {
+      var s = query[1].split("&");
+      var s_length = s.length;
+      var bit, query = {}, first, second;
+      for (var i = 0; i < s_length; i++) {
+          bit = s[i].split("=");
+          first = decodeURIComponent(bit[0]);
+          if (first.length == 0) continue;
+          second = decodeURIComponent(bit[1]);
+          if (typeof query[first] == "undefined") query[first] = second;
+          else if (query[first] instanceof Array) query[first].push(second);
+          else query[first] = [query[first], second];
+      }
+      return query;
+  }
+  return {};
+}
 
 const options = {
   scales: {
@@ -354,8 +376,10 @@ class App extends React.Component {
     //console.log("label: " + JSON.stringify(res))
     return res;
   }
-
+  
   generateData = () => {
+    
+    let get = parseQuery(document.URL);
     let startDate = moment(this.state.startFilterDate).toDate();
     let endDate = moment(this.state.endFilterDate).toDate();
 
@@ -366,12 +390,16 @@ class App extends React.Component {
       numberOfLessonsRemote: 0,
       numberOfLessonPresence: 0
     }
-    //console.log("button pressed")
-    API.getCourseLectures({
+    let courseLecturesParams = {
       startDate: startDate,//moment().add(-3, "days").toISOString(),
       endDate: endDate, //moment().toISOString()
       teacher_id: this.state.authUser.ID_User
-    })
+    }
+
+    if(get.subjectId)
+      courseLecturesParams.subject_id = get.subjectId;
+    //console.log("button pressed")
+    API.getCourseLectures(courseLecturesParams)
       .then((lectures) => {
 
         var lecturesFiltered = lectures.filter((a) => {
@@ -440,11 +468,7 @@ class App extends React.Component {
         console.log("err: " + JSON.stringify(err))
       })
     
-    API.getStatisticsBookings({
-      startDate: startDate,
-      endDate: endDate,
-      teacher_id: this.state.authUser.ID_User
-    })
+    API.getStatisticsBookings(courseLecturesParams)
       .then((bookings) => {
         statistics.studentsBookings = bookings.length;
         //console.log("bookings: " + JSON.stringify(bookings))
@@ -504,6 +528,15 @@ class App extends React.Component {
       })
   }
 
+  resetState = () => {
+    this.setState({
+      statistics:{},
+      lectureData:{},
+      bookingsData:{},
+      bookingsLectureData:{}
+    })
+  }
+
   render() {
 
     const value = {
@@ -530,6 +563,7 @@ class App extends React.Component {
                   userLogout={this.userLogout}
                   role_id={this.state.info_user.role_id}
                   logged={this.state.logged}
+                  resetState = {this.resetState}
                 />
               </div>
             </Col> : <></>}
@@ -680,115 +714,10 @@ class App extends React.Component {
                 {this.state.info_user.role_id == 4 ?
                   <>
                     <Route exact path={"/teacher/statistics/overall"}>
-
-                      <Row>
-                        <Col sm={5} style={{ paddingLeft: "50px" }}><h1 style={{ color: "white" }}>OVERALL</h1></Col>
-                      </Row>
-
-                      <br />
-
-                      <Row>
-                        <Col sm={1}></Col>
-                        <Col sm={10}>
-                          <Card>
-                            <Card.Body>
-                              <Form>
-                                <Row>
-                                  <Col sm={2}>
-                                    <Form.Group controlId="exampleForm.GroupBy">
-                                      <Form.Label>Group By</Form.Label>
-                                      <br />
-                                      <Form.Control defaultValue="days" value={this.state.statisticsGroupBy} as="select" onChange={this.onStatisticGroupByChange} custom>
-                                        <option>hours</option>
-                                        <option>days</option>
-                                        <option>weeks</option>
-                                        <option>months</option>
-                                      </Form.Control>
-                                    </Form.Group>
-                                  </Col>
-                                  <Col sm={1}></Col>
-                                  <Col sm={3}>
-                                    <Form.Group controlId="exampleForm.StartDay">
-                                      <Form.Label>Start day : </Form.Label>
-                                      <DatePickerComponent type="startDate" setStateDate={this.setStateDate} ></DatePickerComponent>
-                                    </Form.Group>                                  </Col>
-                                  <Col sm={3}>
-                                    <Form.Group controlId="exampleForm.EndDay">
-                                      <Form.Label>End day : </Form.Label>
-                                      <DatePickerComponent type="endDate" setStateDate={this.setStateDate}></DatePickerComponent>
-                                    </Form.Group>                                  </Col>
-                                  <Col sm={1}></Col>
-                                  <Col sm={1} style={{ alignSelf: "center" }}>
-                                    <Button variant="primary" onClick={this.generateData} >Generate</Button>
-                                  </Col>
-                                </Row>
-                              </Form>
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-
-                      <br />
-
-                      <Row>
-                        <StatisticsComponet statistics={this.state.statistics} />
-                      </Row>
-
-                      <br />
-
-                      <Row>
-                        <Col sm={1}></Col>
-                        <Col sm={10}>
-                          <Card>
-                            <Card.Header className="text-center">
-                              <h3 className='title'>Number of Lectures</h3>
-                            </Card.Header>
-                            <Card.Body>
-                              <Bar data={this.state.lectureData} options={optionsBarChart} />
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-
-                      <br />
-
-                      <Row>
-                        <Col sm={1}></Col>
-                        <Col sm={10}>
-                          <Card>
-                            <Card.Header className="text-center">
-                              <h3 className='title'>Number of Bookings</h3>
-                            </Card.Header>
-                            <Card.Body>
-                              <Line data={this.state.bookingsData} options={options} />
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-
-                      <br />
-
-                      <Row>
-                        <Col sm={1}></Col>
-                        <Col sm={10}>
-                          <Card>
-                            <Card.Header className="text-center">
-                              <h3 className='title'>Number of Bookings per Lecture</h3>
-                            </Card.Header>
-                            <Card.Body>
-                              <HorizontalBar data={this.state.bookingsLectureData} options={options} />
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-
-                      <br />
-
+                      <TeacherStatistics title = "OVERALL" statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
                     </Route>
                     {this.state.courses.map((course) => <Route exact path={"/teacher/statistics/" + course.subjectID}>
-                      <Col sm={5}><h1 style={{ color: "white" }}>{course.description}</h1></Col>
-                      <br />
-                      <Col sm={5}><h1 style={{ color: "white" }}>GRAFICI BELLI</h1></Col>
+                      <TeacherStatistics title = {course.description.toUpperCase()} statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
                     </Route>)}
                   </> : <Redirect to="/login" />}
 

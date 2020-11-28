@@ -7,6 +7,8 @@ import { FaChalkboardTeacher, FaUser, FaUsers, FaBook } from 'react-icons/fa';
 
 const StatisticsComponent = (props) => {
     let { statistics } = props;
+    let studentAVG = Number(parseFloat( statistics.studentsBookings / (statistics.numberOfLessons - statistics.numberOfLessonsCancelled)).toFixed(2));
+    studentAVG = Number.isNaN(studentAVG) ? '' : studentAVG
     return <>
         <Col sm={1} />
         <Col sm={3}>
@@ -82,7 +84,7 @@ const StatisticsComponent = (props) => {
                             <Col sm={5}>
 
                                 <h6 className="titleStatisticsCard" >STUDENTS PER LECTURE</h6>
-                                <b><h3 className="contentStaticsCard" >{statistics && parseFloat( statistics.studentsBookings / (statistics.numberOfLessons - statistics.numberOfLessonsCancelled)).toFixed(2)}</h3></b>
+                                <b><h3 className="contentStaticsCard" >{statistics && studentAVG}</h3></b>
                                 
                             </Col>
 
