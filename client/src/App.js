@@ -358,6 +358,14 @@ class App extends React.Component {
   generateData = () => {
     let startDate = moment(this.state.startFilterDate).toDate();
     let endDate = moment(this.state.endFilterDate).toDate();
+
+    let statistics = {
+      studentsBookings: 0,
+      numberOfLessons: 0,
+      numberOfLessonsCancelled: 0,
+      numberOfLessonsRemote: 0,
+      numberOfLessonPresence: 0
+    }
     //console.log("button pressed")
     API.getCourseLectures({
       startDate: startDate,//moment().add(-3, "days").toISOString(),
@@ -372,30 +380,26 @@ class App extends React.Component {
         var lecturesCanceled = lectures.filter((a) => {
           return a.deleted_at;
         });
-        var lecturesInPresence = lectures.filter((a) => {
+        var lecturesInPresence = lecturesFiltered.filter((a) => {
           return !a.remote;
         });
-        var lecturesRemote = lectures.filter((a) => {
+        var lecturesRemote = lecturesFiltered.filter((a) => {
           return a.remote;
         });
-        //console.log("TEST TIME: " + startDate + " " + endDate)
-        /*this.data.labels = data.map((d) => 1)
-        this.data.datasets.labels = data.map((d) => d.date)*/
-        //console.log(data)
-        let statistics = {
-          studentsCounts: 0,
-          numberOfLessons: lecturesFiltered.length,
-          numberOfLessonsCancelled: 0,
-          numberOfLessonsRemote: 0,
-          nummberOfLessonPresence: 0
-        }
+        
+        statistics.numberOfLessons = lectures.length;
+
+        console.log(lectures)
+
         lectures.forEach((elem) => {
-          //console.log(elem.studentsCount);
-          statistics.studentsCounts += elem.studentsCount;
-          if (elem.deleted_at) statistics.numberOfLessonsCancelled++;
-          else if (elem.remote) statistics.numberOfLessonsRemote++;
-          else statistics.nummberOfLessonPresence++;
+          //statistics.studentsCounts += elem.studentsCount;
+          if (elem.deleted_at != null) statistics.numberOfLessonsCancelled++;
+          else {
+            if (elem.remote) statistics.numberOfLessonsRemote++;
+            else statistics.numberOfLessonPresence++;
+          }
         });
+
         this.setState({
           lectureData: {
             labels: this.getTimeSpans(this.state.statisticsGroupBy, startDate, endDate),
@@ -427,7 +431,7 @@ class App extends React.Component {
             ],
             
           },
-          statistics: statistics
+          //statistics: statistics
         })
 
         //console.log("state: "+JSON.stringify(this.state.statistics));
@@ -442,6 +446,7 @@ class App extends React.Component {
       teacher_id: this.state.authUser.ID_User
     })
       .then((bookings) => {
+        statistics.studentsBookings = bookings.length;
         //console.log("bookings: " + JSON.stringify(bookings))
         bookings.sort((a, b)=>{
           return moment(a.lecture.date).unix() - moment(b.lecture.date).unix()
@@ -490,7 +495,8 @@ class App extends React.Component {
                 borderWidth: 1,
               }
             ]
-          }
+          },
+          statistics: statistics
         })
       })
       .catch((err) => {

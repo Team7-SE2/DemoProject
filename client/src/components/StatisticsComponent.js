@@ -16,14 +16,13 @@ const StatisticsComponent = (props) => {
                             <Col sm={4}>
 
                                 <h6 className="titleStatisticsCard" >REMOTE LESSONS</h6>
-                                <b><h3 className="contentStaticsCard" >5</h3></b>
+                                <b><h3 className="contentStaticsCard" >{statistics && statistics.numberOfLessonsRemote}</h3></b>
                                 
                             </Col>
                             <Col sm={4}>
                                 
                                 <h6 className="titleStatisticsCard" >PRESENCE LESSONS</h6>
-                                <b><h3 className="contentStaticsCard" >1</h3></b>
-                                <div>{statistics && statistics.studentsCounts}</div>
+                                <b><h3 className="contentStaticsCard" >{statistics && statistics.numberOfLessonPresence}</h3></b>
                             </Col>
 
                         <Col sm={4}>
@@ -46,14 +45,13 @@ const StatisticsComponent = (props) => {
                             <Col sm={4}>
 
                                 <h6 className="titleStatisticsCard" >LESSONS COUNT</h6>
-                                <b><h3 className="contentStaticsCard" >6</h3></b>
+                                <b><h3 className="contentStaticsCard" >{statistics && statistics.numberOfLessons}</h3></b>
                                 
                             </Col>
                             <Col sm={4}>
                                 
                                 <h6 className="titleStatisticsCard" >LESSONS DELETED</h6>
-                                <b><h3 className="contentStaticsCard" >0</h3></b>
-                                <div>{statistics && statistics.studentsCounts}</div>
+                                <b><h3 className="contentStaticsCard" >{statistics && statistics.numberOfLessonsCancelled}</h3></b>
                             </Col>
 
                             <Col sm={4}>
@@ -78,15 +76,13 @@ const StatisticsComponent = (props) => {
                             <Col sm={4}>
 
                                 <h6 className="titleStatisticsCard" >STUDENT BOOKINGS</h6>
-                                <b><h3 className="contentStaticsCard" >6</h3></b>
-                                <div>{statistics && statistics.studentsCounts}</div>
+                                <b><h3 className="contentStaticsCard" >{statistics && statistics.studentsBookings}</h3></b>
                                 
                             </Col>
                             <Col sm={5}>
 
                                 <h6 className="titleStatisticsCard" >STUDENTS PER LECTURE</h6>
-                                <b><h3 className="contentStaticsCard" >12.5</h3></b>
-                                <div>{statistics && statistics.studentsCounts / statistics.nummberOfLessonPresence}</div>
+                                <b><h3 className="contentStaticsCard" >{statistics && parseFloat( statistics.studentsBookings / (statistics.numberOfLessons - statistics.numberOfLessonsCancelled)).toFixed(2)}</h3></b>
                                 
                             </Col>
 
