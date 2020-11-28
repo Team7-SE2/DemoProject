@@ -485,6 +485,7 @@ class App extends React.Component {
                 fill: false,
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgba(255, 99, 132, 0.2)',
+                lineTension: 0,
               }
             ]
           }
@@ -523,9 +524,17 @@ class App extends React.Component {
                 label: 'Attendances',
                 data: bookingsPerLectureData,
                 fill: false,
-                backgroundColor: 'rgba(54, 162, 235, 1)',
+                // borderColor: '#EC932F',
+                // backgroundColor: '#EC932F',
+                // pointBorderColor: '#EC932F',
+                // pointBackgroundColor: '#EC932F',
+                // pointHoverBackgroundColor: '#EC932F',
+                // pointHoverBorderColor: '#EC932F',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
                 //borderColor: 'rgba(54, 162, 235, 1)',
                 type: "line",
+                lineTension: 0,
                 order: 2
                 //borderWidth: 1,
               }

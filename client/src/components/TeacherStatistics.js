@@ -108,7 +108,7 @@ const TeacherStatistics = (props) => {
                               <h3 className='title'>Number of Bookings per Lecture</h3>
                             </Card.Header>
                             <Card.Body>
-                              <HorizontalBar data={bookingsLectureData} options={options} />
+                              <Bar data={bookingsLectureData} options={options} />
                             </Card.Body>
                           </Card>
                         </Col>
