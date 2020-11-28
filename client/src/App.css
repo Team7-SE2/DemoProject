@@ -105,3 +105,87 @@ button:focus {
 .pro-item-content{
   white-space: break-spaces !important;
 }
+
+.statisticCard{
+  min-height: 120px;
+  max-height: 200px;
+}
+
+.statisticsIcon{
+  min-height: 50px;
+  max-height: 50px;
+  display: inline-block;
+  border-radius: 60px;
+  box-shadow: 0px 0px 2px #888;
+  padding: 0.6em 0.7em;
+}
+
+.titleStatisticsCard{
+  color: grey;
+  font-weight: 22;
+  font-size: small;
+}
+
+.contentStaticsCard{
+  color: black;
+  font-weight: 500;
+}
+
+.statIcon1{
+  background-color: #f5365c;
+  color: white;
+  min-height: 50px;
+  max-height: 50px;
+  display: inline-block;
+  border-radius: 60px;
+  /*box-shadow: 0px 0px 2px #888;*/
+  padding: 0.9em 0.65em;
+}
+
+.statIcon2{
+  background-color: #fb6340;
+  color: white;
+  min-height: 50px;
+  max-height: 50px;
+  display: inline-block;
+  border-radius: 50px;
+  /*box-shadow: 0px 0px 2px #888;*/
+  padding: 0.9em 0.75em;
+}
+
+.statIcon3{
+  background-color: #fb6340;
+  color: white;
+  min-height: 50px;
+  max-height: 50px;
+  display: inline-block;
+  border-radius: 50px;
+  /*box-shadow: 0px 0px 2px #888;*/
+  padding: 0.9em 0.9em;
+}
+
+.statIcon4{
+  background-color: #ffd600;
+  color: white;
+  min-height: 50px;
+  max-height: 50px;
+  display: inline-block;
+  border-radius: 50px;
+  /*box-shadow: 0px 0px 2px #888;*/
+  padding: 0.9em 0.7em;
+}
+ 
+.statIcon1 svg{
+  padding-bottom: 6px;
+}
+.statIcon2 svg{
+  padding-bottom: 7px;
+}
+.statIcon3 svg{
+  padding-bottom: 6px;
+}
+.statIcon4 svg{
+  padding-bottom: 6px;
+}
+.circleBackground { 
+}
