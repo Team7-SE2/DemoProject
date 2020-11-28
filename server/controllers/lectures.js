@@ -19,6 +19,7 @@ module.exports = function () {
 
     router.get('/includeDeleted',function (req, res){
         var paramsQuery = {}
+        var paramsQuerySubject = {}
         paramsQuery = req.query;
         if (req.query.startDate){
             paramsQuery.date = {[Op.gt]: moment(req.query.startDate).toDate()}
@@ -32,9 +33,14 @@ module.exports = function () {
                 [Op.lt]: moment(req.query.endDate).toDate()
             }
         }
+        if (req.query.teacher_id){
+            paramsQuerySubject.teacher_id = req.query.teacher_id;
+            delete paramsQuery.teacher_id;
+        }
+
         delete paramsQuery.startDate;
         delete paramsQuery.endDate;
-        db['lectures'].findAll({where: paramsQuery,paranoid:false})
+        db['lectures'].findAll({where: paramsQuery,paranoid:false,include:[{model: db.subjects, as: 'subject', where: paramsQuerySubject}]})
         .then((lectures)=>{
             res.send(lectures)
         })
