@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Form from "react-bootstrap/Form";
+//import Form from "react-bootstrap/Form";
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
 import {
@@ -12,7 +12,7 @@ const DatePickerComponent = (props) => {
 
   let { label, type, setStateDate } = props;
 
-  console.log("type: " + type)
+  //console.log("type: " + type)
 
   let date = type === "startDate" ? moment().add(-7, "days").startOf("day") : moment().endOf("day");
 
@@ -20,7 +20,7 @@ const DatePickerComponent = (props) => {
   const [selectedDate, setSelectedDate] = React.useState(date);
 
   const handleDateChange = (date) => {
-    console.log("date: " + JSON.stringify(date))
+    //console.log("date: " + JSON.stringify(date))
     setSelectedDate(date);
     setStateDate(props.type, date);
   };
@@ -31,7 +31,7 @@ const DatePickerComponent = (props) => {
       <KeyboardDateTimePicker
           margin="normal"
           id="time-picker"
-          label= {label}
+          /*label= {label}*/
           value={selectedDate}
           onChange={handleDateChange}
           KeyboardButtonProps={{

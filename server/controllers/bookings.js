@@ -4,6 +4,7 @@ var finale = require('finale-rest')
 var db = require('../models/index');
 const Op = db.Sequelize.Op;
 var transporter = require('../helpers/email');
+var moment = require("moment")
 /*
     *** API LIST ***
     GET -> /api/bookings -> restituisce la lista delle prenotazioni con il dettaglio degli utenti e delle lezioni -> se si aggiunge al path ?user_id= o ?lecture_id= filtra
@@ -14,7 +15,7 @@ var transporter = require('../helpers/email');
 */
 module.exports = function () {
 
-    router.get('/excludeLecturesCanceled',(req,res)=>{
+    router.get('/excludeLecturesCanceled', (req,res)=>{
         var paramsQuery = {}
         paramsQuery = req.query;
         db['bookings'].findAll({where:paramsQuery,include: [
@@ -25,6 +26,48 @@ module.exports = function () {
                 if(!booking.lecture)
                     bookings.splice(index, 1);
             })
+            res.send(bookings);
+        })
+    })
+
+    router.get('/statistics', (req,res)=>{
+        var paramsQueryLecture = {}
+        var paramsQuerySubject = {}
+        var paramsQuery = {}
+        paramsQuery = req.query;
+        if (req.query.startDate){
+            paramsQueryLecture.date = {[Op.gt]: moment(req.query.startDate).toDate()}
+        }
+        if (req.query.endDate){
+            paramsQueryLecture.date = {[Op.lt]: moment(req.query.endDate).toDate()}
+        }
+        if (req.query.startDate && req.query.endDate){
+            paramsQueryLecture.date = {
+                [Op.gt]: moment(req.query.startDate).toDate(),
+                [Op.lt]: moment(req.query.endDate).toDate()
+            }
+        }
+        if (req.query.teacher_id){
+            paramsQuerySubject.teacher_id = req.query.teacher_id;
+            delete paramsQuery.teacher_id;
+        }
+
+        delete paramsQuery.startDate;
+        delete paramsQuery.endDate;
+
+        db['bookings'].findAll({where: paramsQuery, include: [
+
+            { model: db.users, as: 'user',attributes:['email'] },
+            { model: db.lectures, as: 'lecture', where: paramsQueryLecture, include:[{model: db.subjects, as: 'subject', attributes:['subjectID'], where: paramsQuerySubject}] }
+
+        ]}).then(( bookings ) => {
+            
+            bookings.forEach((booking, index) => {
+
+                if(!booking.lecture)
+                    bookings.splice(index, 1);
+            })
+
             res.send(bookings);
         })
     })

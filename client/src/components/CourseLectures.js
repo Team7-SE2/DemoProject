@@ -12,14 +12,14 @@ const CourseLectures = (props) => {
 
     function checkPrenotation(bookedLectures2, lectureID) {
 
-        console.log(bookedLectures2);
+        //console.log(bookedLectures2);
         return bookedLectures2.find((bl) => bl.lecture_id === lectureID);
 
     }
 
     const compareDate = (a, b) => {
 
-        console.log(a, b)
+        //console.log(a, b)
         const millisA = new Date(a).getTime();
         const millisB = new Date(b).getTime();
 
