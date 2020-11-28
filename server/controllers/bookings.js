@@ -47,6 +47,10 @@ module.exports = function () {
                 [Op.lt]: moment(req.query.endDate).toDate()
             }
         }
+        if (req.query.subject_id){
+            paramsQueryLecture.subject_id = req.query.subject_id;
+            delete paramsQuery.subject_id;
+        }
         if (req.query.teacher_id){
             paramsQuerySubject.teacher_id = req.query.teacher_id;
             delete paramsQuery.teacher_id;
