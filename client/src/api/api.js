@@ -80,6 +80,24 @@ async function getSubject(subjectId) {
 
 }
 
+async function getSubjects() {
+    
+    let url = "/api/subjects"
+    console.log(url)
+    const response = await fetch(url);
+    const studentCoursesJson = await response.json();
+
+    if (response.ok) {
+        return (studentCoursesJson.map((course) => course));  // have to do parsing
+    }
+    else {
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: studentCoursesJson };
+        throw err;
+    }
+
+}
+
 async function getStudentBookings(studentId) {
 
     let url = "/api/bookings?user_id=" + studentId;
@@ -289,6 +307,7 @@ async function deleteBookedLecture(user_id, lecture_id) {
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
 }
+
 async function getBookedLectures(user_id) {
     let url = "/api/bookings?user_id=" + user_id;
     const response = await fetch(url);
@@ -574,5 +593,5 @@ async function turnOnRemote(lecture_id) {
     });
 }
 
-const API = { getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
+const API = { getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;

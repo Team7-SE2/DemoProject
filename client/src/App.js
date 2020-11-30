@@ -135,6 +135,7 @@ class App extends React.Component {
         this.setState({ endFilterDate: moment().endOf("day") })
 
         console.log("role_id: " + info.role_id)
+        this.setState({ statisticsSubject: 'All' })
 
         if (info.role_id === 5) {
           this.loadInitialDataStudent();
@@ -142,10 +143,10 @@ class App extends React.Component {
         }
         if (info.role_id === 4) {
           this.loadInitialDataTeacher();
-          this.props.history.push("/teacher");
+          
         }
         if (info.role_id === 3) {
-          this.props.history.push("/bookingManager");
+          this.loadInitialSubjects();
         }
 
       }
@@ -251,10 +252,19 @@ class App extends React.Component {
     API.getTeacherSubjects(this.state.info_user.ID_User)
       .then((courses) => {
         this.setState({ courses: courses })
-      }
-      );
+        this.props.history.push("/teacher");
+      });
   }
 
+  loadInitialSubjects = () => {
+
+    API.getSubjects()
+      .then((subjects) => {
+        this.setState({ subjects: subjects})
+        this.setState({ statisticsSubject: 'All' })
+        this.props.history.push("/bookingManager");
+      })
+  }
 
 
   handleErrors(err) {
@@ -306,6 +316,11 @@ class App extends React.Component {
   onStatisticGroupByChange = (e) => {
     //console.log("filter: " + e.target.value)
     this.setState({ statisticsGroupBy: e.target.value })
+  }
+
+  onStatisticSubjectChange = (e) => {
+    console.log("filter subject: " + e.target.value)
+    this.setState({ statisticsSubject: e.target.value })
   }
 
   turnOnRemote = (lecture) => {
@@ -397,11 +412,16 @@ class App extends React.Component {
     let courseLecturesParams = {
       startDate: startDate,//moment().add(-3, "days").toISOString(),
       endDate: endDate, //moment().toISOString()
-      teacher_id: this.state.authUser.ID_User
     }
+
+    if(this.state.info_user.role_id != 3)
+      courseLecturesParams.teacher_id = this.state.authUser.user_id;
 
     if(get.subjectId)
       courseLecturesParams.subject_id = get.subjectId;
+    
+    if(this.state.info_user.role_id == 3 && this.state.statisticsSubject != 'All')
+      courseLecturesParams.subject_id = this.state.statisticsSubject;
     //console.log("button pressed")
     API.getCourseLectures(courseLecturesParams)
       .then((lectures) => {
@@ -421,7 +441,7 @@ class App extends React.Component {
         
         statistics.numberOfLessons = lectures.length;
 
-        console.log(lectures)
+        //console.log(lectures)
 
         lectures.forEach((elem) => {
           //statistics.studentsCounts += elem.studentsCount;
@@ -555,9 +575,9 @@ class App extends React.Component {
   resetState = () => {
     this.setState({
       statistics:{},
-      lectureData:{},
-      bookingsData:{},
-      bookingsLectureData:{}
+      lectureData:{labels:[],datasets:[]},
+      bookingsData:{labels:[],datasets:[]},
+      bookingsLectureData:{labels:[],datasets:[]}
     })
   }
 
@@ -611,7 +631,7 @@ class App extends React.Component {
                 <Route exact path="/bookingManager">
                     {this.state.logged ? <Redirect to="/bookingManager" /> : <Redirect to="/login" />}
                       
-                        <TeacherStatistics title = "OVERALL STATISTICS" statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
+                        <TeacherStatistics title = {(this.state.statisticsSubject == 'All')?'Overall Statistics':(this.state.subjects? this.state.subjects.find((el) =>{ return (el.id == this.state.statisticsSubject)}):'OVERALL STATISTICS').description + ' Statistics'} subjects = {this.state.subjects} statisticsSubject = {this.state.statisticsSubject} statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} onStatisticSubjectChange = {this.onStatisticSubjectChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
                       
 
                 </Route>

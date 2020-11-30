@@ -36,9 +36,11 @@ const StatisticsComponent = (props) => {
                             <h6></h6>
                             <div className="statIcon1"><FaChalkboardTeacher style={{
                                     
-                                    "min-height": "30px",
-                                    "max-height": "30px"
-                                }} size="6x"></FaChalkboardTeacher></div>
+                                    "minHeight": "30px",
+                                    "maxWidth": "30px",
+                                    "height": "30px",
+                                    "width": "30px"
+                                }}></FaChalkboardTeacher></div>
                         </Col>
                     </Row>
                 </Card.Body>
@@ -65,9 +67,11 @@ const StatisticsComponent = (props) => {
                                 <h6></h6>
                                 <div className="statIcon3"><FaBook style={{
                                     
-                                    "min-height": "30px",
-                                    "max-height": "30px"
-                                }} size="6x"></FaBook></div>
+                                    "minHeight": "30px",
+                                    "maxWidth": "30px",
+                                    "height": "30px",
+                                    "width": "30px"
+                                }}></FaBook></div>
                                 
                                 
                             </Col>
@@ -98,9 +102,11 @@ const StatisticsComponent = (props) => {
                                 <h6></h6>
                                 <div className="statIcon4"><FaUsers style={{
                                         
-                                        "min-height": "30px",
-                                        "max-height": "30px"
-                                    }} size="6x"></FaUsers></div>
+                                        "minHeight": "30px",
+                                        "maxWidth": "30px",
+                                        "height": "30px",
+                                        "width": "30px"
+                                    }}></FaUsers></div>
                             </Col>
                         </Row>
                     </Card.Body>
