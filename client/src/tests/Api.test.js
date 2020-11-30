@@ -1,5 +1,5 @@
 import API from '../api/api.js'
-
+import moment from 'moment'
 it('API UserLogin', (done) => {
     API.userLogin('s202022@studenti.polito.it', '123')
         .then((usrObj) => {
@@ -13,6 +13,21 @@ it('API UserLogin', (done) => {
                 done();
         })
 });
+
+it('API UserLogin err', (done) => {
+    API.userLogin('aaa')
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
 it('API userLogout', (done) => {
     API.userLogout()
         .then(() => {
@@ -33,6 +48,7 @@ it('API getStudentCourses', (done) => {
                 done();
         })
 });
+
 it('API getSubject', (done) => {
     API.getSubject(1)
         .then((usrObj) => {
@@ -47,7 +63,7 @@ it('API getSubject', (done) => {
         })
 });
 it('API getStudentBookings', (done) => {
-    API.getStudentBookings(1)
+    API.getStudentBookings(3)
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
             if (done)
@@ -59,8 +75,14 @@ it('API getStudentBookings', (done) => {
                 done();
         })
 });
+
+
+
+
+
+
 it('API getStudentBookingsexcludeLecturesCanceled', (done) => {
-    API.getStudentBookingsexcludeLecturesCanceled(1)
+    API.getStudentBookingsexcludeLecturesCanceled(3)
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
             if (done)
@@ -86,7 +108,11 @@ it('API getStudentCourseLectures', (done) => {
         })
 });
 it('API getCourseLectures', (done) => {
-    API.getCourseLectures({})
+    API.getCourseLectures({
+        startDate: moment().add(-3, "days").toISOString(),
+        endDate:moment().toISOString(),
+        teacher_id: 4
+      })
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
             if (done)
@@ -98,6 +124,33 @@ it('API getCourseLectures', (done) => {
                 done();
         })
 });
+it('API bookLecture', (done) => {
+    API.bookLecture(68,68,"68@gimeil.com")
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+it('API deleteBookedLecture', (done) => {
+    API.deleteBookedLecture(68,68)
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
 it('API getStudentListforLecture', (done) => {
     API.getStudentListforLecture(1)
         .then((usrObj) => {
@@ -138,7 +191,7 @@ it('API getLectures', (done) => {
         })
 });
 it('API getTeacherLectures', (done) => {
-    API.getTeacherLectures(1)
+    API.getTeacherLectures(4)
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
             if (done)
@@ -150,21 +203,9 @@ it('API getTeacherLectures', (done) => {
                 done();
         })
 });
-it('API getTeacherLecturesWithParams', (done) => {
-    API.getTeacherLecturesWithParams(1,{})
-        .then((usrObj) => {
-            expect(usrObj).not.toBeNull();
-            if (done)
-                done();
-        })
-        .catch((err) => {
-            expect(err).not.toBeNull();
-            if (done)
-                done();
-        })
-});
+
 it('API getTeacherSubjects', (done) => {
-    API.getTeacherSubjects(1)
+    API.getTeacherSubjects(4)
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
             if (done)
@@ -177,7 +218,53 @@ it('API getTeacherSubjects', (done) => {
         })
 });
 it('API getStatisticsBookings', (done) => {
-    API.getStatisticsBookings(1)
+    API.getStatisticsBookings({
+        startDate: moment().add(-3, "days").toISOString(),
+        endDate:moment().toISOString(),
+        teacher_id: 4
+      })
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+it('API getbookings', (done) => {
+    API.getbookings(10)
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+it('API deleteLecture', (done) => {
+    API.deleteLecture(999)
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+it('API turnOnRemote', (done) => {
+    API.turnOnRemote(999)
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
             if (done)
