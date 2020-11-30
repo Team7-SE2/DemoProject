@@ -16,17 +16,17 @@ import userEvent from '@testing-library/user-event'
 import { createMemoryHistory } from 'history'
 import { Router as Router2 } from 'react-router-dom'
 import API from '../api/api'
+import TeacherStatistics from "../components/TeacherStatistics"
+import DatePickerComponent from "../components/DatePickerComponent"
 
+import moment from "moment"
 import '@testing-library/jest-dom/extend-expect'
 
 it('renders StudentList', () => {
 	render(<StudentList students={[{user:{userID:"AA",name:"AA",surname:"AA"}}]} lecture={{}} course={{description:"..."}}></StudentList>);
 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
   });
-// it('renders StudentCourseLectures', () => {
-// 	render(<StudentCourseLectures lectures={[]} course={{}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]}></StudentCourseLectures>);
-// 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
-//   });
+
 // it('renders StudentCourseLectures 2', () => {
 // 	render(<StudentCourseLectures lectures={[{id:1,date:new Date()}]} course={{}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]}></StudentCourseLectures>);
 // 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
@@ -40,18 +40,67 @@ it('renders StudentList', () => {
 // 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
 //   });
 it('renders CourseLectures' ,() => {
+	function bookLecture(lectureID){
+		return 1;
+	}
+	function getListStudents(lectureID){
+		return 1;
+	}
+	function turnOnRemote(lectureID){
+		return 1;
+	}
+
+	function deleteLecture(lectureID){
+		return 1;
+	}
 	//lectures, course, bookLecture, deleteBookedLecture,bookedLectures, role_id, getListStudents
-	render(<CourseLectures lectures={[{id:1,date:new Date()}]} course={{description:""}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]} getListStudents={App.getListStudents} role_id={4}></CourseLectures>);
- 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+	render(<CourseLectures lectures={[{id:1,date:moment().add(1,"days")}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture}deletedeleteLecture={deleteLecture} bookedLectures={[]} getListStudents={getListStudents} role_id={5} turnOnRemote={turnOnRemote}></CourseLectures>);
+	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
+	userEvent.click((screen.getByText("BOOK")));
+
+	render(<CourseLectures lectures={[{id:1,date:moment().add(1,"days")}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[]} getListStudents={getListStudents} role_id={4} turnOnRemote={turnOnRemote}></CourseLectures>);
+	var x=document.getElementsByClassName("btn btn-primary");
+	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
+	userEvent.click(x[0]);
+
+	render(<CourseLectures lectures={[{id:1,date:moment().add(1,"days"),deleted_at:"2020-11-12 10:30:00.000 +00:00"}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[]} getListStudents={getListStudents} role_id={4} turnOnRemote={turnOnRemote}></CourseLectures>);
+	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
+
+
+
+	render(<CourseLectures lectures={[{id:1,date:moment().add(29,"minutes")}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[]} getListStudents={getListStudents} role_id={4} turnOnRemote={turnOnRemote}></CourseLectures>);
+	
+	var x=document.getElementsByClassName("btn btn-primary");
+	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
+	userEvent.click(x[1]);
+
+	render(<CourseLectures lectures={[{id:1,date:moment().add(31,"minutes")}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[]} getListStudents={getListStudents} role_id={4} turnOnRemote={turnOnRemote}></CourseLectures>);
+	var x=document.getElementsByClassName("btn btn-danger");
+	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
+	userEvent.click(x[0]);
+
+	render(<CourseLectures lectures={[{id:1,date:moment().add(1,"days")}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[{created_at:"2020-11-08 14:00:00.000 +01:00",updated_at:"2020-11-08 14:00:00.000 +01:00",user_id:3,lecture_id:1}]} getListStudents={getListStudents} role_id={5} turnOnRemote={turnOnRemote}></CourseLectures>);
+	var x=document.getElementsByClassName("btn btn-danger");
+	expect(screen.getAllByText('UNBOOK')[0]).toBeInTheDocument();
+	userEvent.click(x[0]);
+	var x=document.getElementsByClassName("btn btn-primary");
+	expect(screen.getAllByText('BOOK')[0]).toBeInTheDocument();
+	userEvent.click(x[0]);
+
+	render(<CourseLectures lectures={[{id:1,date:moment().add(1,"days"),deleted_at:"2020-11-12 10:30:00.000 +00:00"}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[{created_at:"2020-11-08 14:00:00.000 +01:00",updated_at:"2020-11-08 14:00:00.000 +01:00",user_id:3,lecture_id:1}]} getListStudents={getListStudents} role_id={5} turnOnRemote={turnOnRemote}></CourseLectures>);
+	expect(screen.getAllByText('Canceled')[0]).toBeInTheDocument();
+
+
+	 
 })
-it('renders CourseLectures 2' ,() => {
+/*it('renders CourseLectures 2' ,() => {
 	//lectures, course, bookLecture, deleteBookedLecture,bookedLectures, role_id, getListStudents
 	render(<CourseLectures lectures={[{id:1,date:new Date()}]} course={{description:""}} bookLecture={App.bookLecture} deleteBookedLecture={App.deleteBookedLecture} bookedLectures={[]} getListStudents={App.getListStudents} role_id={5}></CourseLectures>);
  	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
-})
+})*/
 it('renders ListCourses', () => {
 	render(<ListCourses courses={[]} showLectures={App.showLectures} role_id={5}></ListCourses>);
-	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
   });
 it('renders ListCourses 2', () => {
 	render(<ListCourses courses={[{id: 1,subjectID:1,description: "andale andale andale"}]} showLectures={App.showLectures} role_id={5}></ListCourses>);
@@ -59,15 +108,15 @@ it('renders ListCourses 2', () => {
   });
 it('renders HomeCalendar', () => {
 	render(<HomeCalendar isMyCalendar={true} userId={3} isStudent={true}></HomeCalendar>);
-	expect(screen.getByText('My bookings calendar')).toBeInTheDocument();
+	expect(screen.getByText('Chose the subjects to show')).toBeInTheDocument();
   });
 it('renders HomeCalendar 2', () => {
 	render(<HomeCalendar userId={2} isStudent={true}></HomeCalendar>);
-	expect(screen.getByText('All Day')).toBeInTheDocument();
+	expect(screen.getByText('Week')).toBeInTheDocument();
   });
 it('renders HomeCalendar 3', () => {
-	render(<HomeCalendar isMyCalendar={true} userId={4} isStudent={false}></HomeCalendar>);
-	expect(screen.getByText('My bookings calendar')).toBeInTheDocument();
+	render(<HomeCalendar userId={4} isStudent={false}></HomeCalendar>);
+	expect(screen.getByText('Week')).toBeInTheDocument();
   });
 it('renders Header', () => {
 	render(<Header userLogout={App.userLogout} logged={true}></Header>);
@@ -77,9 +126,146 @@ it('renders Header 2', () => {
 	render(<Header userLogout={App.userLogout} logged={false}></Header>);
 	//expect(screen.getByText('TEACHING LOAD')).toBeInTheDocument();
   });
-it('renders Aside logged true', () => {
+  it('renders Teacher Statistics', () => {
+	render(<TeacherStatistics title = "OVERALL" statisticsGroupBy ={"days"} onStatisticGroupByChange = {App.onStatisticGroupByChange} setStateDate = {App.setStateDate} generateData = {App.generateData} statistics = { {studentsBookings: 0,numberOfLessons: 0,numberOfLessonsCancelled: 0,numberOfLessonsRemote: 0,numberOfLessonPresence: 0}} 
+	lectureData = {{
+		labels: App.getTimeSpans=("days", moment(), moment().add(7,"days")),
+		datasets: [
+		  {
+			label: 'Lectures In Presence',
+			data: App.getDataGrouped=([{id:1,date:moment()}], "days", moment(), moment().add(7,"days")),
+			fill: false,
+			backgroundColor: 'rgba(75, 192, 192, 0.2)',
+			borderColor: 'rgba(75, 192, 192, 1)',
+			borderWidth: 1
+		  },
+		  {
+			label: 'Lectures Remote',
+			data: App.getDataGrouped=([{id:1,date:moment()}], "days", moment(), moment().add(7,"days")),
+			fill: false,
+			backgroundColor: 'rgba(54, 162, 235, 0.2)',
+			borderColor: 'rgba(54, 162, 235, 1)',
+			borderWidth: 1
+		  },
+		  {
+			label: 'Lectures Canceled',
+			data: App.getDataGrouped=([{id:1,date:moment()}], "days", moment(), moment().add(7,"days")),
+			fill: false,
+			backgroundColor: 'rgba(255, 99, 132, 0.2)',
+			borderColor: 'rgba(255, 99, 132, 1)',
+			borderWidth: 1
+		  },
+		],
+		
+	  }} optionsBarChart = {{
+		scales: {
+		  yAxes: [
+			{
+			  ticks: {
+				beginAtZero: true,
+				precision: 0
+			  },
+			  stacked: true
+			},
+		  ],
+		  xAxes: [
+			{
+			  ticks: {
+				beginAtZero: true,
+				precision: 0
+			  },
+			  stacked: true
+			}
+		  ]
+		},
+	  }} bookingsData = {{
+		labels: App.getTimeSpans=("days", moment(), moment().add(7,"days")),
+		datasets: [
+		  {
+			label: 'Bookings',
+			data: App.getDataGrouped=([{}], "days", moment(), moment().add(7,"days"), "bookings"),
+			fill: false,
+			backgroundColor: 'rgb(255, 99, 132)',
+			borderColor: 'rgba(255, 99, 132, 0.2)',
+			lineTension: 0,
+		  }
+		]
+	  }
+	} bookingsLectureData = 
+	{ {
+		labels: [],
+		datasets: [
+		  {
+			label: 'Bookings',
+			data: [],
+			fill: false,
+			backgroundColor: 'rgba(54, 162, 235, 0.2)',
+			borderColor: 'rgba(54, 162, 235, 1)',
+			borderWidth: 1,
+			order: 1
+		  },
+		  {
+			label: 'Attendances',
+			data: [],
+			fill: false,
+			// borderColor: '#EC932F',
+			// backgroundColor: '#EC932F',
+			// pointBorderColor: '#EC932F',
+			// pointBackgroundColor: '#EC932F',
+			// pointHoverBackgroundColor: '#EC932F',
+			// pointHoverBorderColor: '#EC932F',
+			backgroundColor: 'rgba(255, 99, 132, 0.2)',
+			borderColor: 'rgba(255, 99, 132, 1)',
+			//borderColor: 'rgba(54, 162, 235, 1)',
+			type: "line",
+			lineTension: 0,
+			order: 2
+			//borderWidth: 1,
+		  }
+		]
+	  }} options = {{
+		scales: {
+		  yAxes: [
+			{
+			  ticks: {
+				beginAtZero: true,
+				precision: 0
+			  },
+			},
+		  ],
+		  xAxes: [
+			{
+			  ticks: {
+				beginAtZero: true,
+				precision: 0
+			  },
+			},
+		  ],
+		},
+	  }}></TeacherStatistics>
+	);
+	expect(screen.getByText('OVERALL')).toBeInTheDocument();
+  });
+it('renders Aside logged true student', () => {
 	render(<Router><Aside className="LeftBar"
 	//image={image}
+	courses={{}}
+	collapsed={false}
+	rtl={false}
+	toggled={false}
+	handleToggleSidebar={false}
+	style={{height:'100%'}}
+	userLogout={App.userLogout} 
+	role_id={5} 
+	logged = {true}
+	resetState= {App.resetState}
+  /> </Router>);
+	expect(screen.getByText('View Source')).toBeInTheDocument();
+  });
+  it('renders Aside logged true teacher', () => {
+	render(<Router><Aside className="LeftBar"
+	//image={image}
+	courses={[{id:1, description: "CIAO",subjectID:"SE2",created_at:"",deleted_at:"",updated_at:"",teacher_id:4}]}
 	collapsed={false}
 	rtl={false}
 	toggled={false}
@@ -88,8 +274,9 @@ it('renders Aside logged true', () => {
 	userLogout={App.userLogout} 
 	role_id={4} 
 	logged = {true}
+	resetState= {App.resetState}
   /> </Router>);
-	expect(screen.getByText('View Source')).toBeInTheDocument();
+	expect(screen.getByText('Statistics')).toBeInTheDocument();
   });
 it('renders Aside logged false', () => {
 	render(<Router><Aside className="LeftBar"
@@ -113,7 +300,7 @@ it('renders App', () => {
 	expect(screen.getByText("Don't share your password with anyone")).toBeInTheDocument();
   });
   
-it('full app rendering/navigating', () => {
+it('LOGIN insert username pwd', () => {
 	const history = createMemoryHistory()
 	render(
 	  <Router2 history={history}>
@@ -164,3 +351,45 @@ it('full app rendering/navigating', () => {
 // 		expect(x).not.toBeNull();
 // 	})
 //   });
+
+it('HomeCalendar Click button', () => {
+	const history = createMemoryHistory()
+	render(
+	  <Router2 history={history}>
+		<HomeCalendar userId={4} isStudent={false}></HomeCalendar>
+	  </Router2>
+	)
+	// verify page content for expected route
+	// often you'd use a data-testid or role query, but this is also possible
+	expect((screen.queryAllByText('Week'))[0]).toBeInTheDocument()
+	userEvent.click((screen.getByText("Week")));
+
+  
+  
+	// check that the content changed to the new page
+  })
+
+  it('DatePickerComponent change', () => {
+	  function setStateDate(type,date){
+		  return 1;
+	  }
+	const history = createMemoryHistory()
+	render(
+	  <Router2 history={history}>
+  <DatePickerComponent type="startDate" setStateDate={setStateDate} ></DatePickerComponent>
+	  </Router2>
+	)
+	// verify page content for expected route
+	// often you'd use a data-testid or role query, but this is also possible
+	var datepickstart=document.getElementById("time-picker");
+	userEvent.type(datepickstart,"aaaaaaa");
+	expect((screen.getByText('Invalid Date Format'))).toBeInTheDocument()
+	//userEvent.type(screen.getByLabelText(moment().add(-7, "days").startOf("day").format("MMMM Do YYYY, h:mm:ss a")),"November 23rd 12:00 a.m.")
+
+	//userEvent.click(screen.getByLabelText('change time'))
+  
+  
+	// check that the content changed to the new page
+  })
+
+ 
