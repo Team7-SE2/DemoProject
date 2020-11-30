@@ -23,8 +23,13 @@ import moment from "moment"
 import '@testing-library/jest-dom/extend-expect'
 
 it('renders StudentList', () => {
-	render(<StudentList students={[{user:{userID:"AA",name:"AA",surname:"AA"}}]} lecture={{}} course={{description:"..."}}></StudentList>);
+	function switchRoute(path){
+		return 1;
+	}
+	render(<StudentList switchRoute={switchRoute} students={[{user:{userID:"AA",name:"AA",surname:"AA"}}]} lecture={{id:1,date:moment().add(1,"days")}} course={{description:"SE2"}}></StudentList>);
 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+	var x=document.getElementsByClassName("btn btn-dark");
+	userEvent.click(x[0]);
   });
 
 // it('renders StudentCourseLectures 2', () => {
