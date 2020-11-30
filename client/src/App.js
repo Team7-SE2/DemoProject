@@ -45,6 +45,7 @@ function parseQuery(str) {
   }
   return {};
 }
+parseQuery(document.URL);
 
 const options = {
   scales: {

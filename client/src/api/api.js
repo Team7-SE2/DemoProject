@@ -62,6 +62,7 @@ async function getStudentCourses(studentId) {
     }
 
 }
+
 async function getSubject(subjectId) {
 
     let url = "/api/subjects?id=" + subjectId;
@@ -78,7 +79,6 @@ async function getSubject(subjectId) {
     }
 
 }
-
 
 async function getStudentBookings(studentId) {
 
@@ -230,7 +230,6 @@ async function getStudentListforLecture(lectureId) {
         throw err;
     }
 }
-
 
 async function bookLecture(user_id, lecture_id, email) {
     let obj = {
@@ -575,5 +574,5 @@ async function turnOnRemote(lecture_id) {
     });
 }
 
-const API = { getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
+const API = { getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
 export default API;
