@@ -5,11 +5,19 @@ import PaperInsideCard from './PaperInsideCard';
 import { FaUsers, FaTrashAlt, FaTv } from 'react-icons/fa';
 import Nav from 'react-bootstrap/Nav';
 import { red } from '@material-ui/core/colors';
+import Modal from "react-bootstrap/Modal"
 
 const CourseLectures = (props) => {
+    const [show, setShow] = useState(false);
+    const [remote, setRemote] = useState(false);
+    const [lecture, setLecture] = useState(null);
+
+    const handleClose = () => { setShow(false); setRemote(false); }
+    const handleShow = (lecture) => { setLecture(lecture); setShow(true); }
+    const handleShowRemote = (lecture) => { setLecture(lecture); setRemote(true); setShow(true); }
 
     let { lectures, course, bookLecture, deleteBookedLecture, bookedLectures, role_id, getListStudents, deleteLecture, turnOnRemote } = props;
-
+    const handleSubmit = (lecture) => { if (show) remote ? turnOnRemote(lecture) : deleteLecture(lecture); handleClose(); }
     function checkPrenotation(bookedLectures2, lectureID) {
 
         //console.log(bookedLectures2);
@@ -61,23 +69,23 @@ const CourseLectures = (props) => {
         if (role_id == 4) {
             return {
                 id: lecture.id,
-                lectureDate: lecture.deleted_at == null ? 
-                <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}> 
-                {moment(new Date(lecture.date)).format("LLL")}
-                </div> 
-                :
-                <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    textDecoration: "line-through red"
-                }}> 
-                {moment(new Date(lecture.date)).format("LLL")}
-                </div>
+                lectureDate: lecture.deleted_at == null ?
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        {moment(new Date(lecture.date)).format("LLL")}
+                    </div>
+                    :
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        textDecoration: "line-through red"
+                    }}>
+                        {moment(new Date(lecture.date)).format("LLL")}
+                    </div>
                 ,
                 'View list of students': <div style={{
                     display: "flex",
@@ -92,14 +100,17 @@ const CourseLectures = (props) => {
                         justifyContent: "center",
                         alignItems: "center"
                     }}>
-                           {lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(30,'minutes')) ? <Button disabled = {lecture.remote} onClick={() => {turnOnRemote(lecture)}}> <FaTv size ={20}></FaTv></Button> :  <Button disabled> <FaTv  size ={20}></FaTv></Button>}
+                        {/*lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(30,'minutes')) ? <Button disabled = {lecture.remote} onClick={() => {turnOnRemote(lecture)}}> <FaTv size ={20}></FaTv></Button> :  <Button disabled> <FaTv  size ={20}></FaTv></Button>*/}
+                        {lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(30, 'minutes')) ? <Button disabled={lecture.remote} onClick={() => { handleShowRemote(lecture) }}> <FaTv size={20}></FaTv></Button> : <Button disabled> <FaTv size={20}></FaTv></Button>}
                     </div>,
                 'Delete the lecture': <div style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {(lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(1,'hours'))) ? <Button variant="danger" onClick={() => { deleteLecture(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
+                    {/*(lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(1,'hours'))) ? <Button variant="danger" onClick={() => { deleteLecture(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>*/}
+                    {(lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(1, 'hours'))) ? <Button variant="danger" onClick={() => { handleShow(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
+
                 </div>
             }
         }
@@ -113,7 +124,7 @@ const CourseLectures = (props) => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {lecture.deleted_at == null ? checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button> : <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button>:<h5 style={{color: "red", fontWeight: "bold"}}>Canceled</h5>}
+                    {lecture.deleted_at == null ? checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button> : <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
                 </div>,
             }
         }
@@ -122,6 +133,31 @@ const CourseLectures = (props) => {
 
     return (
         <>
+            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} remote={remote} lecture={lecture}  aria-labelledby="contained-modal-title-vcenter"
+      centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Pay attention </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {remote ? <>
+                        Do you want really switch this lecture in remote? <br></br> You can't go back</>
+                        : <> Do you want really delete this lecture?<br></br> You can't go back </>
+                    }
+                </Modal.Body>
+                <Modal.Footer>
+
+                    {
+                        remote 
+                        ?
+                            <Button variant="danger" onClick={() => {turnOnRemote(lecture); handleClose();}} > Switch </Button>
+                        :
+                            <Button variant="danger" onClick={() =>  {deleteLecture(lecture);handleClose();}} >Delete</Button>
+                    }
+
+                    <Button variant="success"onClick={handleClose} >Go back</Button>
+                </Modal.Footer>
+            </Modal>
+
             <PaperInsideCard
                 CardHeader={course.description + " lectures"}
                 columns={columns}
@@ -134,5 +170,10 @@ const CourseLectures = (props) => {
         </>
     );
 }
+
+
+
+
+
 
 export default CourseLectures;

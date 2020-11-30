@@ -294,7 +294,7 @@ class App extends React.Component {
           });
       })
       .catch((err) => {
-        console.log("erroreeeeeee")
+        console.log("errore")
       })
   }
 
@@ -313,7 +313,7 @@ class App extends React.Component {
         this.loadInitialDataTeacher();
         API.getStudentCourseLectures(lecture.subject_id)
           .then((lectures) => {
-            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().set("hours", 0).set("minutes", 0).set("seconds", 0))) });
+            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment()))});
           });
 
       })
