@@ -39,7 +39,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test-ci": "set CI=true&&react-scripts test --testResultsProcessor ./node_modules/jest-sonar-reporter",
+    "test-ci": "set CI=true&&react-scripts test --testResultsProcessor ./node_modules/jest-sonar-reporter --testURL=http://localhost:3100",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
