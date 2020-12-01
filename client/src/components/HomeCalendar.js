@@ -143,8 +143,8 @@ class HomeCalendar extends React.PureComponent {
             books.forEach((b) => {
 
               // check Lecture Color
-              var lectureIndex = courseInstances.findIndex(x => parseInt(x.id) === parseInt(b.courseId))
-              if (lectureIndex === -1) {
+              var index = courseInstances.findIndex(x => parseInt(x.id) === parseInt(b.courseId))
+              if (index === -1) {
                 courseInstances.push({
                   id: parseInt(b.courseId),
                   description: b.title,
@@ -181,18 +181,6 @@ class HomeCalendar extends React.PureComponent {
 
   }
 
-checkLectureColorTD = (courseInstances, b) => {
-  var lectureIndex = courseInstances.findIndex(x => parseInt(x.id) === parseInt(b.courseId))
-              if (lectureIndex === -1) {
-                courseInstances.push({
-                  id: parseInt(b.courseId),
-                  description: b.title,
-                  text: b.title,
-                  color: colors[parseInt(b.courseId)]
-                })
-              }
-}
-
   studentCalendar = (userID) => {
 
         API.getLectures(userID)
@@ -221,8 +209,16 @@ checkLectureColorTD = (courseInstances, b) => {
             books.forEach((b) => {
 
               // check Lecture color
-              this.checkLectureColorTD(courseInstances,b);
-              
+              var lectureIndex = courseInstances.findIndex(x => parseInt(x.id) === parseInt(b.courseId))
+              if (lectureIndex === -1) {
+                courseInstances.push({
+                  id: parseInt(b.courseId),
+                  description: b.title,
+                  text: b.title,
+                  color: colors[parseInt(b.courseId)]
+                })
+              }
+
               // check Room color
               var roomIndex = roomInstances.findIndex(x => parseInt(x.id) === parseInt(b.roomId))
               if (roomIndex === -1) {

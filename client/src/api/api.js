@@ -1,4 +1,3 @@
-
 async function userLogin(username, password) {
     return new Promise((resolve, reject) => {
         fetch("/api/login", {
@@ -98,9 +97,56 @@ async function getSubjects() {
 
 }
 
+async function getStudentBookings(studentId) {
+
+    let url = "/api/bookings?user_id=" + studentId;
+    const response = await fetch(url);
+    const studentBookingsJson = await response.json();
+    let id = 1;
+    if (response.ok) {
+        
+        let array = studentBookingsJson.map(async (book) => {
+
+            let startDate = new Date(book.lecture.date);
+
+            let endDate = new Date(startDate);
+            endDate.setHours(startDate.getHours() + book.lecture.duration)
+
+            let subjectDescription = '';
+
+            await getSubject(book.lecture.subject_id).then((subject) => {
+                subjectDescription = subject[0].description;
+            })
+
+            return {
+                courseId: book.lecture.subject_id,
+                id: id++,
+                title: subjectDescription,
+                startDate: startDate,
+                endDate: endDate,
+                ownerId: book.user_id,
+                roomId: 1,
+                room: 'Room 1',
+                teacher: 'Teacher Vetrò',
+                teacherId: 1
+            }
+        });
 
 
-async function getStudentBookingsTD(url) {
+        return await Promise.all(array);
+
+    }
+    else {
+        console.log("studentCoursesJson Error");
+        let err = { status: response.status, errObj: studentBookingsJson };
+        throw err;
+    }
+
+}
+
+async function getStudentBookingsexcludeLecturesCanceled(studentId) {
+
+    let url = "/api/bookings/excludeLecturesCanceled?user_id=" + studentId;
     const response = await fetch(url);
     const studentBookingsJson = await response.json();
     let id = 1;
@@ -144,20 +190,6 @@ async function getStudentBookingsTD(url) {
         throw err;
     }
 
-}
-
-async function getStudentBookings(studentId) {
-
-    let url = "/api/bookings?user_id=" + studentId;
-    getStudentBookingsTD(url);
-
-}
-
-async function getStudentBookingsexcludeLecturesCanceled(studentId) {
-
-    let url = "/api/bookings/excludeLecturesCanceled?user_id=" + studentId;
-    getStudentBookingsTD(url);
-    
 }
 
 async function getStudentCourseLectures(courseID) {
@@ -246,7 +278,10 @@ async function bookLecture(user_id, lecture_id, email) {
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
 }
-async function deleteBookedLectureTD(url){
+
+async function deleteBookedLecture(user_id, lecture_id) {
+
+    const url = `/api/bookings/students/${user_id}/lectures/${lecture_id}`;
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL
             method: 'DElETE',
@@ -269,14 +304,6 @@ async function deleteBookedLectureTD(url){
             }
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
-
-}
-
-async function deleteBookedLecture(user_id, lecture_id) {
-
-    const url = `/api/bookings/students/${user_id}/lectures/${lecture_id}`;
-    deleteBookedLectureTD(url);
-    
 }
 
 async function getBookedLectures(user_id) {
@@ -475,7 +502,28 @@ async function getStatisticsBookings(params) {
 
 async function deleteLecture(lecture_id) {
     const url = `/api/lectures/${lecture_id}`;
-    deleteBookedLectureTD(url);
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'DElETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+
+            } else {
+                // analyze the cause of error
+                console.log(response);
+                response.json()
+                    .then((obj) => { reject(obj); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+    });
 }
 
 

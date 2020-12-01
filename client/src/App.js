@@ -18,8 +18,6 @@ import "./App.css";
 import CourseLectures from './components/CourseLectures';
 import moment from 'moment';
 import TeacherStatistics from './components/TeacherStatistics';
-import {FaArrowCircleLeft} from 'react-icons/fa';
-import Button from "react-bootstrap/Button"
 
 function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
