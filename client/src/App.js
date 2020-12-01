@@ -156,6 +156,7 @@ class App extends React.Component {
   userLogout = () => {
 
     API.userLogout().then(() => {
+      this.resetState();
       this.setState(this.initialState);
 
       this.props.history.push("/login");
@@ -412,7 +413,7 @@ class App extends React.Component {
     }
 
     if(this.state.info_user.role_id != 3)
-      courseLecturesParams.teacher_id = this.state.authUser.user_id;
+      courseLecturesParams.teacher_id = this.state.authUser.ID_User;
 
     if(get.subjectId)
       courseLecturesParams.subject_id = get.subjectId;
@@ -437,8 +438,6 @@ class App extends React.Component {
         });
         
         statistics.numberOfLessons = lectures.length;
-
-        
 
         lectures.forEach((elem) => {
           //statistics.studentsCounts += elem.studentsCount;
