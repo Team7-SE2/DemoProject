@@ -18,6 +18,8 @@ import "./App.css";
 import CourseLectures from './components/CourseLectures';
 import moment from 'moment';
 import TeacherStatistics from './components/TeacherStatistics';
+import {FaArrowCircleLeft} from 'react-icons/fa';
+import Button from "react-bootstrap/Button"
 
 function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
@@ -129,7 +131,6 @@ class App extends React.Component {
         this.setState({ endFilterDate: moment().endOf("day") })
 
         
-        this.setState({ statisticsSubject: 'All' })
 
         if (info.role_id === 5) {
           this.loadInitialDataStudent();
@@ -140,6 +141,7 @@ class App extends React.Component {
           
         }
         if (info.role_id === 3) {
+          this.setState({ statisticsSubject: 'All' })
           this.loadInitialSubjects();
         }
 
@@ -154,6 +156,7 @@ class App extends React.Component {
   userLogout = () => {
 
     API.userLogout().then(() => {
+      this.resetState();
       this.setState(this.initialState);
 
       this.props.history.push("/login");
@@ -410,7 +413,7 @@ class App extends React.Component {
     }
 
     if(this.state.info_user.role_id != 3)
-      courseLecturesParams.teacher_id = this.state.authUser.user_id;
+      courseLecturesParams.teacher_id = this.state.authUser.ID_User;
 
     if(get.subjectId)
       courseLecturesParams.subject_id = get.subjectId;
@@ -435,8 +438,6 @@ class App extends React.Component {
         });
         
         statistics.numberOfLessons = lectures.length;
-
-        
 
         lectures.forEach((elem) => {
           //statistics.studentsCounts += elem.studentsCount;

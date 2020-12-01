@@ -472,33 +472,6 @@ async function getStatisticsBookings(params) {
     }
 
 }
-// invio al server il tipo della richiesta che è stata prenotata da un cliente appena entrato
-async function bookRequestType(ReqType) {
-    let obj = {
-        requestTypeId: ReqType
-    };
-
-    return new Promise((resolve, reject) => {
-        fetch("/api/requestTypes/addNumberInQueue", {                             // url da decidere
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-
-
-            },
-            body: JSON.stringify(obj),
-        }).then((response) => {
-            if (response.ok) {
-                resolve(response.text());
-
-            } else {
-                // analyze the cause of error
-                console.log(response);
-            }
-        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
-    });
-}
 
 async function deleteLecture(lecture_id) {
     const url = `/api/lectures/${lecture_id}`;
@@ -533,5 +506,5 @@ async function turnOnRemote(lecture_id) {
     });
 }
 
-const API = { getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, bookRequestType };
+const API = { getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings };
 export default API;
