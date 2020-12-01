@@ -28,7 +28,7 @@ const TeacherStatistics = (props) => {
               <Row>
                 <Col sm={2}>
                   <Form.Group controlId="exampleForm.GroupBy">
-                    <Form.Label>Group By</Form.Label>
+                    <Form.Label className="titleStatisticsCard">GROUP BY</Form.Label>
                     <br />
                     <Form.Control defaultValue="days" value={statisticsGroupBy} as="select" onChange={onStatisticGroupByChange} custom>
                       <option>hours</option>
@@ -41,7 +41,7 @@ const TeacherStatistics = (props) => {
                 <Col sm={2}>
                   {
                   subjects && <Form.Group controlId="exampleForm.Subject">
-                    <Form.Label>Select Subject</Form.Label>
+                    <Form.Label className="titleStatisticsCard">SELECT SUBJECT</Form.Label>
                     <br />
                     <Form.Control defaultValue="All" value={statisticsSubject} as="select" onChange={onStatisticSubjectChange} custom>
                       <option>All</option>
@@ -56,12 +56,12 @@ const TeacherStatistics = (props) => {
                 </Col>
                 <Col sm={3}>
                   <Form.Group controlId="exampleForm.StartDay">
-                    <Form.Label>Start day : </Form.Label>
+                    <Form.Label className="titleStatisticsCard">START DAY: </Form.Label>
                     <DatePickerComponent type="startDate" setStateDate={setStateDate} ></DatePickerComponent>
                   </Form.Group>                                  </Col>
                 <Col sm={3}>
                   <Form.Group controlId="exampleForm.EndDay">
-                    <Form.Label>End day : </Form.Label>
+                    <Form.Label className="titleStatisticsCard">END DAY: </Form.Label>
                     <DatePickerComponent type="endDate" setStateDate={setStateDate}></DatePickerComponent>
                   </Form.Group>                                  </Col>
                 
