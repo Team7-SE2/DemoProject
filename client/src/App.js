@@ -128,7 +128,7 @@ class App extends React.Component {
         this.setState({ startFilterDate: moment().add(-7, "days").startOf("day") })
         this.setState({ endFilterDate: moment().endOf("day") })
 
-        console.log("role_id: " + info.role_id)
+        
         this.setState({ statisticsSubject: 'All' })
 
         if (info.role_id === 5) {
@@ -308,7 +308,7 @@ class App extends React.Component {
   }
 
   onStatisticGroupByChange = (e) => {
-    //console.log("filter: " + e.target.value)
+  
     this.setState({ statisticsGroupBy: e.target.value })
   }
 
@@ -360,7 +360,7 @@ class App extends React.Component {
       res[index]++;
     })
 
-    //console.log("res: " + JSON.stringify(res))
+   
     return res;
   }
 
@@ -387,7 +387,7 @@ class App extends React.Component {
         res[i] = start.clone().add(i, groupBy).format(formatString);
     }
 
-    //console.log("label: " + JSON.stringify(res))
+    
     return res;
   }
   
@@ -417,7 +417,7 @@ class App extends React.Component {
     
     if(this.state.info_user.role_id == 3 && this.state.statisticsSubject != 'All')
       courseLecturesParams.subject_id = this.state.statisticsSubject;
-    //console.log("button pressed")
+    
     API.getCourseLectures(courseLecturesParams)
       .then((lectures) => {
 
@@ -436,7 +436,7 @@ class App extends React.Component {
         
         statistics.numberOfLessons = lectures.length;
 
-        //console.log(lectures)
+        
 
         lectures.forEach((elem) => {
           //statistics.studentsCounts += elem.studentsCount;
@@ -481,7 +481,7 @@ class App extends React.Component {
           //statistics: statistics
         })
 
-        //console.log("state: "+JSON.stringify(this.state.statistics));
+        
       })
       .catch((err) => {
         console.log("err: " + JSON.stringify(err))
@@ -490,7 +490,7 @@ class App extends React.Component {
     API.getStatisticsBookings(courseLecturesParams)
       .then((bookings) => {
         statistics.studentsBookings = bookings.length;
-        //console.log("bookings: " + JSON.stringify(bookings))
+        
         bookings.sort((a, b)=>{
           return moment(a.lecture.date).unix() - moment(b.lecture.date).unix()
         })

@@ -105,7 +105,7 @@ async function getStudentBookings(studentId) {
     const studentBookingsJson = await response.json();
     let id = 1;
     if (response.ok) {
-        //console.log(studentBookingsJson)
+        
         let array = studentBookingsJson.map(async (book) => {
 
             let startDate = new Date(book.lecture.date);
@@ -133,7 +133,6 @@ async function getStudentBookings(studentId) {
             }
         });
 
-        //console.log(array)
 
         return await Promise.all(array);
 
@@ -153,7 +152,7 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
     const studentBookingsJson = await response.json();
     let id = 1;
     if (response.ok) {
-        //console.log(studentBookingsJson)
+        
         let array = studentBookingsJson.map(async (book) => {
 
             let startDate = new Date(book.lecture.date);
@@ -181,7 +180,7 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
             }
         });
 
-        //console.log(array)
+        
 
         return await Promise.all(array);
 
@@ -198,7 +197,7 @@ async function getStudentCourseLectures(courseID) {
     let url = "/api/lectures/includeDeleted?subject_id=" + courseID;
     const response = await fetch(url);
     const studentCourseLecturesJson = await response.json();
-    //console.log("response: " + response);
+    
     if (response.ok) {
         return (studentCourseLecturesJson.map((lecture) => lecture));
     }
@@ -220,10 +219,10 @@ async function getCourseLectures(params) {
     });
 
     let url = "/api/lectures/includeDeleted"+paramsString;
-    //console.log(url);
+  
     const response = await fetch(url);
     const studentCourseLecturesJson = await response.json();
-    //console.log("response: " + response);
+    
     if (response.ok) {
         return (studentCourseLecturesJson.map((lecture) => lecture));
     }
@@ -312,7 +311,6 @@ async function getBookedLectures(user_id) {
     let url = "/api/bookings?user_id=" + user_id;
     const response = await fetch(url);
     const BookedLecturesJson = await response.json();
-    //console.log("aaa: " + BookedLecturesJson);
     if (response.ok) {
         return (BookedLecturesJson.map((l) => l));
     }
@@ -330,7 +328,6 @@ async function getLectures(user_id) {
     let lectureId = 1;
     let courseId = 0;
     if (response.ok) {
-        //console.log(coursesJson)
         let array = [];
         coursesJson.forEach((course) => {
 
@@ -341,7 +338,6 @@ async function getLectures(user_id) {
                 let endDate = new Date(startDate);
                 endDate.setHours(startDate.getHours() + lecture.duration)
 
-                //console.log(course)
 
                 return {
                     courseId: course.id,
@@ -361,7 +357,6 @@ async function getLectures(user_id) {
             courseId++;
         });
 
-        //console.log(array)
         return await Promise.all(array);
 
     }
@@ -378,7 +373,6 @@ async function getTeacherLectures(user_id) {
     const lecturesJson = await response.json();
     let id = 1;
     if (response.ok) {
-        //console.log(lecturesJson)
         let array = [];
         lecturesJson.forEach((lecture) => {
             let startDate = new Date(lecture.date);
@@ -404,7 +398,6 @@ async function getTeacherLectures(user_id) {
             })
         });
 
-        //console.log("array: " + JSON.stringify(array))
         return await Promise.all(array);
 
     }
@@ -425,7 +418,6 @@ async function getTeacherLecturesWithParams(user_id, params) {
 
     })
     let url = `/api/lectures/users/${user_id}` + paramsString;
-    //console.log(url)
     const response = await fetch(url);
     //let lectures = []
     const lecturesJson = await response.json();
@@ -435,7 +427,6 @@ async function getTeacherLecturesWithParams(user_id, params) {
             //let newLecture = lecture;
             lecture.studentsCount = students.length;
             //lectures.push(students.length)
-            //console.log(students.length)
 
         });
     }
@@ -495,7 +486,6 @@ async function getStatisticsBookings(params) {
     })
 
     let url = "/api/bookings/statistics"+paramsString;
-    //console.log(url);
     const response = await fetch(url);
     const bookingsJson = await response.json();
 
@@ -539,7 +529,6 @@ async function bookRequestType(ReqType) {
 }
 
 async function deleteLecture(lecture_id) {
-    //console.log("lecture_id" + lecture_id)
     const url = `/api/lectures/${lecture_id}`;
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL

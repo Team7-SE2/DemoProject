@@ -19,7 +19,6 @@ module.exports = function (app) {
     // used to check login password
     var apiCheckPassword = function (dbHash, password) {
 
-        //console.log("hash of: " + password);
         var check = bcrypt.compareSync(password, dbHash);
 
         console.log(check)
