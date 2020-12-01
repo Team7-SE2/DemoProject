@@ -251,6 +251,128 @@ it('renders Header 2', () => {
 	);
 	expect(screen.getByText('OVERALL')).toBeInTheDocument();
   });
+
+  it('renders Teacher Statistics BM', () => {
+	render(<TeacherStatistics title = "Overall Statistics" subjects = {[{id:1, description:"SE2"}]}statisticsGroupBy ={"days"} onStatisticGroupByChange = {App.onStatisticGroupByChange} setStateDate = {App.setStateDate} generateData = {App.generateData} statistics = { {studentsBookings: 0,numberOfLessons: 0,numberOfLessonsCancelled: 0,numberOfLessonsRemote: 0,numberOfLessonPresence: 0}} 
+	lectureData = {{
+		labels: App.getTimeSpans=("days", moment(), moment().add(7,"days")),
+		datasets: [
+		  {
+			label: 'Lectures In Presence',
+			data: App.getDataGrouped=([{id:1,date:moment()}], "days", moment(), moment().add(7,"days")),
+			fill: false,
+			backgroundColor: 'rgba(75, 192, 192, 0.2)',
+			borderColor: 'rgba(75, 192, 192, 1)',
+			borderWidth: 1
+		  },
+		  {
+			label: 'Lectures Remote',
+			data: App.getDataGrouped=([{id:1,date:moment()}], "days", moment(), moment().add(7,"days")),
+			fill: false,
+			backgroundColor: 'rgba(54, 162, 235, 0.2)',
+			borderColor: 'rgba(54, 162, 235, 1)',
+			borderWidth: 1
+		  },
+		  {
+			label: 'Lectures Canceled',
+			data: App.getDataGrouped=([{id:1,date:moment()}], "days", moment(), moment().add(7,"days")),
+			fill: false,
+			backgroundColor: 'rgba(255, 99, 132, 0.2)',
+			borderColor: 'rgba(255, 99, 132, 1)',
+			borderWidth: 1
+		  },
+		],
+		
+	  }} optionsBarChart = {{
+		scales: {
+		  yAxes: [
+			{
+			  ticks: {
+				beginAtZero: true,
+				precision: 0
+			  },
+			  stacked: true
+			},
+		  ],
+		  xAxes: [
+			{
+			  ticks: {
+				beginAtZero: true,
+				precision: 0
+			  },
+			  stacked: true
+			}
+		  ]
+		},
+	  }} bookingsData = {{
+		labels: App.getTimeSpans=("days", moment(), moment().add(7,"days")),
+		datasets: [
+		  {
+			label: 'Bookings',
+			data: App.getDataGrouped=([{}], "days", moment(), moment().add(7,"days"), "bookings"),
+			fill: false,
+			backgroundColor: 'rgb(255, 99, 132)',
+			borderColor: 'rgba(255, 99, 132, 0.2)',
+			lineTension: 0,
+		  }
+		]
+	  }
+	} bookingsLectureData = 
+	{ {
+		labels: [],
+		datasets: [
+		  {
+			label: 'Bookings',
+			data: [],
+			fill: false,
+			backgroundColor: 'rgba(54, 162, 235, 0.2)',
+			borderColor: 'rgba(54, 162, 235, 1)',
+			borderWidth: 1,
+			order: 1
+		  },
+		  {
+			label: 'Attendances',
+			data: [],
+			fill: false,
+			// borderColor: '#EC932F',
+			// backgroundColor: '#EC932F',
+			// pointBorderColor: '#EC932F',
+			// pointBackgroundColor: '#EC932F',
+			// pointHoverBackgroundColor: '#EC932F',
+			// pointHoverBorderColor: '#EC932F',
+			backgroundColor: 'rgba(255, 99, 132, 0.2)',
+			borderColor: 'rgba(255, 99, 132, 1)',
+			//borderColor: 'rgba(54, 162, 235, 1)',
+			type: "line",
+			lineTension: 0,
+			order: 2
+			//borderWidth: 1,
+		  }
+		]
+	  }} options = {{
+		scales: {
+		  yAxes: [
+			{
+			  ticks: {
+				beginAtZero: true,
+				precision: 0
+			  },
+			},
+		  ],
+		  xAxes: [
+			{
+			  ticks: {
+				beginAtZero: true,
+				precision: 0
+			  },
+			},
+		  ],
+		},
+	  }}></TeacherStatistics>
+	);
+	expect(screen.getByText('Overall Statistics')).toBeInTheDocument();
+  });
+
 it('renders Aside logged true student', () => {
 	render(<Router><Aside className="LeftBar"
 	//image={image}

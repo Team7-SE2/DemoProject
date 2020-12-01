@@ -1,7 +1,20 @@
 import API from '../api/api.js'
 import moment from 'moment'
+
 it('API UserLogin', (done) => {
     API.userLogin('s202022@studenti.polito.it', '123')
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+
+        API.userLogin('s202022@studenti.polito.it', 'aaa')
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
             if (done)
@@ -239,6 +252,33 @@ it('API getbookings', (done) => {
     API.getbookings(10)
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+it('API getSubjects', (done) => {
+    API.getSubjects()
+        .then((obj) => {
+            expect(obj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+it('API getTeacherLecturesWithParams', (done) => {
+    API.getTeacherLecturesWithParams(3, {startDate:"2020-11-20",endDate:"2020-12-20"})
+        .then((obj) => {
+            expect(obj).not.toBeNull();
             if (done)
                 done();
         })
