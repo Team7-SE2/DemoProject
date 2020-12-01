@@ -274,7 +274,7 @@ async function bookLecture(user_id, lecture_id, email) {
                 // analyze the cause of error
                 console.log(response);
                 response.json()
-                    .then((obj) => { reject(obj); }) // error msg in the response body
+                    .then((ob) => { reject(ob); }) // error msg in the response body
                     .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
             }
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors

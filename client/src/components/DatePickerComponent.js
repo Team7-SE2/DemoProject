@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 //import Form from "react-bootstrap/Form";
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
@@ -10,19 +10,17 @@ var moment = require("moment");
 
 const DatePickerComponent = (props) => {
 
-  let { label, type, setStateDate } = props;
+  let { type, setStateDate } = props;
 
-  //console.log("type: " + type)
 
   let date = type === "startDate" ? moment().add(-7, "days").startOf("day") : moment().endOf("day");
 
   // The first commit of Material-UI
   const [selectedDate, setSelectedDate] = React.useState(date);
 
-  const handleDateChange = (date) => {
-    //console.log("date: " + JSON.stringify(date))
-    setSelectedDate(date);
-    setStateDate(props.type, date);
+  const handleDateChange = (d) => {
+    setSelectedDate(d);
+    setStateDate(props.type, d);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from "./components/Header";
 import Login from "./components/Login"
 import Container from "react-bootstrap/Container";
@@ -14,15 +14,9 @@ import { AuthContext } from "./auth/AuthContext";
 import HomeCalendar from "./components/HomeCalendar.js";
 import Aside from "./components/Aside.js";
 import Card from "react-bootstrap/Card";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import "./App.css";
 import CourseLectures from './components/CourseLectures';
-import DatePickerComponent from './components/DatePickerComponent';
 import moment from 'moment';
-import StatisticsComponet from './components/StatisticsComponent';
-
-import { Line, Bar, HorizontalBar } from 'react-chartjs-2'
 import TeacherStatistics from './components/TeacherStatistics';
 
 function parseQuery(str) {
@@ -298,7 +292,7 @@ class App extends React.Component {
   deleteLecture = (lecture) => {
     API.deleteLecture(lecture.id)
       .then(() => {
-        this.loadInitialDataTeacher();
+        //this.loadInitialDataTeacher();
         API.getStudentCourseLectures(lecture.subject_id)
           .then((lectures) => {
             this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
@@ -326,7 +320,7 @@ class App extends React.Component {
   turnOnRemote = (lecture) => {
     API.turnOnRemote(lecture.id)
       .then(() => {
-        this.loadInitialDataTeacher();
+        //this.loadInitialDataTeacher();
         API.getStudentCourseLectures(lecture.subject_id)
           .then((lectures) => {
             this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment()))});
@@ -352,13 +346,14 @@ class App extends React.Component {
       res[i] = 0;
     }
     data.forEach((d) => {
+      var index;
       if(type == 'bookings')
-        var index = moment(d.lecture.date).startOf(groupBy).diff(start, groupBy);
+        index = moment(d.lecture.date).startOf(groupBy).diff(start, groupBy);
       else{
         if (d.date)
-          var index = moment(d.date).startOf(groupBy).diff(start, groupBy);
+          index = moment(d.date).startOf(groupBy).diff(start, groupBy);
         else
-          var index = moment(d.created_at).startOf(groupBy).diff(start, groupBy);
+          index = moment(d.created_at).startOf(groupBy).diff(start, groupBy);
       }
       if (!res[index])
         res[index] = 0;

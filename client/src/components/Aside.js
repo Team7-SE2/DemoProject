@@ -10,7 +10,7 @@ import {
 } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
-import { FaBook, FaCalendar, FaGithub, FaHeart,FaRegChartBar} from 'react-icons/fa';
+import { FaBook, FaCalendar, FaGithub, FaRegChartBar} from 'react-icons/fa';
 import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';

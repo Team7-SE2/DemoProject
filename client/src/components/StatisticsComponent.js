@@ -2,7 +2,7 @@ import React from 'react';
 import Card from "react-bootstrap/Card";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { FaChalkboardTeacher, FaUser, FaUsers, FaBook } from 'react-icons/fa';
+import { FaChalkboardTeacher, FaUsers, FaBook } from 'react-icons/fa';
 
 
 const StatisticsComponent = (props) => {

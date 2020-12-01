@@ -3,8 +3,6 @@ import moment from 'moment';
 import Button from "react-bootstrap/Button";
 import PaperInsideCard from './PaperInsideCard';
 import { FaUsers, FaTrashAlt, FaTv } from 'react-icons/fa';
-import Nav from 'react-bootstrap/Nav';
-import { red } from '@material-ui/core/colors';
 import Modal from "react-bootstrap/Modal"
 
 const CourseLectures = (props) => {
@@ -13,11 +11,10 @@ const CourseLectures = (props) => {
     const [lecture, setLecture] = useState(null);
 
     const handleClose = () => { setShow(false); setRemote(false); }
-    const handleShow = (lecture) => { setLecture(lecture); setShow(true); }
-    const handleShowRemote = (lecture) => { setLecture(lecture); setRemote(true); setShow(true); }
+    const handleShow = (lect) => { setLecture(lect); setShow(true); }
+    const handleShowRemote = (l) => { setLecture(l); setRemote(true); setShow(true); }
 
     let { lectures, course, bookLecture, deleteBookedLecture, bookedLectures, role_id, getListStudents, deleteLecture, turnOnRemote } = props;
-    const handleSubmit = (lecture) => { if (show) remote ? turnOnRemote(lecture) : deleteLecture(lecture); handleClose(); }
     function checkPrenotation(bookedLectures2, lectureID) {
 
         //console.log(bookedLectures2);
@@ -62,20 +59,20 @@ const CourseLectures = (props) => {
         { columnName: 'View list of students', sortingEnabled: false }
     ]);
 
-    const test = lectures.map((lecture) => {
-        console.log("lecture deleted at" + lecture.deleted_at)
+    const test = lectures.map((lec) => {
+        console.log("lecture deleted at" + lec.deleted_at)
 
 
         if (role_id == 4) {
             return {
-                id: lecture.id,
-                lectureDate: lecture.deleted_at == null ?
+                id: lec.id,
+                lectureDate: lec.deleted_at == null ?
                     <div style={{
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center"
                     }}>
-                        {moment(new Date(lecture.date)).format("LLL")}
+                        {moment(new Date(lec.date)).format("LLL")}
                     </div>
                     :
                     <div style={{
@@ -84,7 +81,7 @@ const CourseLectures = (props) => {
                         alignItems: "center",
                         textDecoration: "line-through red"
                     }}>
-                        {moment(new Date(lecture.date)).format("LLL")}
+                        {moment(new Date(lec.date)).format("LLL")}
                     </div>
                 ,
                 'View list of students': <div style={{
@@ -92,7 +89,7 @@ const CourseLectures = (props) => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {lecture.deleted_at == null ? <Button onClick={() => getListStudents(lecture)} ><FaUsers size={20} > </FaUsers></Button> : <Button disabled><FaUsers size={20} > </FaUsers></Button>}
+                    {lec.deleted_at == null ? <Button onClick={() => getListStudents(lec)} ><FaUsers size={20} > </FaUsers></Button> : <Button disabled><FaUsers size={20} > </FaUsers></Button>}
                 </div>,
                 'Switch to remote':
                     <div style={{
@@ -100,16 +97,14 @@ const CourseLectures = (props) => {
                         justifyContent: "center",
                         alignItems: "center"
                     }}>
-                        {/*lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(30,'minutes')) ? <Button disabled = {lecture.remote} onClick={() => {turnOnRemote(lecture)}}> <FaTv size ={20}></FaTv></Button> :  <Button disabled> <FaTv  size ={20}></FaTv></Button>*/}
-                        {lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(30, 'minutes')) ? <Button disabled={lecture.remote} onClick={() => { handleShowRemote(lecture) }}> <FaTv size={20}></FaTv></Button> : <Button disabled> <FaTv size={20}></FaTv></Button>}
+                        {lec.deleted_at == null && moment(lec.date).isAfter(moment().add(30, 'minutes')) ? <Button disabled={lec.remote} onClick={() => { handleShowRemote(lec) }}> <FaTv size={20}></FaTv></Button> : <Button disabled> <FaTv size={20}></FaTv></Button>}
                     </div>,
                 'Delete the lecture': <div style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {/*(lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(1,'hours'))) ? <Button variant="danger" onClick={() => { deleteLecture(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>*/}
-                    {(lecture.deleted_at == null && moment(lecture.date).isAfter(moment().add(1, 'hours'))) ? <Button variant="danger" onClick={() => { handleShow(lecture) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
+                    {(lec.deleted_at == null && moment(lec.date).isAfter(moment().add(1, 'hours'))) ? <Button variant="danger" onClick={() => { handleShow(lec) }}><FaTrashAlt size={20} ></FaTrashAlt></Button> : <Button disabled variant="danger"><FaTrashAlt size={20} ></FaTrashAlt></Button>}
 
                 </div>
             }
@@ -117,14 +112,14 @@ const CourseLectures = (props) => {
 
         if (role_id == 5) {
             return {
-                id: lecture.id,
-                lectureDate: moment(new Date(lecture.date)).format("LLL"),
+                id: lec.id,
+                lectureDate: moment(new Date(lec.date)).format("LLL"),
                 book: <div style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {lecture.deleted_at == null ? checkPrenotation(bookedLectures, lecture.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lecture.id)}> UNBOOK </Button> : <Button variant="success" onClick={() => bookLecture(lecture.id)}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
+                    {lec.deleted_at == null ? checkPrenotation(bookedLectures, lec.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lec.id)}> UNBOOK </Button> : <Button variant="success" onClick={() => bookLecture(lec.id)}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
                 </div>,
             }
         }
