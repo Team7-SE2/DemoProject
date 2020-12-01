@@ -3,6 +3,9 @@ import moment from'moment';
 import PaperInsideCard from "./PaperInsideCard"
 import {FaArrowCircleLeft} from 'react-icons/fa';
 import Button from "react-bootstrap/Button"
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
 const StudentList = (props) => {
 
   let {students, course, lecture, switchRoute} = props;
@@ -33,7 +36,16 @@ const StudentList = (props) => {
   return (
     <>
      <PaperInsideCard
-        CardHeader = {<><Button variant="dark" onClick={() => {switchRoute("/teacher/courses/"+course.subjectID+"/lectures")}}><FaArrowCircleLeft  /> </Button><>{course.description} <br></br>Lecture Date:  {moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}</></>}
+        CardHeader = {
+          <Row>
+            <Col sm={1}>
+              <Button variant="dark" onClick={() => {switchRoute("/teacher/courses/"+course.subjectID+"/lectures")}}><FaArrowCircleLeft style={{'marginBottom': '20%'}} /> </Button>
+            </Col>
+            <Col sm={11}>
+              <>{course.description} <br></br>Lecture Date:  {moment(lecture.date).format("DD-MM-YYYY hh:mm").toString()}</>
+            </Col>
+          </Row>
+        }
         columns = {columns}
         sortingStateColumnExtensions = {sortingStateColumnExtensions}
         integratedSortingColumnExtensions = {integratedSortingColumnExtensions}

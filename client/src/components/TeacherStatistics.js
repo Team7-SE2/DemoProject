@@ -39,18 +39,20 @@ const TeacherStatistics = (props) => {
                   </Form.Group>
                 </Col>
                 <Col sm={2}>
-                  <Form.Group controlId="exampleForm.Subject">
+                  {
+                  subjects && <Form.Group controlId="exampleForm.Subject">
                     <Form.Label>Select Subject</Form.Label>
                     <br />
                     <Form.Control defaultValue="All" value={statisticsSubject} as="select" onChange={onStatisticSubjectChange} custom>
                       <option>All</option>
                       {
-                        subjects && subjects.map((subject, i) => {
+                        subjects.map((subject, i) => {
                           return (<option value={subject.id}>{subject.description}</option>)
                         })}
 
                     </Form.Control>
                   </Form.Group>
+                  }
                 </Col>
                 <Col sm={3}>
                   <Form.Group controlId="exampleForm.StartDay">
