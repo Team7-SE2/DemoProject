@@ -21,9 +21,9 @@ import TeacherStatistics from './components/TeacherStatistics';
 
 function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
-  var query = str.split("?");
-  if (query[1]) {
-      var s = query[1].split("&");
+  var q = str.split("?");
+  if (q[1]) {
+      var s = q[1].split("&");
       var s_length = s.length;
       var bit, query = {}, first, second;
       for (var i = 0; i < s_length; i++) {

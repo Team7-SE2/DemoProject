@@ -427,14 +427,14 @@ async function getTeacherLecturesWithParams(user_id, params) {
     let url = `/api/lectures/users/${user_id}` + paramsString;
     //console.log(url)
     const response = await fetch(url);
-    let lectures = []
+    //let lectures = []
     const lecturesJson = await response.json();
 
     for (const lecture of lecturesJson) {
         await getStudentListforLecture(lecture.id).then((students) => {
             //let newLecture = lecture;
             lecture.studentsCount = students.length;
-            lectures.push(students.length)
+            //lectures.push(students.length)
             //console.log(students.length)
 
         });
