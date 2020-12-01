@@ -21,6 +21,36 @@ import DatePickerComponent from "../components/DatePickerComponent"
 
 import moment from "moment"
 import '@testing-library/jest-dom/extend-expect'
+const app=new App.WrappedComponent();
+
+
+it('test app function', () => {
+	app.setStateDate("startDate","2020-11-20");
+	app.setStateDate("endDate","2020-12-20");
+	app.getDataGrouped([{date:"2020-11-20",
+						lecture:{date: "2020-11-20"},
+						created_at:"2020-11-20"
+}], 'days', "2020-11-20", "2020-12-20", "bookings");
+
+app.getDataGrouped([{date:"2020-11-20",
+						lecture:{date: "2020-11-20"},
+						created_at:"2020-11-20"
+}], 'days', "2020-11-20", "2020-12-20", "");
+
+app.getDataGrouped([{
+						lecture:{date: "2020-11-20"},
+						created_at:"2020-11-20"
+}], 'days', "2020-11-20", "2020-12-20", "");
+
+app.getTimeSpans('days', "2020-11-20", "2020-12-20");
+
+expect(1).toBe(1);
+  });
+
+  
+
+  
+  
 
 it('renders StudentList', () => {
 	function switchRoute(path){
