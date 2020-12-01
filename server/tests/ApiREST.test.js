@@ -108,7 +108,7 @@ describe('API test', function () {
     });
     it('GET lectures deleted startDate end Date', function (done) {
         request(app)
-            .get('/api/lectures/includeDeleted?startDate=2020-05-11&endDate=2021-01-22')
+            .get('/api/lectures/includeDeleted?startDate=2020-05-11&endDate=2021-01-22&teacher_id=2')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -126,7 +126,7 @@ describe('API test', function () {
     });
     it('GET users/:userID ', function (done) {
         request(app)
-            .get('/api/lectures/users/5')
+            .get('/api/lectures/users/5?startDate=2020-05-11&endDate=2021-01-22')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -262,7 +262,20 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(500, done);
     });
-    
+    //=================== Statistics test =====================
+    it('GET statistics with params', function (done) {
+        request(app)
+            .get('/api/bookings/statistics?startDate=2020-11-28&endDate=2020-11-12&subject_id=1&teacher_id=2')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+    it('GET statistics', function (done) {
+        request(app)
+            .get('/api/bookings/statistics')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+  
     //==================== teachers API test ====================
 
     it('GET teachers', function (done) {
