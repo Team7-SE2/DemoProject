@@ -19,7 +19,7 @@ services:
     build:
       context: ../../
       dockerfile: ./server/dockerfile
-    image: "server/application-main:debug"
+    image: "benedettagiorgi/pulsbs:serverRealease1"
     ports:
      - "3100:3100"
      - "9229:9229" #DEBUG
@@ -34,7 +34,7 @@ services:
     build:
       context: ../../
       dockerfile: ./client/dockerfile
-    image: "client/application-main:debug"
+    image: "benedettagiorgi/pulsbs:clientRealease1"
     ports:
      - "3000:3000"
     restart: always
