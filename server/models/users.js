@@ -15,6 +15,7 @@ module.exports = function (sequelize, DataTypes) {
         User.belongsTo(models.roles, { as: "role" });
         User.belongsToMany(models.subjects, { through: "teaching_loads" });
         User.belongsToMany(models.lectures, { through: 'bookings' });
+        User.belongsToMany(models.lectures, { through: 'lectureQueues' });
     }
 
     // function hashPassword(password, salt) {
