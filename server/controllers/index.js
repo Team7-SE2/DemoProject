@@ -77,6 +77,7 @@ module.exports = function (app) {
         );
     }
     router.use('/api/users', require('./users.js')());
+    router.use('/api/rooms', require('./rooms.js')());
     router.use('/api/bookings', require('./bookings.js')());
     router.use('/api/lectureQueues', require('./lectureQueues.js')());
     router.use('/api/teaching_loads', require('./teaching_loads.js')());

@@ -2,9 +2,8 @@ var express = require('express');
 var router = express.Router();
 var finale = require('finale-rest')
 var db = require('../models/index');
+var moment = require('moment');
 const Op = db.Sequelize.Op;
-var transporter = require('../helpers/email');
-var moment = require("moment")
 
 module.exports = function () {
 
@@ -16,13 +15,12 @@ module.exports = function () {
 
     // Create REST resource
     finale.resource({
-        model: db.lectureQueues,
-        endpoints: ['/', '/students/:user_id/lectures/:lecture_id'], //MANAGE GET, POST, PUT, DELETE
-        include: [
-            { model: db.users, as: 'user' },
-            { model: db.lectures, as: 'lecture'}
-        ]
+        model: db.rooms,
+        endpoints: ['/','/:id'], //MANAGE GET, POST, PUT, DELETE
+        /*include: [{
+            model:db.lectures, as:'lectures'
+        }]*/
     });
-
+    
     return router;
 }

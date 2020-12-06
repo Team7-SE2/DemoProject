@@ -4,13 +4,14 @@ module.exports = function (sequelize, DataTypes) {
         id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },//1->Administrator; 2->Support Officer; 3->Booking Manager; 4->Teacher; 5->Student
         date: { type: DataTypes.DATE },
         duration: { type: DataTypes.REAL },
-        remote: {type: DataTypes.BOOLEAN},
+        remote: {type: DataTypes.BOOLEAN}
     }, {
         paranoid: process.env.NODE_ENV =="test"? false : true
     });
 
     Lecture.associate = function (models) {
         Lecture.belongsTo(models.subjects, { as: 'subject' });
+        Lecture.belongsTo(models.rooms, { as: 'room' });
         Lecture.belongsToMany(models.users, { as: 'lecture_bookings', through: 'bookings' });
         Lecture.belongsToMany(models.users, { as: 'lecture_bookings_queues', through: 'lectureQueues' });
     }
