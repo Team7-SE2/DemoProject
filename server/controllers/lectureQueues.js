@@ -45,8 +45,12 @@ module.exports = function () {
                 transporter.sendEmail(mailOptions);
                 res.send(user);
 
-            })
-        })
+            }).catch((err) => {
+                res.send(err);
+              })
+        }).catch((err) => {
+            res.send(err);
+          })
 
     })
 
