@@ -14,44 +14,93 @@ var moment = require("moment")
     POST -> /api/bookings -> body:{user_id,lecture_id} -> crea una prenotazione (manda in automatico una mail all'utente che si prenota)
 */
 module.exports = function () {
+    //http://localhost:3100/api/bookings/tracingReport?user_id=3
+    router.get('/tracingReport', (req, res) => {
+        var lecturesListIds = [];
 
-    router.get('/excludeLecturesCanceled', (req,res)=>{
+        db['bookings'].findAll({
+            where: {
+                user_id: { [Op.eq]: req.query.user_id }
+
+
+            }, distinct: true, include: [
+                { model: db.lectures, as: 'lecture', where: { date: { [Op.gte]: moment().add(-14, "days").toDate() } } }
+            ]
+        }).then((bookings) => {
+            bookings.forEach((b) => {
+                lecturesListIds.push(b.lecture.id)
+            });
+
+
+            db['bookings'].findAll({
+                where: {
+                    lecture_id: { [Op.in]: lecturesListIds }
+                }, include: [
+                    { model: db.users, as: 'user', attributes: ["id","name", "surname", "email"] }]
+            }).then((bookings) => {
+                var users = [];
+                var usersObj={};
+                bookings.forEach((b) => {
+                    if(b.user.id!=req.query.user_id)
+                    { usersObj[b.user.id]=b.user; }
+                });
+                Object.keys(usersObj).forEach((k)=>{
+                    users.push(usersObj[k]);
+                })
+                
+                res.send(users);
+            }
+            );
+    
+
+        });
+
+       
+
+
+
+
+
+    })
+    router.get('/excludeLecturesCanceled', (req, res) => {
         var paramsQuery = {}
         paramsQuery = req.query;
-        db['bookings'].findAll({where:paramsQuery,include: [
-            { model: db.users, as: 'user' },
-            { model: db.lectures, as: 'lecture'}
-        ]}).then((bookings)=>{
-            bookings.forEach((booking,index)=>{
-                if(!booking.lecture)
+        db['bookings'].findAll({
+            where: paramsQuery, include: [
+                { model: db.users, as: 'user' },
+                { model: db.lectures, as: 'lecture' }
+            ]
+        }).then((bookings) => {
+            bookings.forEach((booking, index) => {
+                if (!booking.lecture)
                     bookings.splice(index, 1);
             })
             res.send(bookings);
         })
     })
 
-    router.get('/statistics', (req,res)=>{
+    router.get('/statistics', (req, res) => {
         var paramsQueryLecture = {}
         var paramsQuerySubject = {}
         var paramsQuery = {}
         paramsQuery = req.query;
-        if (req.query.startDate){
-            paramsQueryLecture.date = {[Op.gt]: moment(req.query.startDate).toDate()}
+        if (req.query.startDate) {
+            paramsQueryLecture.date = { [Op.gt]: moment(req.query.startDate).toDate() }
         }
-        if (req.query.endDate){
-            paramsQueryLecture.date = {[Op.lt]: moment(req.query.endDate).toDate()}
+        if (req.query.endDate) {
+            paramsQueryLecture.date = { [Op.lt]: moment(req.query.endDate).toDate() }
         }
-        if (req.query.startDate && req.query.endDate){
+        if (req.query.startDate && req.query.endDate) {
             paramsQueryLecture.date = {
                 [Op.gt]: moment(req.query.startDate).toDate(),
                 [Op.lt]: moment(req.query.endDate).toDate()
             }
         }
-        if (req.query.subject_id){
+        if (req.query.subject_id) {
             paramsQueryLecture.subject_id = req.query.subject_id;
             delete paramsQuery.subject_id;
         }
-        if (req.query.teacher_id){
+        if (req.query.teacher_id) {
             paramsQuerySubject.teacher_id = req.query.teacher_id;
             delete paramsQuery.teacher_id;
         }
@@ -59,16 +108,18 @@ module.exports = function () {
         delete paramsQuery.startDate;
         delete paramsQuery.endDate;
 
-        db['bookings'].findAll({where: paramsQuery, include: [
+        db['bookings'].findAll({
+            where: paramsQuery, include: [
 
-            { model: db.users, as: 'user',attributes:['email'] },
-            { model: db.lectures, as: 'lecture', where: paramsQueryLecture, include:[{model: db.subjects, as: 'subject', attributes:['subjectID'], where: paramsQuerySubject}] }
+                { model: db.users, as: 'user', attributes: ['email'] },
+                { model: db.lectures, as: 'lecture', where: paramsQueryLecture, include: [{ model: db.subjects, as: 'subject', attributes: ['subjectID'], where: paramsQuerySubject }] }
 
-        ]}).then(( bookings ) => {
-            
+            ]
+        }).then((bookings) => {
+
             bookings.forEach((booking, index) => {
 
-                if(!booking.lecture)
+                if (!booking.lecture)
                     bookings.splice(index, 1);
             })
 
@@ -87,7 +138,7 @@ module.exports = function () {
         endpoints: ['/', '/students/:user_id/lectures/:lecture_id'], //MANAGE GET, POST, PUT, DELETE
         include: [
             { model: db.users, as: 'user' },
-            { model: db.lectures, as: 'lecture'}
+            { model: db.lectures, as: 'lecture' }
         ]
     });
 
@@ -171,7 +222,7 @@ module.exports = function () {
                             // respond to the caller
                             transporter.sendEmail(mailOptions);
                             res.status(201).end();
-                            
+
                         })
                 })
                 .catch((err) => {
