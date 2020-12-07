@@ -30,6 +30,7 @@
     "jquery-sparkline": "^2.4.0",
     "jquery.json-viewer": "^1.4.0",
     "json2xls": "^0.1.2",
+    "jspdf": "^2.2.0",
     "less-middleware": "^2.2.1",
     "moment": "^2.20.1",
     "nodemailer": "^6.4.15",

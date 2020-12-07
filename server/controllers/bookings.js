@@ -5,6 +5,10 @@ var db = require('../models/index');
 const Op = db.Sequelize.Op;
 var transporter = require('../helpers/email');
 var moment = require("moment")
+const { jsPDF } = require("jspdf");
+var path = require('path');
+const { create } = require('domain');
+
 /*
     *** API LIST ***
     GET -> /api/bookings -> restituisce la lista delle prenotazioni con il dettaglio degli utenti e delle lezioni -> se si aggiunge al path ?user_id= o ?lecture_id= filtra
@@ -36,32 +40,56 @@ module.exports = function () {
                 where: {
                     lecture_id: { [Op.in]: lecturesListIds }
                 }, include: [
-                    { model: db.users, as: 'user', attributes: ["id","name", "surname", "email"] }]
+                    { model: db.users, as: 'user', attributes: ["userID", "id", "name", "surname", "email"] }]
             }).then((bookings) => {
                 var users = [];
-                var usersObj={};
+                var usersObj = {};
                 bookings.forEach((b) => {
-                    if(b.user.id!=req.query.user_id)
-                    { usersObj[b.user.id]=b.user; }
+                    if (b.user.id != req.query.user_id) { usersObj[b.user.id] = b.user; }
                 });
-                Object.keys(usersObj).forEach((k)=>{
+                Object.keys(usersObj).forEach((k) => {
                     users.push(usersObj[k]);
                 })
-                
-                res.send(users);
+
+
+                createPDF(users, res);
             }
             );
-    
+
 
         });
 
-       
-
-
-
-
 
     })
+    function createPDF(users, res) {
+        var doc = new jsPDF();
+        var fontSize = 16;
+        var offsetY = 4.797777777777778;
+        var lineHeight = 6.49111111111111;
+
+        doc.setFontSize(fontSize);
+
+        doc.text(10, 10 + lineHeight * 0 + offsetY, 'Tracing Report');
+        doc.text(175, 10 + lineHeight * 0 + offsetY, moment().format("DD-MM-YYYY"));
+
+        var data = [];
+        users.map(u => data.push(u.dataValues));
+        var header = createHeaders(["userID", "name", "surname", "email"]);
+        doc.table(5, 10 + lineHeight * 1 + offsetY, data, header)
+        doc.save('TracingReport.pdf');
+        res.sendFile(path.resolve('../server/TracingReport.pdf'));
+    }
+
+    function createHeaders(keys) {
+        return keys.map(key => ({
+            'name': key,
+            'prompt': key,
+            'width': 65,
+            'align': 'center',
+            'padding': 0
+        }));
+    }
+
     router.get('/excludeLecturesCanceled', (req, res) => {
         var paramsQuery = {}
         paramsQuery = req.query;
