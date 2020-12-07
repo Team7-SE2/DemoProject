@@ -9,7 +9,7 @@ const jwt = require('express-jwt');
 const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
-const expireTime = 300; //seconds
+const expireTime = 1800; //seconds
 
 module.exports = function (app) {
 
