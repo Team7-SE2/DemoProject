@@ -18,7 +18,7 @@ import "./App.css";
 import CourseLectures from './components/CourseLectures';
 import moment from 'moment';
 import TeacherStatistics from './components/TeacherStatistics';
-
+import UploadLists from './components/UploadLists';
 function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
   var q = str.split("?");
@@ -141,6 +141,10 @@ class App extends React.Component {
         if (info.role_id === 3) {
           this.setState({ statisticsSubject: 'All' })
           this.loadInitialSubjects();
+        }
+
+        if(info.role_id===2) {
+          this.props.history.push("/supportOfficer");
         }
 
       }
@@ -623,11 +627,12 @@ class App extends React.Component {
                 </Route>
 
                 <Route exact path="/bookingManager">
-                    {this.state.logged ? <Redirect to="/bookingManager" /> : <Redirect to="/login" />}
-                      
+                    {this.state.logged ? <Redirect to="/bookingManager" /> : <Redirect to="/login" />}                      
                         <TeacherStatistics title = {(this.state.statisticsSubject == 'All')?'Overall Statistics':(this.state.subjects? this.state.subjects.find((el) =>{ return (el.id == this.state.statisticsSubject)}):'OVERALL STATISTICS').description + ' Statistics'} subjects = {this.state.subjects} statisticsSubject = {this.state.statisticsSubject} statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} onStatisticSubjectChange = {this.onStatisticSubjectChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
-                      
-
+                </Route>
+                <Route exact path="/supportOfficer">
+                    {!this.state.logged &&  <Redirect to="/login" />}    
+                  <UploadLists />
                 </Route>
 
                 <Route exact path="/student">
