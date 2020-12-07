@@ -1,7 +1,9 @@
 "use strict";
 module.exports = function (sequelize, DataTypes) {
     var Subject = sequelize.define('subjects', {
-        id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },//1->Administrator; 2->Support Officer; 3->Booking Manager; 4->Teacher; 5->Student
+        id: { type: DataTypes.STRING, primaryKey: true },
+        year: { type: DataTypes.INTEGER },
+        semester: { type: DataTypes.INTEGER },
         subjectID: { type: DataTypes.STRING },
         description: { type: DataTypes.STRING },
     }, {

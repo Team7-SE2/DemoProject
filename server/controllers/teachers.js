@@ -58,7 +58,7 @@ module.exports = function () {
 
 
     router.get('/:teacher_id/nextLecture', function (req, res) {
-        if (req.params && Number(req.params.teacher_id)) {
+        if (req.params && req.params.teacher_id) {
             db['lectures'].findOne({
                 include: [{
                     model: db.subjects,
@@ -95,7 +95,7 @@ module.exports = function () {
         model: db.users,
         endpoints: ['/', '/:id'], //MANAGE GET, POST, PUT, DELETE
         excludeAttributes: [
-            "password", "salt"
+            "password"
         ],
         // controls if the user is a TEACHER
         include: [{

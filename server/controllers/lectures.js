@@ -64,7 +64,7 @@ module.exports = function () {
         delete paramsQuery.startDate;
         delete paramsQuery.endDate;
         // get only users with ROLE-STUDENT
-        if (req.params && Number(req.params.user_id)) {
+        if (req.params && req.params.user_id) {
             db['lectures'].findAll({
                 where: paramsQuery,
                 include: [{

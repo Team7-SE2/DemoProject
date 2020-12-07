@@ -21,7 +21,7 @@ module.exports = function () {
     router.get('/students/:user_id/lectures', function (req, res) {
         
         // get only users with ROLE-STUDENT
-        if (req.params && Number(req.params.user_id)) {
+        if (req.params && req.params.user_id) {
             db['users'].findOne({
                 where: { 
                     id: req.params.user_id 
@@ -57,7 +57,7 @@ module.exports = function () {
     router.get('/students/:user_id', function (req, res) {
         
         // get only users with ROLE-STUDENT
-        if (req.params && Number(req.params.user_id)) {
+        if (req.params && req.params.user_id) {
             db['users'].findOne({
                 where: { 
                     id: req.params.user_id 

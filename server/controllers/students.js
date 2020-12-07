@@ -26,7 +26,7 @@ module.exports = function () {
         model: db.users,
         endpoints: ['/','/:id'], //MANAGE GET, POST, PUT, DELETE
         excludeAttributes: [
-            "password","salt"
+            "password"
         ],
         // controls if the user is a STUDENT
         include: [{

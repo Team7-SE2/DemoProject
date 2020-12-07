@@ -2,7 +2,7 @@
 var router = express.Router();
 var io = require('../helpers/socketIo')();
 var db = require('../models/index');
-
+const csvParser = require("../helpers/csv_parser");
 // autentication token dependencies
 const jwtSecret = '6xvL4xkAAbG49hcXf5GIYSvkDICiUAR6EdR5dLdwW7hMzUjjMUe9t6M5kSAYxsvX';
 const jwt = require('express-jwt');
@@ -89,6 +89,6 @@ module.exports = function (app) {
     // router.get('/', function (req, res) {
     //     res.render('pages/index.html');
     // });
-
+    //csvParser.parse('Schedule1s');
     return router;
 }

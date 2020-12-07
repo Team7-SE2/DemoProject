@@ -57,7 +57,9 @@ Object.keys(db).forEach(function (modelName) {
 });
 
 
-sequelize.sync().then(() => { })
+sequelize.sync().then(() => { 
+    
+})
 /*await db['roles'].findOrCreate({where:{id:1},defaults:{role:'Administrator',system_role:true}})
 await db['roles'].findOrCreate({where:{id:2},defaults:{role:'Support Officer',system_role:true}})
 await db['roles'].findOrCreate({where:{id:3},defaults:{role:'Booking Manager',system_role:true}})
