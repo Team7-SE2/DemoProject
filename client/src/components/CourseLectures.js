@@ -17,7 +17,7 @@ const CourseLectures = (props) => {
     let { lectures, course, bookLecture, deleteBookedLecture, bookedLectures, role_id, getListStudents, deleteLecture, turnOnRemote } = props;
     function checkPrenotation(bookedLectures2, lectureID) {
 
-        return bookedLectures2.find((bl) => bl.lecture_id === lectureID);
+        return bookedLectures2.find((bl) => parseInt(bl.lecture_id) === parseInt(lectureID));
 
     }
 
@@ -109,6 +109,7 @@ const CourseLectures = (props) => {
         }
 
         if (role_id == 5) {
+            console.log("LECTURE: " + JSON.stringify(lec))
             return {
                 id: lec.id,
                 lectureDate: moment(new Date(lec.date)).format("LLL"),

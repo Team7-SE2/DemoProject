@@ -150,6 +150,7 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
     const response = await fetch(url);
     const studentBookingsJson = await response.json();
     let id = 1;
+    let courseInstances = [];
     if (response.ok) {
         
         let array = studentBookingsJson.map(async (book) => {
@@ -161,12 +162,18 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
 
             let subjectDescription = '';
 
+            let index = courseInstances.findIndex(x => x === book.lecture.subject_id)
+            if(index < 0){
+                courseInstances.push(book.lecture.subject_id);
+                index = courseInstances.length - 1
+            }
             await getSubject(book.lecture.subject_id).then((subject) => {
                 subjectDescription = subject[0].description;
             })
 
+
             return {
-                courseId: book.lecture.subject_id,
+                courseId: index,
                 id: id++,
                 title: subjectDescription,
                 startDate: startDate,
@@ -253,6 +260,9 @@ async function bookLecture(user_id, lecture_id, email) {
         lecture_id: lecture_id,
         email: email
     };
+
+    console.log("BOOK: " + JSON.stringify(obj))
+
     const url = `/api/bookings/student`;
     //const url = "/api/bookings";
     return new Promise((resolve, reject) => {
@@ -326,6 +336,7 @@ async function getLectures(user_id) {
     const coursesJson = await response.json();
     let lectureId = 1;
     let courseId = 0;
+    let courseInstances = [];
     if (response.ok) {
         let array = [];
         coursesJson.forEach((course) => {
@@ -337,9 +348,14 @@ async function getLectures(user_id) {
                 let endDate = new Date(startDate);
                 endDate.setHours(startDate.getHours() + lecture.duration)
 
+                let index = courseInstances.findIndex(x => x === course.id)
+                if(index < 0){
+                    courseInstances.push(course.id);
+                    index = courseInstances.length - 1
+                }
 
                 return {
-                    courseId: course.id,
+                    courseId: index,
                     id: lectureId++,
                     title: course.description,
                     startDate: startDate,
@@ -371,6 +387,7 @@ async function getTeacherLectures(user_id) {
     const response = await fetch(url);
     const lecturesJson = await response.json();
     let id = 1;
+    let courseInstances = [];
     if (response.ok) {
         let array = [];
         lecturesJson.forEach((lecture) => {
@@ -378,6 +395,11 @@ async function getTeacherLectures(user_id) {
 
             let endDate = new Date(startDate);
             endDate.setHours(startDate.getHours() + lecture.duration)
+            let index = courseInstances.findIndex(x => x === lecture.subject_id)
+            if(index < 0){
+                courseInstances.push(lecture.subject_id);
+                index = courseInstances.length - 1
+            }
             array.push({
                 /*location: lecture.subject_id,
                 id: id++,
@@ -386,7 +408,7 @@ async function getTeacherLectures(user_id) {
                 endDate: endDate,
                 ownerId: user_id,*/
 
-                courseId: lecture.subject_id,
+                courseId: index,
                 id: id++,
                 title: lecture.subject.description,
                 startDate: startDate,
@@ -396,6 +418,8 @@ async function getTeacherLectures(user_id) {
                 room: 'Room 1'
             })
         });
+
+        console.log(JSON.stringify(courseInstances))
 
         return await Promise.all(array);
 
