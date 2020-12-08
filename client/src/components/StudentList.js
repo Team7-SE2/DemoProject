@@ -13,7 +13,7 @@ const StudentList = (props) => {
 
   const test = students.map((student) => {
     return {
-      id: student.user.userID,
+      id: student.user.id,
       name: student.user.name,
       surname: student.user.surname
     }
