@@ -552,7 +552,60 @@ async function turnOnRemote(lecture_id) {
             }
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
+} 
+
+/////////////////////////
+//      PULSBS-13      //
+/////////////////////////
+
+// restituisce il numero di studenti prenotati per quella lezione
+async function getStudentsCountforLecture(lectureId) {
+    let url = "/api/bookings?lecture_id=" + lectureId + "&user.role_id=5";
+    const response = await fetch(url);
+    const studentListJson = await response.json();
+
+    if (response.ok) {
+        return studentListJson.length;
+    }
+    else {
+        console.log("studentListJson Error");
+        let err = { status: response.status, errObj: studentListJson };
+        throw err;
+    }
 }
 
-const API = { getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings };
+// aggiunge uno studente in coda per una lezione
+// bisogna controllare prima che la lezione abbia raggiunto il numero massimo di studenti
+async function addStudentOnQueue(student_id, lecture_id) {
+    const url = `/api/lectureQueues`;
+    const body = {
+        user_id: student_id,
+        lecture_id: lecture_id
+    }
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            }
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+
+            } else {
+                // analyze the cause of error
+                console.log(response);
+                response.json()
+                    .then((obj) => { reject(obj); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+    });
+}
+
+const API = { getStudentsCountforLecture, addStudentOnQueue, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings };
 export default API;

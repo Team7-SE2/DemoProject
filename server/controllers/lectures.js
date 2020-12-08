@@ -40,7 +40,10 @@ module.exports = function () {
 
         delete paramsQuery.startDate;
         delete paramsQuery.endDate;
-        db['lectures'].findAll({where: paramsQuery,paranoid:false,include:[{model: db.subjects, as: 'subject', where: paramsQuerySubject}]})
+        db['lectures'].findAll({where: paramsQuery,paranoid:false,include:[
+            {model: db.subjects, as: 'subject', where: paramsQuerySubject},
+            {model:db.rooms, as: 'room'}
+        ]})
         .then((lectures)=>{
             res.send(lectures)
         })
@@ -108,6 +111,7 @@ module.exports = function () {
             attributes: [ 'date' ]
           }
         ],
+        include:[{model:db.rooms, as: 'room'}],
         paranoid:false
         
     });

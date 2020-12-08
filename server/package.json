@@ -19,6 +19,7 @@
     "bootstrap": "^4.5.3",
     "cookie-parser": "^1.4.4",
     "cron": "^1.8.2",
+    "csv-parser": "^3.0.0",
     "debug": "^2.2.0",
     "ejs": "^2.7.4",
     "express": "^4.17.1",
