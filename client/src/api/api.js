@@ -611,17 +611,41 @@ async function getStudentsCountforLecture(lectureId) {
     }
 }
 
-// aggiunge uno studente in coda per una lezione
+/////////////////////////
+//      PULSBS-14     //
+/////////////////////////
+/*
+As a student in the waiting list I want to be added to the list of students booked 
+when someone cancels their booking so that I can attend the lecture
+*/
+async function getStudentfromWaitingList(lectureId) {
+    let url = "/api/bookings/getStudentWaitingList?lecture_id="+lectureId;
+    const response = await fetch(url);
+    const StudentJson = await response.json();
+    
+
+    if (response.ok) {
+        return StudentJson;  // have to do parsing
+    }
+    else {
+        console.log("getStudentfromWaitingList Error");
+        let err = { status: response.status, errObj: StudentJson };
+        throw err;
+    }
+}
+
+
 // bisogna controllare prima che la lezione abbia raggiunto il numero massimo di studenti
-async function addStudentOnQueue(student_id, lecture_id) {
-    const url = `/api/lectureQueues`;
+
+// preleva lo studente dalla waiting list 
+async function turnOnBooked(student_id, lecture_id) {
+    const url = "/api/bookings/students/"+student_id+"/lectures/"+lecture_id;
     const body = {
-        user_id: student_id,
-        lecture_id: lecture_id
+        waiting: 0
     }
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL
-            method: 'POST',
+            method: 'PUT',
             body: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json',
@@ -644,5 +668,5 @@ async function addStudentOnQueue(student_id, lecture_id) {
     });
 }
 
-const API = { getStudentsCountforLecture, addStudentOnQueue, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings };
+const API = {getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings };
 export default API;
