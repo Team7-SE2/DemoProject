@@ -76,7 +76,8 @@ module.exports = function () {
                     where: { 
                         teacher_id: req.params.user_id 
                     },
-                }]
+                },
+                {model:db.rooms, as: 'room'}]
             })
             .then((lectures) => {
                 res.send(lectures);

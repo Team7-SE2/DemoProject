@@ -151,6 +151,7 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
     const studentBookingsJson = await response.json();
     let id = 1;
     let courseInstances = [];
+    let teacherInstances = [];
     if (response.ok) {
         
         let array = studentBookingsJson.map(async (book) => {
@@ -167,11 +168,18 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
                 courseInstances.push(book.lecture.subject_id);
                 index = courseInstances.length - 1
             }
+
+            let teacherIndex = teacherInstances.findIndex(t => t === book.lecture.subject.teacher.surname + " " + book.lecture.subject.teacher.name)
+            if(teacherIndex < 0){
+                teacherInstances.push(book.lecture.subject.teacher.surname + " " + book.lecture.subject.teacher.name);
+                teacherIndex = teacherInstances.length - 1
+            }
+            
             await getSubject(book.lecture.subject_id).then((subject) => {
                 subjectDescription = subject[0].description;
             })
 
-
+            console.log("BOOK: " + JSON.stringify(book))
             return {
                 courseId: index,
                 id: id++,
@@ -179,10 +187,10 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
                 startDate: startDate,
                 endDate: endDate,
                 ownerId: book.user_id,
-                roomId: 1,
-                room: 'Room 1',
-                teacher: 'Teacher Vetrò',
-                teacherId: 1
+                roomId: book.lecture.room.id,
+                room: book.lecture.room.description,
+                teacher: 'Teacher - ' + book.lecture.subject.teacher.name + " " + book.lecture.subject.teacher.surname,
+                teacherId: teacherIndex
             }
         });
 
@@ -261,8 +269,6 @@ async function bookLecture(user_id, lecture_id, email) {
         email: email
     };
 
-    console.log("BOOK: " + JSON.stringify(obj))
-
     const url = `/api/bookings/student`;
     //const url = "/api/bookings";
     return new Promise((resolve, reject) => {
@@ -337,6 +343,7 @@ async function getLectures(user_id) {
     let lectureId = 1;
     let courseId = 0;
     let courseInstances = [];
+    let teacherInstances = [];
     if (response.ok) {
         let array = [];
         coursesJson.forEach((course) => {
@@ -354,6 +361,12 @@ async function getLectures(user_id) {
                     index = courseInstances.length - 1
                 }
 
+                let teacherIndex = teacherInstances.findIndex(t => t === lecture.subject.teacher.surname + " " + lecture.subject.teacher.name)
+                if(teacherIndex < 0){
+                    teacherInstances.push(lecture.subject.teacher.surname + " " + lecture.subject.teacher.name);
+                    teacherIndex = teacherInstances.length - 1
+                }
+
                 return {
                     courseId: index,
                     id: lectureId++,
@@ -361,10 +374,10 @@ async function getLectures(user_id) {
                     startDate: startDate,
                     endDate: endDate,
                     ownerId: user_id,
-                    roomId: 1,
-                    room: 'Room 1',
-                    teacher: 'Teacher Vetrò',
-                    teacherId: course.teacher_id
+                    roomId: lecture.room.id,
+                    room: lecture.room.description,
+                    teacher: 'Teacher - ' + lecture.subject.teacher.surname + " " + lecture.subject.teacher.name,
+                    teacherId: teacherIndex
                 }
 
             })
@@ -414,8 +427,8 @@ async function getTeacherLectures(user_id) {
                 startDate: startDate,
                 endDate: endDate,
                 ownerId: user_id,
-                roomId: 1,
-                room: 'Room 1'
+                roomId: lecture.room.id,
+                room: lecture.room.description
             })
         });
 

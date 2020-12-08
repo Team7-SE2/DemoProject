@@ -96,7 +96,7 @@ module.exports = function () {
         db['bookings'].findAll({
             where: paramsQuery, include: [
                 { model: db.users, as: 'user' },
-                { model: db.lectures, as: 'lecture' }
+                { model: db.lectures, as: 'lecture', include: [{model:db.rooms, as: 'room'}, {model:db.subjects, as:'subject', include: [{model: db.users, as:'teacher'}]}] }
             ]
         }).then((bookings) => {
             bookings.forEach((booking, index) => {

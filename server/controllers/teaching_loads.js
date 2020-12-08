@@ -30,8 +30,11 @@ module.exports = function () {
                     model: db.subjects,
                     include: [{
                         model: db.lectures,
-                        as: 'lectures'
-                    }],
+                        as: 'lectures',
+                        include: [{model:db.rooms, as: 'room'}, {model:db.subjects, as:'subject', include: [{model: db.users, as:'teacher'}]}]
+                    },
+                ],
+                    
                 }],
                 attributes: []
             })

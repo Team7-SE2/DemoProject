@@ -172,7 +172,7 @@ class HomeCalendar extends React.PureComponent {
               }
 
             })
-            console.log(courseInstances)
+            
             this.setState({ data: books, data2: books })
           })
           .catch((err) => {
@@ -227,7 +227,7 @@ class HomeCalendar extends React.PureComponent {
                   text: b.room,
                 })
               }
-              
+              console.log(b.teacher)
               // check Teacher Color
               var teacherIndex = teacherInstances.findIndex(x => parseInt(x.id) === parseInt(b.teacherId))
               if(teacherIndex === -1){
