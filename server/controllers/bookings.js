@@ -18,13 +18,76 @@ const { create } = require('domain');
     POST -> /api/bookings -> body:{user_id,lecture_id} -> crea una prenotazione (manda in automatico una mail all'utente che si prenota)
 */
 module.exports = function () {
+
+//http://localhost:3100/api/bookings/getStudentWaitingList?lecture_id=1027
+    router.get('/getStudentWaitingList', (req, res) => {
+
+        db['bookings'].min('updated_at', {
+            where: {
+                lecture_id: { [Op.eq]: req.query.lecture_id },
+                waiting:{ [Op.eq]: 1 }
+
+
+            }
+        }).then((mindate) => {
+
+
+            db['bookings'].findOne({
+                where: {
+                    updated_at: { [Op.eq]: mindate }, 
+                    lecture_id: { [Op.eq]: req.query.lecture_id },
+                    waiting:{ [Op.eq]: 1 }
+
+
+                }, include: [
+                    { model: db.users, as: 'user' },
+                    {
+                        model: db.lectures, as: 'lecture', include: [
+                            { model: db.subjects, as: 'subject' },
+                            { model: db.rooms, as: 'room' }
+                        ]
+                    }
+                ]
+            }).then((user) => {
+
+                var mailOptions = {
+                    from: "pulsbsnoreply@gmail.com",
+                    subject: 'Picked from the waiting list',
+                    text: 'Dear ' + user.user.name + ",\nyou are picked from the waiting list for the lecture of " + user.lecture.subject.description + " of " + moment(user.lecture.date).format("DD-MM-YYYY hh:mm") + ".\nRegards"
+                }
+                // set the teacher email
+                mailOptions.to =user.user.email;
+                // send the email to the student
+                transporter.sendEmail(mailOptions);
+                res.send(user);
+
+            }).catch((err) => {
+                res.send(err);
+              })
+        }).catch((err) => {
+            res.send(err);
+          })
+
+    })
+
+
+
+
+
+
+
+
+
+
+
     //http://localhost:3100/api/bookings/tracingReport?user_id=3
     router.get('/tracingReport', (req, res) => {
         var lecturesListIds = [];
 
         db['bookings'].findAll({
             where: {
-                user_id: { [Op.eq]: req.query.user_id }
+                user_id: { [Op.eq]: req.query.user_id },
+                waiting:{ [Op.eq]: 0 }
 
 
             }, distinct: true, include: [
@@ -40,7 +103,7 @@ module.exports = function () {
                 where: {
                     lecture_id: { [Op.in]: lecturesListIds }
                 }, include: [
-                    { model: db.users, as: 'user', attributes: ["userID", "id", "name", "surname", "email"] }]
+                    { model: db.users, as: 'user', attributes: [ "id", "name", "surname", "email"] }]
             }).then((bookings) => {
                 var users = [];
                 var usersObj = {};
@@ -74,7 +137,7 @@ module.exports = function () {
 
         var data = [];
         users.map(u => data.push(u.dataValues));
-        var header = createHeaders(["userID", "name", "surname", "email"]);
+        var header = createHeaders(["id", "name", "surname", "email"]);
         doc.table(5, 10 + lineHeight * 1 + offsetY, data, header)
         doc.save('TracingReport.pdf');
         res.sendFile(path.resolve('../server/TracingReport.pdf'));
@@ -166,7 +229,9 @@ module.exports = function () {
         endpoints: ['/', '/students/:user_id/lectures/:lecture_id'], //MANAGE GET, POST, PUT, DELETE
         include: [
             { model: db.users, as: 'user' },
-            { model: db.lectures, as: 'lecture' }
+            { model: db.lectures, as: 'lecture',include: [
+                { model: db.subjects, as: 'subject' },
+                { model: db.rooms, as: 'room' }]}
         ]
     });
 
