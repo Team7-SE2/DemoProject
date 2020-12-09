@@ -19,7 +19,6 @@ class UploadLists extends React.Component {
     updateFields = (name, value) => {
         let file = value.split(".");
         let ext = file[file.length - 1];
-        console.log("ehi: " + ext);
         if (ext != "csv")
             this.setState({error: true})
         else
@@ -84,7 +83,7 @@ function UploadStudentsList(props) {
                 {error&& <ExError closeError ={closeError} />}
                 <Form>
                     <Form.Group>
-                        <Form.File id="CourseList" label="Input file" onChange={(ev) => updateFields("courseList", ev.target.value)} />
+                        <Form.File  custom id="CourseList" label="Input file" onChange={(ev) => updateFields("courseList", ev.target.value)} />
                     </Form.Group>
                 </Form>
             </Card.Body>
