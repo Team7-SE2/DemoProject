@@ -120,7 +120,7 @@ const CourseLectures = (props) => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {lec.deleted_at == null ? checkPrenotation(bookedLectures, lec.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lec.id)}> UNBOOK </Button> : <Button variant="success" onClick={() => handleShowQueue(lec) /*bookLecture(lec.id)*/}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
+                    {lec.deleted_at == null ? checkPrenotation(bookedLectures, lec.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lec.id)}> {lec.full ? "LEAVE THE WAITING LIST" : "UNBOOK"} </Button> : <Button variant= {lec.full ? "warning" : "success"} onClick={() => {if(lec.full) {handleShowQueue(lec);} else {bookLecture(lec.id, 0);}} /*bookLecture(lec.id)*/}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
                 </div>,
             }
         }
@@ -136,7 +136,7 @@ const CourseLectures = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     { queue ? 
-                        <> The room is full, vuoi essere messo in coda? risp sul mio</>
+                        <> The room is full! Do you want to be added in a waiting list? </>
                      :
                      remote ? <>
                         Do you want really switch this lecture in remote? <br></br> You can't go back</>
@@ -146,7 +146,7 @@ const CourseLectures = (props) => {
                 <Modal.Footer>
 
                     { queue ?
-                    <Button variant="success" onClick={() => {bookLecture(lecture.id, 1); handleClose();}} > Si </Button>
+                    <Button variant="success" onClick={() => {bookLecture(lecture.id, 1); handleClose();}} > YES </Button>
                     :
                         remote 
                         ?
@@ -156,7 +156,7 @@ const CourseLectures = (props) => {
                     }
                     
                     { queue ? 
-                    <Button variant="danger" onClick={handleClose} >No</Button>
+                    <Button variant="danger" onClick={handleClose} >NO</Button>
                     :
                     <Button variant="success"onClick={handleClose} >Go back</Button>
                      }
