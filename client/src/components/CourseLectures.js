@@ -8,11 +8,13 @@ import Modal from "react-bootstrap/Modal"
 const CourseLectures = (props) => {
     const [show, setShow] = useState(false);
     const [remote, setRemote] = useState(false);
+    const [queue, setQueue] = useState(false);
     const [lecture, setLecture] = useState(null);
 
     const handleClose = () => { setShow(false); setRemote(false); }
     const handleShow = (lect) => { setLecture(lect); setShow(true); }
     const handleShowRemote = (l) => { setLecture(l); setRemote(true); setShow(true); }
+    const handleShowQueue = (l) => { setLecture(l); setQueue(true); setShow(true);}
 
     let { lectures, course, bookLecture, deleteBookedLecture, bookedLectures, role_id, getListStudents, deleteLecture, turnOnRemote } = props;
     function checkPrenotation(bookedLectures2, lectureID) {
@@ -118,7 +120,7 @@ const CourseLectures = (props) => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {lec.deleted_at == null ? checkPrenotation(bookedLectures, lec.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lec.id)}> UNBOOK </Button> : <Button variant="success" onClick={() => bookLecture(lec.id)}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
+                    {lec.deleted_at == null ? checkPrenotation(bookedLectures, lec.id) ? <Button variant="danger" onClick={() => deleteBookedLecture(lec.id)}> {lec.full ? "LEAVE THE WAITING LIST" : "UNBOOK"} </Button> : <Button variant= {lec.full ? "warning" : "success"} onClick={() => {if(lec.full) {handleShowQueue(lec);} else {bookLecture(lec.id, 0);}} /*bookLecture(lec.id)*/}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
                 </div>,
             }
         }
@@ -127,28 +129,37 @@ const CourseLectures = (props) => {
 
     return (
         <>
-            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} remote={remote} lecture={lecture}  aria-labelledby="contained-modal-title-vcenter"
+            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false} remote={remote} lecture={lecture} queue = {queue}  aria-labelledby="contained-modal-title-vcenter"
       centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Pay attention </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {remote ? <>
+                    { queue ? 
+                        <> The room is full! Do you want to be added in a waiting list? </>
+                     :
+                     remote ? <>
                         Do you want really switch this lecture in remote? <br></br> You can't go back</>
                         : <> Do you want really delete this lecture?<br></br> You can't go back </>
                     }
                 </Modal.Body>
                 <Modal.Footer>
 
-                    {
+                    { queue ?
+                    <Button variant="success" onClick={() => {bookLecture(lecture.id, 1); handleClose();}} > YES </Button>
+                    :
                         remote 
                         ?
                             <Button variant="danger" onClick={() => {turnOnRemote(lecture); handleClose();}} > Switch </Button>
                         :
                             <Button variant="danger" onClick={() =>  {deleteLecture(lecture);handleClose();}} >Delete</Button>
                     }
-
+                    
+                    { queue ? 
+                    <Button variant="danger" onClick={handleClose} >NO</Button>
+                    :
                     <Button variant="success"onClick={handleClose} >Go back</Button>
+                     }
                 </Modal.Footer>
             </Modal>
 

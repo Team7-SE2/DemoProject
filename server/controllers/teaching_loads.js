@@ -31,7 +31,7 @@ module.exports = function () {
                     include: [{
                         model: db.lectures,
                         as: 'lectures',
-                        include: [{model:db.rooms, as: 'room'}, {model:db.subjects, as:'subject', include: [{model: db.users, as:'teacher'}]}]
+                        include: [{model: db.users, as: 'lecture_bookings'}, {model:db.rooms, as: 'room'}, {model:db.subjects, as:'subject', include: [{model: db.users, as:'teacher'}]}]
                     },
                 ],
                     
