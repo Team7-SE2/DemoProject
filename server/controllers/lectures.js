@@ -42,7 +42,8 @@ module.exports = function () {
         delete paramsQuery.endDate;
         db['lectures'].findAll({where: paramsQuery,paranoid:false,include:[
             {model: db.subjects, as: 'subject', where: paramsQuerySubject},
-            {model:db.rooms, as: 'room'}
+            {model:db.rooms, as: 'room'},
+            {model:db.users, as: 'lecture_bookings'}
         ]})
         .then((lectures)=>{
             res.send(lectures)

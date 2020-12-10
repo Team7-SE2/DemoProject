@@ -213,7 +213,13 @@ async function getStudentCourseLectures(courseID) {
     const studentCourseLecturesJson = await response.json();
     
     if (response.ok) {
-        return (studentCourseLecturesJson.map((lecture) => lecture));
+        return (studentCourseLecturesJson.map((lecture) => {
+            lecture.full = false;
+            if(lecture.lecture_bookings.length >= lecture.room.capacity){
+                lecture.full = true;
+            }
+           return lecture;
+        }));
     }
     else {
         console.log("studentCoursesJson Error");
@@ -262,12 +268,15 @@ async function getStudentListforLecture(lectureId) {
     }
 }
 
-async function bookLecture(user_id, lecture_id, email) {
+async function bookLecture(user_id, lecture_id, email, LectureWaiting) {
+   
     let obj = {
         user_id: user_id,
         lecture_id: lecture_id,
-        email: email
+        email: email,
+        waiting: LectureWaiting
     };
+    console.log("*************obj.waiting***************" + obj.waiting);
 
     const url = `/api/bookings/student`;
     //const url = "/api/bookings";
@@ -356,6 +365,7 @@ async function getLectures(user_id) {
                 endDate.setHours(startDate.getHours() + lecture.duration)
 
                 let index = courseInstances.findIndex(x => x === course.id)
+                let full = false;
                 if(index < 0){
                     courseInstances.push(course.id);
                     index = courseInstances.length - 1
@@ -366,7 +376,9 @@ async function getLectures(user_id) {
                     teacherInstances.push(lecture.subject.teacher.surname + " " + lecture.subject.teacher.name);
                     teacherIndex = teacherInstances.length - 1
                 }
-
+                if(lecture.lecture_bookings.length >= lecture.room.capacity){
+                    full = true;
+                }
                 return {
                     courseId: index,
                     id: lectureId++,
@@ -377,7 +389,8 @@ async function getLectures(user_id) {
                     roomId: lecture.room.id,
                     room: lecture.room.description,
                     teacher: 'Teacher - ' + lecture.subject.teacher.surname + " " + lecture.subject.teacher.name,
-                    teacherId: teacherIndex
+                    teacherId: teacherIndex,
+                    full: full
                 }
 
             })
@@ -597,7 +610,7 @@ async function turnOnRemote(lecture_id) {
 
 // restituisce il numero di studenti prenotati per quella lezione
 async function getStudentsCountforLecture(lectureId) {
-    let url = "/api/bookings?lecture_id=" + lectureId + "&user.role_id=5";
+    let url = "/api/bookings?lecture_id=" + lectureId + "&user.role_id=5&waiting=0";
     const response = await fetch(url);
     const studentListJson = await response.json();
 

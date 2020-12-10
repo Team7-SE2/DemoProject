@@ -272,8 +272,9 @@ class App extends React.Component {
   }
 
 
-  bookLecture = (LectureID) => {
-    API.bookLecture(this.state.authUser.ID_User, LectureID, this.state.info_user.email)
+  bookLecture = (LectureID, LectureWaiting) => {
+    console.log("****************************" + LectureWaiting);
+    API.bookLecture(this.state.authUser.ID_User, LectureID, this.state.info_user.email, LectureWaiting )
       .then(() => {
 
         this.loadInitialDataStudent();
