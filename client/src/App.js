@@ -579,6 +579,12 @@ class App extends React.Component {
     })
   }
 
+  uploadFile = (file) => {
+      console.log("APP ALE: "+(file.name));
+      this.setState({ok: file});
+      //console.log("APP ALE: "+(this.state.ok.name));
+  }
+
   render() {
 
     const value = {
@@ -632,7 +638,7 @@ class App extends React.Component {
                 </Route>
                 <Route exact path="/supportOfficer">
                     {!this.state.logged &&  <Redirect to="/login" />}    
-                  <UploadLists />
+                  <UploadLists  uploadFile={this.uploadFile} />
                 </Route>
 
                 <Route exact path="/student">
