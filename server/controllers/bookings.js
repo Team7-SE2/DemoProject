@@ -8,6 +8,11 @@ var moment = require("moment")
 const { jsPDF } = require("jspdf");
 var path = require('path');
 const { create } = require('domain');
+const fs = require('fs')
+var path = require('path');
+var root = path.dirname(require.main.filename);
+const csvFilePath =  root + '/../csv_files/Enrollment.csv' // or any file format
+const ObjectsToCsv = require('objects-to-csv');
 
 /*
     *** API LIST ***
@@ -18,6 +23,23 @@ const { create } = require('domain');
     POST -> /api/bookings -> body:{user_id,lecture_id} -> crea una prenotazione (manda in automatico una mail all'utente che si prenota)
 */
 module.exports = function () {
+
+    router.get('/csv', (req, res) => {
+
+        console.log(csvFilePath)
+        // Check if file specified by the filePath exists 
+        fs.exists(csvFilePath, function(exists){
+            if (exists) {  
+                
+                res.download(csvFilePath)
+                
+            } else {
+                res.writeHead(400, {"Content-Type": "text/plain"});
+                res.end("ERROR File does not exist");
+            }
+        });
+        
+    })
 
 //http://localhost:3100/api/bookings/getStudentWaitingList?lecture_id=1027
     router.get('/getStudentWaitingList', (req, res) => {
@@ -80,7 +102,7 @@ module.exports = function () {
 
 
 
-    //http://localhost:3100/api/bookings/tracingReport?user_id=3
+    //http://localhost:3100/api/bookings/tracingReport?user_id=3?type='PDF'
     router.get('/tracingReport', (req, res) => {
         var lecturesListIds = [];
 
@@ -108,14 +130,16 @@ module.exports = function () {
                 var users = [];
                 var usersObj = {};
                 bookings.forEach((b) => {
-                    if (b.user.id != req.query.user_id) { usersObj[b.user.id] = b.user; }
+                    let user = b.dataValues.user.dataValues;
+                    if (user.id != req.query.user_id) { usersObj[user.id] = user; }
                 });
                 Object.keys(usersObj).forEach((k) => {
                     users.push(usersObj[k]);
                 })
-
-
-                createPDF(users, res);
+                if(req.query.type === 'PDF')
+                    createPDF(users, res);
+                else if(req.query.type === 'CSV')
+                    createCSV(users, res);
             }
             );
 
@@ -136,11 +160,32 @@ module.exports = function () {
         doc.text(175, 10 + lineHeight * 0 + offsetY, moment().format("DD-MM-YYYY"));
 
         var data = [];
-        users.map(u => data.push(u.dataValues));
+        users.map(u => data.push(u));
+
         var header = createHeaders(["id", "name", "surname", "email"]);
         doc.table(5, 10 + lineHeight * 1 + offsetY, data, header)
         doc.save('TracingReport.pdf');
         res.sendFile(path.resolve('../server/TracingReport.pdf'));
+    }
+
+    function createCSV(users, res){
+        
+        var data = [];
+        users.map(u => data.push(u));
+        
+        // If you use "await", code must be inside an asynchronous function:
+        (async () => {
+            const csv = new ObjectsToCsv(data);
+        
+            // Save to file:
+            await csv.toDisk('./TracingReport.csv');
+        
+            // Return the CSV file as string:
+            console.log(await csv.toString());
+            
+            res.sendFile(path.resolve('../server/TracingReport.csv'));
+        })();
+
     }
 
     function createHeaders(keys) {
