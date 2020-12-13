@@ -10,7 +10,8 @@ import {
 } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
-import { FaBook, FaCalendar, FaGithub, FaRegChartBar} from 'react-icons/fa';
+import { FaBook, FaCalendar, FaGithub, FaRegChartBar } from 'react-icons/fa';
+import {RiVirusFill} from "react-icons/ri";
 import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
 import { NavLink } from 'react-router-dom';
@@ -65,12 +66,23 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
           </Nav>
           </MenuItem>}
           </>
+
           <>
           {context.authUser && role_id===3 && logged && <MenuItem 
             icon={<FaRegChartBar />}>
             <Nav >
               {
                 <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/bookingManager"  ><h6>Overall Statistics</h6></Nav.Link>
+              }
+            </Nav>
+          </MenuItem>}
+          </>
+          <>
+          {context.authUser && role_id===3 && logged && <MenuItem 
+            icon={<RiVirusFill />}>
+            <Nav >
+              {
+                <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/bookingManager/contactTracingReport"  ><h6>Contact Tracing Report</h6></Nav.Link>
               }
             </Nav>
           </MenuItem>}

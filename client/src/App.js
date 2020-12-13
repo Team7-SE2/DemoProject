@@ -637,6 +637,25 @@ class App extends React.Component {
                     {this.state.logged ? <Redirect to="/bookingManager" /> : <Redirect to="/login" />}                      
                         <TeacherStatistics title = {(this.state.statisticsSubject == 'All')?'Overall Statistics':(this.state.subjects? this.state.subjects.find((el) =>{ return (el.id == this.state.statisticsSubject)}):'OVERALL STATISTICS').description + ' Statistics'} subjects = {this.state.subjects} statisticsSubject = {this.state.statisticsSubject} statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} onStatisticSubjectChange = {this.onStatisticSubjectChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
                 </Route>
+
+                <Route exact path="/bookingManager/contactTracingReport">
+                  <Container fluid>
+                    <Row >
+                      <Col sm={1}></Col>
+                      <Col sm={10} className="below-nav">
+                        <Card>
+                          <Card.Header className="text-center">
+                            <h3>Contact Tracing Report</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            {/* qui ci metto il form dove segnalo la positività di un paziente */}
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Route>
+
                 <Route exact path="/supportOfficer">
                     {!this.state.logged &&  <Redirect to="/login" />}    
                   <UploadLists  uploadFile={this.uploadFile} />
