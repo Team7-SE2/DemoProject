@@ -8,6 +8,10 @@ var moment = require("moment")
 const { jsPDF } = require("jspdf");
 var path = require('path');
 const { create } = require('domain');
+const fs = require('fs')
+var path = require('path');
+var root = path.dirname(require.main.filename);
+const csvFilePath =  root + '/../csv_files/Enrollment.csv' // or any file format
 
 /*
     *** API LIST ***
@@ -18,6 +22,23 @@ const { create } = require('domain');
     POST -> /api/bookings -> body:{user_id,lecture_id} -> crea una prenotazione (manda in automatico una mail all'utente che si prenota)
 */
 module.exports = function () {
+
+    router.get('/csv', (req, res) => {
+
+        console.log(csvFilePath)
+        // Check if file specified by the filePath exists 
+        fs.exists(csvFilePath, function(exists){
+            if (exists) {  
+                
+                res.download(csvFilePath)
+                
+            } else {
+                res.writeHead(400, {"Content-Type": "text/plain"});
+                res.end("ERROR File does not exist");
+            }
+        });
+        
+    })
 
 //http://localhost:3100/api/bookings/getStudentWaitingList?lecture_id=1027
     router.get('/getStudentWaitingList', (req, res) => {

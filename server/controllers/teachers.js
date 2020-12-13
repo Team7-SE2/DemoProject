@@ -6,6 +6,10 @@ var moment = require('moment');
 const Op = db.Sequelize.Op;
 var cron = require('cron');
 var transporter = require('../helpers/email');
+const fs = require('fs')
+var path = require('path');
+var root = path.dirname(require.main.filename);
+const csvFilePath =  root + '/../csv_files/Professors.csv' // or any file format
 
 /*
     *** API LIST ***
@@ -56,6 +60,22 @@ job.start(); // avvio il job
 
 module.exports = function () {
 
+    router.get('/csv', (req, res) => {
+
+        console.log(csvFilePath)
+        // Check if file specified by the filePath exists 
+        fs.exists(csvFilePath, function(exists){
+            if (exists) {  
+                
+                res.download(csvFilePath)
+                
+            } else {
+                res.writeHead(400, {"Content-Type": "text/plain"});
+                res.end("ERROR File does not exist");
+            }
+        });
+        
+    })
 
     router.get('/:teacher_id/nextLecture', function (req, res) {
         if (req.params && req.params.teacher_id) {
