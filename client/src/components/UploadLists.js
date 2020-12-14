@@ -35,51 +35,62 @@ class UploadLists extends React.Component {
         if (ext != "csv") {
             switch (error) {
                 case 1:
-                    
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Students.csv"
-                      });
-                    this.setState({ errorS: true, fileS: f });
+                    this.setState({ errorS: true });
                     break;
                 case 2:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Courses.csv"
-                      });
-                    this.setState({ errorC: true, fileC: f });
+                    this.setState({ errorC: true });
                     break;
                 case 3:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Professors.csv"
-                      });
-                    this.setState({ errorT: true, fileT: f });
+                    this.setState({ errorT: true });
                     break;
                 case 4:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Schedule1s.csv"
-                      });
-                    this.setState({ errorL: true, fileL: f });
+                    this.setState({ errorL: true });
                     break;
                 case 5:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Enrollment.csv"
-                      });
-                    this.setState({ errorCl: true, fileCl: f });                    
+                    this.setState({ errorCl: true });
                     break;
             }
 
         }
         else {
             switch (error) {
-                case 1: this.setState({ errorS: false }); break;
-                case 2: this.setState({ errorC: false }); break;
-                case 3: this.setState({ errorT: false }); break;
-                case 4: this.setState({ errorL: false }); break;
-                case 5: this.setState({ errorCl: false }); break;
+                case 1:
+                    Object.defineProperty(f, 'name', {
+                        writable: true,
+                        value: "Students.csv"
+                    });
+                    this.setState({ errorS: false, fileS: f });
+                    break;
+                case 2:
+                    Object.defineProperty(f, 'name', {
+                        writable: true,
+                        value: "Courses.csv"
+                    });
+                    this.setState({ errorC: false, fileC: f });
+                    break;
+                case 3:
+                    Object.defineProperty(f, 'name', {
+                        writable: true,
+                        value: "Professors.csv"
+                    });
+                    this.setState({ errorT: false, fileT: f });
+                    break;
+
+                case 4:
+                    Object.defineProperty(f, 'name', {
+                        writable: true,
+                        value: "Schedule1s.csv"
+                    });
+                    this.setState({ errorL: false, fileL: f });
+                    break;
+
+                case 5:
+                    Object.defineProperty(f, 'name', {
+                        writable: true,
+                        value: "Enrollment.csv"
+                    });
+                    this.setState({ errorCl: false, fileCl: f });
+                    break;
             }
         }
     }
@@ -210,7 +221,7 @@ function UploadTeachersList(props) {
                 {error && <ExError closeError={closeError} error={3} />}
                 <Form>
                     <Form.Group>
-                        <Form.File id="TheachersList" label="Input file" onChange={(ev) => updateFields("teachersList", ev.target.value, 3,ev.target.files[0])} />
+                        <Form.File id="TheachersList" label="Input file" onChange={(ev) => updateFields("teachersList", ev.target.value, 3, ev.target.files[0])} />
                         <br />
                         <Button onClick={() => handleSubmit(3)} > Send File </Button>
                     </Form.Group>
@@ -225,12 +236,12 @@ function UploadLecturesList(props) {
     let { handleSubmit, updateFields, error, closeError } = props;
     return <>
         <Card>
-            <Card.Header><b>Upload lectures list </b> </Card.Header>
+            <Card.Header><b>Upload Schedules list </b> </Card.Header>
             <Card.Body>
                 {error && <ExError closeError={closeError} error={4} />}
                 <Form>
                     <Form.Group>
-                        <Form.File id="LecturesList" label="Input file" onChange={(ev) => updateFields("lecturesList", ev.target.value, 4,ev.target.files[0])} />
+                        <Form.File id="LecturesList" label="Input file" onChange={(ev) => updateFields("lecturesList", ev.target.value, 4, ev.target.files[0])} />
                         <Button onClick={() => handleSubmit(4)} > Send File </Button>
                     </Form.Group>
                 </Form>
@@ -243,14 +254,14 @@ function UploadClassesList(props) {
     let { handleSubmit, updateFields, error, closeError } = props;
     return <>
         <Card>
-            <Card.Header><b>Upload classes list </b></Card.Header>
+            <Card.Header><b>Upload Enrollment list </b></Card.Header>
             <Card.Body>
                 {error && <ExError closeError={closeError} error={5} />}
                 <Form>
                     <Form.Group>
                         <Form.File id="ClassesList" label="Input file" onChange={(ev) => updateFields("classesList", ev.target.value, 5, ev.target.files[0])} />
                         <br />
-                        <Button  onClick={() => handleSubmit(5)} > Send File </Button>
+                        <Button onClick={() => handleSubmit(5)} > Send File </Button>
                     </Form.Group>
                 </Form>
             </Card.Body>
