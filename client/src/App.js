@@ -584,9 +584,9 @@ class App extends React.Component {
     })
   }
 
-  uploadFile = (file) => {
-    console.log(file);
-      API.uploadFile(file)
+  uploadFile = (file, type) => {
+    console.log(file, type);
+      API.uploadFile(file, type)
       .then ( ()=> {
         console.log(file);
           console.log("Upload avvenuto con successo");

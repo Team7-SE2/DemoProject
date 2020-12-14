@@ -10,10 +10,10 @@ module.exports = function (sequelize, DataTypes) {
     });
 
     Lecture.associate = function (models) {
-        Lecture.belongsTo(models.subjects, { as: 'subject' });
-        Lecture.belongsTo(models.rooms, { as: 'room' });
-        Lecture.belongsToMany(models.users, { as: 'lecture_bookings', through: 'bookings' });
-        Lecture.belongsToMany(models.users, { as: 'lecture_bookings_queues', through: 'lectureQueues' });
+        Lecture.belongsTo(models.subjects, { as: 'subject', onDelete: 'CASCADE'});
+        Lecture.belongsTo(models.rooms, { as: 'room', onDelete: 'CASCADE' });
+        Lecture.belongsToMany(models.users, { as: 'lecture_bookings', through: 'bookings', onDelete: 'CASCADE' });
+        Lecture.belongsToMany(models.users, { as: 'lecture_bookings_queues', through: 'lectureQueues', onDelete: 'CASCADE' });
     }
     return Lecture;
 }

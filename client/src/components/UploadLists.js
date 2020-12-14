@@ -100,24 +100,24 @@ class UploadLists extends React.Component {
         switch (file) {
 
             case 1:
-                this.props.uploadFile(this.state.fileS);
+                this.props.uploadFile(this.state.fileS, 'Students');
 
                 break;
 
             case 2:
-                this.props.uploadFile(this.state.fileC);
+                this.props.uploadFile(this.state.fileC, 'Courses');
                 break;
 
             case 3:
-                this.props.uploadFile(this.state.fileT);
+                this.props.uploadFile(this.state.fileT, 'Professors');
                 break;
 
             case 4:
-                this.props.uploadFile(this.state.fileL);
+                this.props.uploadFile(this.state.fileL, 'Schedule1s');
                 break;
 
             case 5:
-                this.props.uploadFile(this.state.fileCl);
+                this.props.uploadFile(this.state.fileCl, 'Enrollment');
                 break;
 
         }

@@ -723,10 +723,10 @@ async function generateContactTracingReport(userID) {
 
 }
 
-async function uploadFile(file) {
+async function uploadFile(file, type) {
 
-    const url = "/api/csv";
-    console.log("API: " + JSON.stringify(file));
+    const url = "/api/csv?type="+type;
+    console.log("API: " + type);
     let formData = new FormData();
     formData.append('file', file);
     return new Promise((resolve, reject) => {

@@ -9,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
     });
 
     Room.associate = function (models) {
-        Room.hasMany(models.lectures, {as: 'lectures'});
+        Room.hasMany(models.lectures, {as: 'lectures', onDelete: 'CASCADE'});
     }
     return Room;
 }

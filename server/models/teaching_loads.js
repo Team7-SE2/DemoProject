@@ -4,8 +4,8 @@ module.exports = function (sequelize, DataTypes) {
     });
 
     TeachingLoads.associate = function (models) {
-        TeachingLoads.belongsTo(models.users, { as: 'user' });
-        TeachingLoads.belongsTo(models.subjects, { as: 'subject' });
+        TeachingLoads.belongsTo(models.users, { as: 'user', onDelete: 'CASCADE' });
+        TeachingLoads.belongsTo(models.subjects, { as: 'subject', onDelete: 'CASCADE' });
     }
     return TeachingLoads;
 }

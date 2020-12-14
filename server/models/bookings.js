@@ -8,8 +8,8 @@ module.exports = function (sequelize, DataTypes) {
     });
 
     Booking.associate = function (models) {
-        Booking.belongsTo(models.users, { as: 'user' });
-        Booking.belongsTo(models.lectures, { as: 'lecture' });
+        Booking.belongsTo(models.users, { as: 'user', onDelete: 'CASCADE' });
+        Booking.belongsTo(models.lectures, { as: 'lecture', onDelete: 'CASCADE' });
     }
     return Booking;
 }

@@ -11,9 +11,9 @@ module.exports = function (sequelize, DataTypes) {
     });
 
     Subject.associate = function (models) {
-        Subject.belongsTo(models.users, { as: 'teacher' });
-        Subject.belongsToMany(models.users, { through: 'teaching_loads' });
-        Subject.hasMany(models.lectures, {as: 'lectures'});
+        Subject.belongsTo(models.users, { as: 'teacher', onDelete: 'CASCADE' });
+        Subject.belongsToMany(models.users, { through: 'teaching_loads', onDelete: 'CASCADE' });
+        Subject.hasMany(models.lectures, {as: 'lectures', onDelete: 'CASCADE'});
     }
     return Subject;
 }

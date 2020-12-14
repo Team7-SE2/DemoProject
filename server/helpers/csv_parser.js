@@ -3,6 +3,7 @@ var csv = require('csv-parser');
 var db = require('../models/index');
 var moment = require ('moment');
 
+const Op = db.Sequelize.Op;
 var csvParser = {};
 csvParser.parse = function (type){
     var results = [];
@@ -31,7 +32,29 @@ csvParser.Students = function (data){
         data[index].password = "$2a$10$mMyE5EzEhdYq6rwpMVd.9.BLr360p6x9aUQ7uF7SpulEd5agm7lja";
     })
     
-    db['users'].bulkCreate(data);
+    /*let ids = []
+
+    data.forEach((user) => {
+
+        ids.push(user.id);
+
+    })
+*/
+    //console.log(ids)
+
+    db['users'].destroy({
+        where : {
+            role_id : 5
+        },
+        //truncate: true,
+        cascade: true,
+        force: true
+    }).then(() => {
+
+        db['users'].bulkCreate(data);
+
+    });
+
 };
 
 csvParser.Professors = function (data){
@@ -40,7 +63,28 @@ csvParser.Professors = function (data){
         data[index].password = "$2a$10$mMyE5EzEhdYq6rwpMVd.9.BLr360p6x9aUQ7uF7SpulEd5agm7lja";
     })
     
-    db['users'].bulkCreate(data);
+    /*let ids = []
+
+    data.forEach((user) => {
+
+        ids.push(user.id);
+
+    })*/
+
+    //console.log('TEACHER' + JSON.stringify(ids))
+    
+    db['users'].destroy({
+        where : {
+            role_id : 4
+        },
+        //truncate: true,
+        cascade: true,
+        force: true
+    }).then(() => {
+
+        db['users'].bulkCreate(data);
+
+    });
 };
 csvParser.Courses = function (data){
     var subjectName = {}
@@ -64,10 +108,53 @@ csvParser.Courses = function (data){
             suffix = '_'+subjectName[s.description];
         data[index].subjectID = subjectID + suffix;
     })
-    db['subjects'].bulkCreate(data);
+
+    /*let ids = []
+
+    data.forEach((user) => {
+
+        ids.push(user.id);
+
+    })
+
+    console.log(ids)*/
+
+    db['subjects'].destroy({
+        /*where : {
+            id : {
+                [Op.in] : ids
+            }
+        },*/
+        truncate: true,
+        cascade: true,
+        force: true
+    }).then(() => {
+
+        db['subjects'].bulkCreate(data);
+
+    });
+    //db['subjects'].bulkCreate(data);
 };
 csvParser.Enrollment = function(data){
-    db['teaching_loads'].bulkCreate(data);
+    
+    db['teaching_loads'].destroy({
+        truncate: true,
+        cascade: true,
+        force: true
+    })/*db['teaching_loads'].destroy({
+        where : {
+            id : {
+                [Op.in] : ids
+            }
+        },
+        force: true
+    })*/.then(() => {
+
+        db['teaching_loads'].bulkCreate(data);
+
+    });
+
+    //db['teaching_loads'].bulkCreate(data);
 };
 csvParser.Schedule1s = function(data){
     /*id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
@@ -118,6 +205,18 @@ csvParser.Schedule1s = function(data){
         rooms.push(roomsObj[k]);
     })
 
+    db['rooms'].destroy({
+        truncate: true,
+        force: true,
+        cascade: true
+    })
+
+    db['lectures'].destroy({
+        truncate: true,
+        force: true,
+        cascade: true
+    })
+    
     db['rooms'].bulkCreate(rooms)
         .then((booo)=>{
             //console.log(lectures);
