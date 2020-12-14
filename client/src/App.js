@@ -9,6 +9,7 @@ import { Switch } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import StudentList from "./components/StudentList";
 import ListCourses from "./components/ListCourses";
+import ContactTracingReport from "./components/ContactTracingReport";
 import API from './api/api.js';
 import { AuthContext } from "./auth/AuthContext";
 import HomeCalendar from "./components/HomeCalendar.js";
@@ -647,8 +648,9 @@ class App extends React.Component {
                           <Card.Header className="text-center">
                             <h3>Contact Tracing Report</h3>
                           </Card.Header>
-                          <Card.Body>
+                          <Card.Body style ={{alignSelf : "center"}} >
                             {/* qui ci metto il form dove segnalo la positività di un paziente */}
+                            <ContactTracingReport/>
                           </Card.Body>
                         </Card>
                       </Col>

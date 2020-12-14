@@ -48,7 +48,7 @@ class Login extends React.Component {
                                     />
                                     <Form.Text className="text-muted">
                                         Don't share your password with anyone
-                      </Form.Text>
+                                     </Form.Text>
                                 </Form.Group>
                             </Form.Row>
                             

@@ -681,5 +681,50 @@ async function turnOnBooked(student_id, lecture_id) {
     });
 }
 
-const API = {getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings };
+
+
+
+/////////////////////////
+//      PULSBS-16     //
+/////////////////////////
+
+async function getStudentInfo(studentID) {
+    let url = "/api/users/"+studentID;
+    const response = await fetch(url);
+    const StudentJson = await response.json();
+    
+
+    if (response.ok) {
+        return StudentJson;  // have to do parsing
+    }
+    else {
+        console.log("getStudentInfo Error");
+        let err = { status: response.status, errObj: StudentJson };
+        throw err;
+    }
+}
+//http://localhost:3100/api/bookings/tracingReport?user_id=3?type='PDF'
+
+async function generateContactTracingReport(userID) {
+    let PDF = 'PDF';
+    let url = "/api/bookings/tracingReport?user_id=" + userID+ "&type=" + PDF;
+    const response = await fetch(url);
+    //const reportJson = await response.json();
+    if (response.ok) {
+        console.log(response);
+        window.open("http://localhost:3100/api/bookings/tracingReport?user_id=" + userID+ "&type=" + PDF)
+        return response.body;  // have to do parsing
+    }
+    else {
+        console.log("generateContactTracingReport Error");
+        let err = { status: response.status};
+        throw err;
+    }
+
+}
+
+
+
+
+const API = {getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport };
 export default API;
