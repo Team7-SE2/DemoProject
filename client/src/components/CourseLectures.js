@@ -59,7 +59,9 @@ const CourseLectures = (props) => {
         { columnName: 'View list of students', sortingEnabled: false }
     ]);
 
-    const test = lectures.map((lec) => {
+    const test = lectures.sort((a,b) =>{return moment(a.date).unix() - moment(b.date).unix()}).filter(function (l) {
+        return (l.remote == null);
+    }).map((lec) => {
         console.log("lecture deleted at" + lec.deleted_at)
 
 

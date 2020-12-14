@@ -96,7 +96,7 @@ class ContactTracingReport extends React.Component {
 
 
             <Modal show={this.state.show} handleClose={this.hideModal} backdrop="static" keyboard={false}  aria-labelledby="contained-modal-title-vcenter" centered>
-                <Modal.Header closeButton>
+                <Modal.Header >
                     <Modal.Title>Pay attention! </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
