@@ -102,7 +102,7 @@ module.exports = function () {
 
 
 
-    //http://localhost:3100/api/bookings/tracingReport?user_id=3?type='PDF'
+    //http://localhost:3100/api/bookings/tracingReport?user_id=3&type='PDF'
     router.get('/tracingReport', (req, res) => {
         var lecturesListIds = [];
 

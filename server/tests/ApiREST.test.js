@@ -35,14 +35,14 @@ describe('API test', function () {
     it('LOGIN NOK 3', function (done) {
         request(app)
         .post('/api/login')
-        .send({ email: "prova@prova.it", password: "125"})
+        .send({ email: "s900000@students.politu.it", password: "125"})
         .set('Accept', 'application/json')
         .expect(404, done);
     })
     it('LOGIN OK', function (done) {
         request(app)
         .post('/api/login')
-        .send({ email: "prova@prova.it", password: "123"})
+        .send({ email: "s900000@students.politu.it", password: "123"})
         .set('Accept', 'application/json')
         .expect(200, done);
     })
@@ -82,7 +82,7 @@ describe('API test', function () {
     it('POST lectures', function (done) {
         request(app)
             .post('/api/lectures')
-            .send({ duration: 1.5, id: 1 , subject_id:1, date: moment().add(1,"hours").toDate(), remote: 1})
+            .send({ duration: 1.5, id: 1 , subject_id:"XY1211", date: moment().add(1,"hours").toDate(), remote: 1,room_id: 1})
             .set('Accept', 'application/json')
             .expect(201, done);
     });
@@ -97,6 +97,13 @@ describe('API test', function () {
     it('GET lectures', function (done) {
         request(app)
             .get('/api/lectures')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+
+    it('GET lectures csv', function (done) {
+        request(app)
+            .get('/api/lectures/csv')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -118,12 +125,13 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
-    it('GET users/:userID FAIL', function (done) {
+    it('GET users/:userID FAIL EMPTY', function (done) {
         request(app)
             .get('/api/lectures/users/A')
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect(200, done);
     });
+    
     it('GET users/:userID ', function (done) {
         request(app)
             .get('/api/lectures/users/5?startDate=2020-05-11&endDate=2021-01-22')
@@ -136,24 +144,18 @@ describe('API test', function () {
     it('POST bookings', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 1, lecture_id: 1, email:"prova@prova.it" })
+            .send({ user_id: 900001, lecture_id: 2, email:"prova@prova.it", waiting: 0})
             .set('Accept', 'application/json')
             .expect(201, done);
     });
     it('POST bookings 2', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 1, lecture_id: 2, email:"prova@prova.it" })
+            .send({ user_id: 900001, lecture_id: 1, email:"prova@prova.it", waiting: null })
             .set('Accept', 'application/json')
             .expect(201, done);
     });
-    it('POST bookings 3', function (done) {
-        request(app)
-            .post('/api/bookings/student')
-            .send({ user_id: 1, lecture_id: 15, email:"prova@prova.it" })
-            .set('Accept', 'application/json')
-            .expect(201, done);
-    });
+    
     it('POST bookings FAIL', function (done) {
         request(app)
             .post('/api/bookings/student')
@@ -188,17 +190,45 @@ describe('API test', function () {
     });   
     it('GET/:id bookings', function (done) {
         request(app)
-            .get('/api/bookings/students/1/lectures/1')
+            .get('/api/bookings/students/900001/lectures/1')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+    it('GET csv files bookings', function (done) {
+        request(app)
+            .get('/api/bookings/csv')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
 
+    it('GET csv files getStudentWaitingList', function (done) {
+        request(app)
+            .get('/api/bookings/getStudentWaitingList?lecture_id=1027')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+
+    
+
+    it('GET tracingReport PDF', function (done) {
+        request(app)
+            .get('/api/bookings/tracingReport?user_id=900001&type=PDF')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+
+    it('GET tracingReport CSV', function (done) {
+        request(app)
+            .get('/api/bookings/tracingReport?user_id=900001&type=CSV')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
     //==================== teaching_loads API test ====================
 
     it('POST teaching_loads', function (done) {
         request(app)
             .post('/api/teaching_loads')
-            .send({ user_id: 1, subject_id: 1 })
+            .send({ user_id: 900001, subject_id: "XY1211" })
             .set('Accept', 'application/json')
             .expect(201, done);
     });
@@ -210,19 +240,19 @@ describe('API test', function () {
     });
     it('GET/:id teaching_loads', function (done) {
         request(app)
-            .get('/api/teaching_loads/students/1/subjects/1')
+            .get('/api/teaching_loads/students/900001/subjects/XY1211')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
     it('GET/:id teaching_loads 2', function (done) {
         request(app)
-            .get('/api/teaching_loads/students/2')
+            .get('/api/teaching_loads/students/900001')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
     it('GET/:id teaching_loads 3', function (done) {
         request(app)
-            .get('/api/teaching_loads/students/2/lectures')
+            .get('/api/teaching_loads/students/900001/lectures')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -230,14 +260,17 @@ describe('API test', function () {
         request(app)
             .get('/api/teaching_loads/students/0')
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect([])
+            .expect(200, done);
+             
     });
     it('GET/:id teaching_loads FAIL 2', function (done) {
         request(app)
             .get('/api/teaching_loads/students/0/lectures')
             .set('Accept', 'application/json')
-            .expect(500, done);
-    });
+            .expect({})
+            .expect(200, done);
+            });
     it('GET/:id teaching_loads FAIL 3', function (done) {
         request(app)
             .get('/api/teaching_loads/students/5')
@@ -254,13 +287,15 @@ describe('API test', function () {
         request(app)
             .get('/api/teaching_loads/students/A')
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect([])
+            .expect(200, done);
     });
     it('GET/:id teaching_loads FAIL 6', function (done) {
         request(app)
             .get('/api/teaching_loads/students/A/lectures')
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect({})
+            .expect(200, done);
     });
     //=================== Statistics test =====================
     it('GET statistics with params', function (done) {
@@ -275,7 +310,13 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
-  
+   //==================== subjects API test ====================
+   it('GET subjects csv', function (done) {
+    request(app)
+        .get('/api/subjects/csv')
+        .set('Accept', 'application/json')
+        .expect(200, done);
+});
     //==================== teachers API test ====================
 
     it('GET teachers', function (done) {
@@ -284,10 +325,16 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
+    it('GET teachers csv', function (done) {
+        request(app)
+            .get('/api/teachers/csv')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
 
     it('GET teachers/nextLecture', function (done) {
         request(app)
-            .get('/api/teachers/2/nextLecture')
+            .get('/api/teachers/d9999/nextLecture')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
@@ -315,38 +362,42 @@ describe('API test', function () {
             .expect(200, done);
     });
 
+    it('GET students csv', function (done) {
+        request(app)
+            .get('/api/students/csv')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+
     //==================== DELETE API test ====================
 
     it('DELETE bookings', function (done) {
         request(app)
-            .del('/api/bookings/students/1/lectures/1')
+            .del('/api/bookings/students/900001/lectures/1')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
     it('DELETE bookings', function (done) {
         request(app)
-            .del('/api/bookings/students/1/lectures/2')
+            .del('/api/bookings/students/900001/lectures/2')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
-    it('DELETE bookings', function (done) {
-        request(app)
-            .del('/api/bookings/students/1/lectures/15')
-            .set('Accept', 'application/json')
-            .expect(200, done);
-    });
-    it('DELETE teaching_loads', function (done) {
-        request(app)
-            .del('/api/teaching_loads/students/1/subjects/1')
-            .set('Accept', 'application/json')
-            .expect(200, done);
-    });
+   
+   
+   
     it('DELETE lectures', function (done) {
         request(app)
             .del('/api/lectures/1')
             .set('Accept', 'application/json')
             .expect(200, done);
 
+    });
+    it('DELETE teaching_loads', function (done) {
+        request(app)
+            .del('/api/teaching_loads/students/900001/subjects/XY1211')
+            .set('Accept', 'application/json')
+            .expect(200, done);
     });
     it('DELETE users', function (done) {
         request(app)
