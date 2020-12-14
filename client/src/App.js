@@ -585,9 +585,17 @@ class App extends React.Component {
   }
 
   uploadFile = (file) => {
-      console.log("APP ALE: "+(file.name));
-      this.setState({ok: file});
-      //console.log("APP ALE: "+(this.state.ok.name));
+    console.log(file);
+      API.uploadFile(file)
+      .then ( ()=> {
+        console.log(file);
+          console.log("Upload avvenuto con successo");
+      })
+      .catch(()=>{
+        console.log(file);
+        console.log("Errore nell'upload del file");
+      })
+     
   }
 
   render() {

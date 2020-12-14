@@ -84,6 +84,7 @@ module.exports = function (app) {
     router.use('/api/lectures', require('./lectures.js')());
     router.use('/api/subjects', require('./subjects.js')());
     router.use('/api/students', require('./students.js')());
+    router.use('/api/csv', require('./csv.js')());
     // /* GET home page. */
     // router.get('/', function (req, res) {
     //     res.render('pages/index.html');
