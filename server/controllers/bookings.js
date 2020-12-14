@@ -268,8 +268,9 @@ module.exports = function () {
         sequelize: db
     });
 
+    
     // Create REST resource
-    finale.resource({
+    var bookingsResource =   finale.resource({
         model: db.bookings,
         endpoints: ['/', '/students/:user_id/lectures/:lecture_id'], //MANAGE GET, POST, PUT, DELETE
         include: [
@@ -279,6 +280,63 @@ module.exports = function () {
                 { model: db.rooms, as: 'room' }]}
         ]
     });
+
+    bookingsResource.delete.fetch((req, res, context) =>{
+        console.log("params" + JSON.stringify(req.params))
+        console.log("query" + JSON.stringify(req.query))
+        console.log("body" + JSON.stringify(req.body))
+
+        db['bookings'].min('updated_at', {
+            where: {
+                lecture_id: { [Op.eq]: req.params.lecture_id },
+                waiting:{ [Op.eq]: 1 }
+
+
+            }
+        }).then((mindate) => {
+
+
+            db['bookings'].findOne({
+                where: {
+                    updated_at: { [Op.eq]: mindate }, 
+                    lecture_id: { [Op.eq]: req.params.lecture_id },
+                    waiting:{ [Op.eq]: 1 }
+
+
+                }, include: [
+                    { model: db.users, as: 'user' },
+                    {
+                        model: db.lectures, as: 'lecture', include: [
+                            { model: db.subjects, as: 'subject' },
+                            { model: db.rooms, as: 'room' }
+                        ]
+                    }
+                ]
+            }).then((user) => {
+                user.waiting = 0;
+                user.save();
+                var mailOptions = {
+                    from: "pulsbsnoreply@gmail.com",
+                    subject: 'Picked from the waiting list',
+                    text: 'Dear ' + user.user.name + ",\nyou are picked from the waiting list for the lecture of " + user.lecture.subject.description + " of " + moment(user.lecture.date).format("DD-MM-YYYY hh:mm") + ".\nRegards"
+                }
+                // set the teacher email
+                mailOptions.to =user.user.email;
+                // send the email to the student
+                transporter.sendEmail(mailOptions);
+                //res.send(user);
+                context.continue()
+
+            }).catch((err) => {
+                //res.send(err);
+                context.continue()
+              })
+        }).catch((err) => {
+            //res.send(err);
+            context.continue()
+          })
+
+    })
 
     // bookingsResource.create.fetch(function(req,res,context){
     //     if(req.body.user_id && req.body.lecture_id){

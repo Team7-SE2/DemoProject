@@ -174,6 +174,7 @@ class App extends React.Component {
         this.setState({ course: course });
         this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment().add("days", 1).set("hours", 0).set("minutes", 0).set("seconds", 0))) });
         this.props.history.push("/student/courses/" + course.subjectID + "/lectures");
+        console.log("AGGIORNATA LISTA LEZIONI")
 
       })
       .catch((err) => {
@@ -244,7 +245,6 @@ class App extends React.Component {
         this.handleErrors(err);
         console.log("Errore in getBookedLectures");
       });
-
   }
 
   loadInitialDataTeacher = () => {
@@ -278,6 +278,7 @@ class App extends React.Component {
     API.bookLecture(this.state.authUser.ID_User, LectureID, this.state.info_user.email, LectureWaiting )
       .then(() => {
 
+      
         this.loadInitialDataStudent();
 
       })
@@ -286,10 +287,12 @@ class App extends React.Component {
       });
   }
 
-  deleteBookedLecture = (LectureID) => {
+  deleteBookedLecture = (LectureID, course) => {
     API.deleteBookedLecture(this.state.authUser.ID_User, LectureID)
       .then(() => {
+        this.showStudentsLectures(course);
         this.loadInitialDataStudent();
+        
       })
       .catch((err) => {
         this.handleErrors(err);
@@ -719,7 +722,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
-                        <CourseLectures role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} deleteLecture={this.deleteLecture} />
+                        <CourseLectures studentID = {this.state.info_user.ID} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} deleteLecture={this.deleteLecture} showStudentsLectures ={this.showStudentsLectures} />
                       </Col>
                       <Col sm={3} className="below-nav" />
 
@@ -765,7 +768,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={1} className="below-nav" />
                       <Col sm={10} className="below-nav">
-                        <CourseLectures turnOnRemote={this.turnOnRemote} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} deleteLecture={this.deleteLecture} />
+                        <CourseLectures turnOnRemote={this.turnOnRemote} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} deleteLecture={this.deleteLecture}  />
                       </Col>
                       <Col sm={1} className="below-nav" />
 
