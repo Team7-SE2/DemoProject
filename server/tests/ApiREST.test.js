@@ -3,6 +3,7 @@ const request = require('supertest')
 const app = require('../app');
 const moment = require('moment');
 
+
 test('check if the model bookings is correctly istantiated', () => {
     expect(db['bookings']).not.toBeNull();
 })
@@ -15,46 +16,50 @@ test('check if the model lectures is correctly istantiated', () => {
 
 
 
+
+
+
+
 describe('API test', function () {
 
     //==================== LOGIN =============================
     it('LOGIN NOK', function (done) {
         request(app)
-        .post('/api/login')
-        .send({ password: "123"})
-        .set('Accept', 'application/json')
-        .expect(500, done);
+            .post('/api/login')
+            .send({ password: "123" })
+            .set('Accept', 'application/json')
+            .expect(500, done);
     })
     it('LOGIN NOK 2', function (done) {
         request(app)
-        .post('/api/login')
-        .send({ email: "prova2@prova.it",password: "123"})
-        .set('Accept', 'application/json')
-        .expect(404, done);
+            .post('/api/login')
+            .send({ email: "prova2@prova.it", password: "123" })
+            .set('Accept', 'application/json')
+            .expect(404, done);
     })
     it('LOGIN NOK 3', function (done) {
         request(app)
-        .post('/api/login')
-        .send({ email: "s900000@students.politu.it", password: "125"})
-        .set('Accept', 'application/json')
-        .expect(404, done);
+            .post('/api/login')
+            .send({ email: "s900000@students.politu.it", password: "125" })
+            .set('Accept', 'application/json')
+            .expect(404, done);
     })
     it('LOGIN OK', function (done) {
         request(app)
-        .post('/api/login')
-        .send({ email: "s900000@students.politu.it", password: "123"})
-        .set('Accept', 'application/json')
-        .expect(200, done);
+            .post('/api/login')
+            .send({ email: "s900000@students.politu.it", password: "123" })
+            .set('Accept', 'application/json')
+            .expect(200, done);
     })
     it('PUT lectures', function (done) {
         request(app)
-        .put('/api/lectures/2')
-        .send({ date: moment().add(1,"hours").toDate()})
-        .set('Accept', 'application/json')
-        .expect(200, done);
+            .put('/api/lectures/2')
+            .send({ date: moment().add(1, "hours").toDate() })
+            .set('Accept', 'application/json')
+            .expect(200, done);
     })
-    
-    
+
+
 
     //==================== users API test ====================
     it('POST users', function (done) {
@@ -77,23 +82,24 @@ describe('API test', function () {
             .expect(200, done);
     });
 
+
     //==================== lectures API test ====================
 
     it('POST lectures', function (done) {
         request(app)
             .post('/api/lectures')
-            .send({ duration: 1.5, id: 1 , subject_id:"XY1211", date: moment().add(1,"hours").toDate(), remote: 1,room_id: 1})
+            .send({ duration: 1.5, id: 1, subject_id: "XY1211", date: moment().add(1, "hours").toDate(), remote: 1, room_id: 1 })
             .set('Accept', 'application/json')
             .expect(201, done);
     });
     it('PUT lectures remote', function (done) {
         request(app)
-        .put('/api/lectures/2')
-        .send({ remote: true})
-        .set('Accept', 'application/json')
-        .expect(200, done);
+            .put('/api/lectures/2')
+            .send({ remote: true })
+            .set('Accept', 'application/json')
+            .expect(200, done);
     })
-    
+
     it('GET lectures', function (done) {
         request(app)
             .get('/api/lectures')
@@ -131,7 +137,7 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
-    
+
     it('GET users/:userID ', function (done) {
         request(app)
             .get('/api/lectures/users/5?startDate=2020-05-11&endDate=2021-01-22')
@@ -144,36 +150,36 @@ describe('API test', function () {
     it('POST bookings', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 900001, lecture_id: 2, email:"prova@prova.it", waiting: 0})
+            .send({ user_id: 900001, lecture_id: 2, email: "prova@prova.it", waiting: 0 })
             .set('Accept', 'application/json')
             .expect(201, done);
     });
     it('POST bookings 2', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 900001, lecture_id: 1, email:"prova@prova.it", waiting: null })
+            .send({ user_id: 900001, lecture_id: 1, email: "prova@prova.it", waiting: null })
             .set('Accept', 'application/json')
             .expect(201, done);
     });
-    
+
     it('POST bookings FAIL', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 2, lecture_id: 2})
+            .send({ user_id: 2, lecture_id: 2 })
             .set('Accept', 'application/json')
             .expect(500, done);
     });
     it('POST bookings FAIL 2', function (done) {
         try {
             request(app)
-            .post('/api/bookings/student')
-            .send({ user_id: 5, lecture_id: 2, email:"prova@prova.it"})
-            .set('Accept', 'application/json')
-            .expect(500,done);
+                .post('/api/bookings/student')
+                .send({ user_id: 5, lecture_id: 2, email: "prova@prova.it" })
+                .set('Accept', 'application/json')
+                .expect(500, done);
         } catch (error) {
             expect(error).not.toBeNull();
         }
-        
+
     });
     it('GET bookings', function (done) {
         request(app)
@@ -187,7 +193,7 @@ describe('API test', function () {
             .get('/api/bookings/excludeLecturesCanceled')
             .set('Accept', 'application/json')
             .expect(200, done);
-    });   
+    });
     it('GET/:id bookings', function (done) {
         request(app)
             .get('/api/bookings/students/900001/lectures/1')
@@ -208,7 +214,7 @@ describe('API test', function () {
             .expect(200, done);
     });
 
-    
+
 
     it('GET tracingReport PDF', function (done) {
         request(app)
@@ -262,7 +268,7 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect([])
             .expect(200, done);
-             
+
     });
     it('GET/:id teaching_loads FAIL 2', function (done) {
         request(app)
@@ -270,7 +276,7 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect({})
             .expect(200, done);
-            });
+    });
     it('GET/:id teaching_loads FAIL 3', function (done) {
         request(app)
             .get('/api/teaching_loads/students/5')
@@ -310,13 +316,13 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
-   //==================== subjects API test ====================
-   it('GET subjects csv', function (done) {
-    request(app)
-        .get('/api/subjects/csv')
-        .set('Accept', 'application/json')
-        .expect(200, done);
-});
+    //==================== subjects API test ====================
+    it('GET subjects csv', function (done) {
+        request(app)
+            .get('/api/subjects/csv')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
     //==================== teachers API test ====================
 
     it('GET teachers', function (done) {
@@ -353,6 +359,8 @@ describe('API test', function () {
             .expect(500, done);
     });
 
+
+
     //==================== students API test ====================
 
     it('GET students', function (done) {
@@ -383,9 +391,9 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
-   
-   
-   
+
+
+
     it('DELETE lectures', function (done) {
         request(app)
             .del('/api/lectures/1')
@@ -408,3 +416,60 @@ describe('API test', function () {
     });
 
 });
+
+//==================== CSV API test =========================
+/*
+it('POST csv students', function (done) {
+    let file = require("../csv_files_test/data/Students.csv")
+    let formData = new FormData();
+    formData.append('file', file);
+
+    request(app)
+        .post("/api/csv?type=Students/")
+        .send(formData)
+        .set('Accept', 'application/json')
+        .expect(201, done);
+});
+it('POST csv Professors', function (done) {
+    let file = require("../csv_files_test/data/Professors.csv")
+    let formData = new FormData();
+    formData.append('file', file);
+    request(app)
+        .post("/api/csv?type=Professors")
+        .send(formData)
+        .set('Accept', 'application/json')
+        .expect(201, done);
+});
+
+it('POST csv Courses', function (done) {
+    let file = require("../csv_files_test/data/Courses.csv")
+    let formData = new FormData();
+    formData.append('file', file);
+    request(app)
+        .post("/api/csv?type=Courses")
+        .send(formData)
+        .set('Accept', 'application/json')
+        .expect(201, done);
+});
+it('POST csv Schedule1s', function (done) {
+    let file = require("../csv_files_test/data/Schedule1s.csv")
+    let formData = new FormData();
+    formData.append('file', file);
+    request(app)
+        .post("/api/csv?type=Schedule1s")
+        .send(formData)
+        .set('Accept', 'application/json')
+        .expect(201, done);
+});
+it('POST csv Enrollment', function (done) {
+    let file = require("../csv_files_test/data/Enrollment.csv")
+    let formData = new FormData();
+    formData.append('file', file);
+    request(app)
+        .post("/api/csv?type=Enrollment")
+        .send(formData)
+        .set('Accept', 'application/json')
+        .expect(201, done);
+});
+
+*/
