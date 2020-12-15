@@ -705,14 +705,13 @@ async function getStudentInfo(studentID) {
 }
 //http://localhost:3100/api/bookings/tracingReport?user_id=3?type='PDF'
 
-async function generateContactTracingReport(userID) {
-    let PDF = 'PDF';
-    let url = "/api/bookings/tracingReport?user_id=" + userID+ "&type=" + PDF;
+async function generateContactTracingReport(userID, type) {
+    let url = "/api/bookings/tracingReport?user_id=" + userID+ "&type=" + type;
     const response = await fetch(url);
     //const reportJson = await response.json();
     if (response.ok) {
         console.log(response);
-        window.open("http://localhost:3100/api/bookings/tracingReport?user_id=" + userID+ "&type=" + PDF)
+        window.open("http://localhost:3100/api/bookings/tracingReport?user_id=" + userID+ "&type=" + type)
         return response.body;  // have to do parsing
     }
     else {

@@ -49,9 +49,9 @@ class ContactTracingReport extends React.Component {
         this.setState({ show: false, name: '', surname: '', role_id: null});
       };
 
-      generateReport = () => {
+      generateReport = (type) => {
           console.log("GENERATE REPORT")
-        API.generateContactTracingReport(this.state.studentID)
+        API.generateContactTracingReport(this.state.studentID, type)
         .then(() =>
             console.log("AAAAAAAAAAAAAAAA")
         )
@@ -108,7 +108,10 @@ class ContactTracingReport extends React.Component {
                 </Modal.Body>
                 <Modal.Footer>
                     {  (this.state.name && this.state.role_id ==5) ?
-                       <Button variant="success" onClick={() => {this.generateReport(); this.hideModal();}} > Generate Report </Button>
+                       <> 
+                       <Button variant="success" onClick={() => {this.generateReport("PDF"); this.hideModal();}} > Generate PDF Report </Button>
+                       <Button variant="success" onClick={() => {this.generateReport("CSV"); this.hideModal();}} > Generate CSV Report </Button>
+                       </>
                        :
                        <Button variant="success" onClick={() => {this.hideModal();}} > OK </Button>
                     }
