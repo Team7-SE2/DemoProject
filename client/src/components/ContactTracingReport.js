@@ -16,6 +16,7 @@ class ContactTracingReport extends React.Component {
             name : '',
             surname: '',
             role_id: null,
+            SSN: '',
             show: false
             
         };
@@ -33,7 +34,7 @@ class ContactTracingReport extends React.Component {
     confirm = (event) => {
         event.preventDefault();
         API.getStudentInfo(this.state.studentID)
-        .then((studentinfo) =>{this.setState({name: studentinfo.name, surname: studentinfo.surname, role_id: studentinfo.role_id})})
+        .then((studentinfo) =>{this.setState({name: studentinfo.name, surname: studentinfo.surname, role_id: studentinfo.role_id, SSN: studentinfo.SSN})})
         .catch(() =>{ /* faccio spuntare l'alert */})
         this.showModal();
         
@@ -101,7 +102,7 @@ class ContactTracingReport extends React.Component {
                 </Modal.Header>
                 <Modal.Body>
                     { (this.state.name && this.state.role_id ==5) ?
-                     <> Do you want to confirm that <b> {this.state.name} {this.state.surname} </b> contracted Covid-19? </>
+                     <> Do you want to confirm that <b> {this.state.name} {this.state.surname} </b> (SSN : <b>{this.state.SSN}</b>)  contracted Covid-19? </>
                      :
                      <> Student ID is not correct! Please retry with another student ID </>
                     }
