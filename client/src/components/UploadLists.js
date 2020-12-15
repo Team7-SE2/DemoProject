@@ -177,12 +177,12 @@ function UploadStudentsList(props) {
     return <>
 
         <Card>
-            <Card.Header><b>Upload student list</b></Card.Header>
+            <Card.Header className="titleUploadCard"><b>UPLOAD STUDENT LIST</b></Card.Header>
             <Card.Body>
                 {error && <ExError closeError={closeError} error={1} />}
                 <Form>
                     <Form.Group>
-                        <Form.File id="StudentList" label="Input file" onChange={(ev) => updateFields("courseList", ev.target.value, 1, ev.target.files[0])} />
+                        <Form.File id="StudentList" onChange={(ev) => updateFields("courseList", ev.target.value, 1, ev.target.files[0])} />
                         <br />
                         <Button disabled={error} onClick={() => handleSubmit(1)}> Send File </Button>
                     </Form.Group>
@@ -196,12 +196,12 @@ function UploadCoursesList(props) {
     let { handleSubmit, updateFields, error, closeError } = props;
     return <>
         <Card>
-            <Card.Header> <b>Upload courses list </b></Card.Header>
+            <Card.Header className="titleUploadCard"> <b>UPLOAD COURSE LIST </b></Card.Header>
             <Card.Body>
                 {error && <ExError closeError={closeError} error={2} />}
                 <Form>
                     <Form.Group>
-                        <Form.File id="CourseList" label="Input file" onChange={(ev) => updateFields("courseList", ev.target.value, 2, ev.target.files[0])} />
+                        <Form.File id="CourseList" onChange={(ev) => updateFields("courseList", ev.target.value, 2, ev.target.files[0])} />
                         <br />
                         <Button onClick={() => handleSubmit(2)}> Send File </Button>
                     </Form.Group>
@@ -216,12 +216,12 @@ function UploadTeachersList(props) {
     let { handleSubmit, updateFields, error, closeError } = props;
     return <>
         <Card>
-            <Card.Header><b>Upload teachers list</b></Card.Header>
+            <Card.Header className="titleUploadCard"><b>UPLOAD TEACHER LIST</b></Card.Header>
             <Card.Body>
                 {error && <ExError closeError={closeError} error={3} />}
                 <Form>
                     <Form.Group>
-                        <Form.File id="TheachersList" label="Input file" onChange={(ev) => updateFields("teachersList", ev.target.value, 3, ev.target.files[0])} />
+                        <Form.File id="TheachersList" onChange={(ev) => updateFields("teachersList", ev.target.value, 3, ev.target.files[0])} />
                         <br />
                         <Button onClick={() => handleSubmit(3)} > Send File </Button>
                     </Form.Group>
@@ -236,12 +236,13 @@ function UploadLecturesList(props) {
     let { handleSubmit, updateFields, error, closeError } = props;
     return <>
         <Card>
-            <Card.Header><b>Upload Schedules list </b> </Card.Header>
+            <Card.Header className="titleUploadCard"><b>UPLOAD SCHEDULE LIST </b> </Card.Header>
             <Card.Body>
                 {error && <ExError closeError={closeError} error={4} />}
                 <Form>
                     <Form.Group>
-                        <Form.File id="LecturesList" label="Input file" onChange={(ev) => updateFields("lecturesList", ev.target.value, 4, ev.target.files[0])} />
+                        <Form.File id="LecturesList" onChange={(ev) => updateFields("lecturesList", ev.target.value, 4, ev.target.files[0])} />
+                        <br />
                         <Button onClick={() => handleSubmit(4)} > Send File </Button>
                     </Form.Group>
                 </Form>
@@ -254,12 +255,12 @@ function UploadClassesList(props) {
     let { handleSubmit, updateFields, error, closeError } = props;
     return <>
         <Card>
-            <Card.Header><b>Upload Enrollment list </b></Card.Header>
+            <Card.Header className="titleUploadCard"><b>UPLOAD ENROLLMENT LIST </b></Card.Header>
             <Card.Body>
                 {error && <ExError closeError={closeError} error={5} />}
                 <Form>
                     <Form.Group>
-                        <Form.File id="ClassesList" label="Input file" onChange={(ev) => updateFields("classesList", ev.target.value, 5, ev.target.files[0])} />
+                        <Form.File id="ClassesList" onChange={(ev) => updateFields("classesList", ev.target.value, 5, ev.target.files[0])} />
                         <br />
                         <Button onClick={() => handleSubmit(5)} > Send File </Button>
                     </Form.Group>

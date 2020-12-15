@@ -134,6 +134,12 @@ button:focus {
   font-size: small;
 }
 
+.titleUploadCard{
+  color: black;
+  font-weight: 42;
+  font-size: medium;
+}
+
 .contentStaticsCard{
   color: black;
   font-weight: 500;
