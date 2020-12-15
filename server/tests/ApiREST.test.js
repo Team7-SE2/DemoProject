@@ -2,6 +2,7 @@ const db = require("../models/index")
 const request = require('supertest')
 const app = require('../app');
 const moment = require('moment');
+const fs = require("fs")
 
 
 test('check if the model bookings is correctly istantiated', () => {
@@ -418,58 +419,96 @@ describe('API test', function () {
 });
 
 //==================== CSV API test =========================
-/*
-it('POST csv students', function (done) {
-    let file = require("../csv_files_test/data/Students.csv")
-    let formData = new FormData();
-    formData.append('file', file);
 
+it('POST csv check error', function (done) {
+        
     request(app)
-        .post("/api/csv?type=Students/")
-        .send(formData)
-        .set('Accept', 'application/json')
-        .expect(201, done);
+    .post('/api/csv')
+    .set('Accept', 'application/json')
+    .expect(500, done);
+
 });
-it('POST csv Professors', function (done) {
-    let file = require("../csv_files_test/data/Professors.csv")
-    let formData = new FormData();
-    formData.append('file', file);
-    request(app)
-        .post("/api/csv?type=Professors")
-        .send(formData)
-        .set('Accept', 'application/json')
-        .expect(201, done);
+
+it('POST csv Students', function (done) {
+
+    fs.readFile('csv_files/Students.csv', 'utf8', function(err, data) {
+        if (err) throw err;
+
+        let formData = {
+            file: data
+        }
+        request(app)
+            .post("/api/csv?type=Students")
+            .send(formData)
+            .set('Accept', 'application/json')
+            .expect(500, done);
+
+    });
+});
+
+it('POST csv Teachers', function (done) {
+    
+    fs.readFile('csv_files/Professors.csv', 'utf8', function(err, data) {
+        if (err) throw err;
+
+        let formData = {
+            file: data
+        }
+        request(app)
+            .post("/api/csv?type=Professors")
+            .send(formData)
+            .set('Accept', 'application/json')
+            .expect(500, done);
+
+    });
 });
 
 it('POST csv Courses', function (done) {
-    let file = require("../csv_files_test/data/Courses.csv")
-    let formData = new FormData();
-    formData.append('file', file);
-    request(app)
-        .post("/api/csv?type=Courses")
-        .send(formData)
-        .set('Accept', 'application/json')
-        .expect(201, done);
+    
+    fs.readFile('csv_files/Courses.csv', 'utf8', function(err, data) {
+        if (err) throw err;
+
+        let formData = {
+            file: data
+        }
+        request(app)
+            .post("/api/csv?type=Courses")
+            .send(formData)
+            .set('Accept', 'application/json')
+            .expect(500, done);
+
+    });
 });
 it('POST csv Schedule1s', function (done) {
-    let file = require("../csv_files_test/data/Schedule1s.csv")
-    let formData = new FormData();
-    formData.append('file', file);
-    request(app)
-        .post("/api/csv?type=Schedule1s")
-        .send(formData)
-        .set('Accept', 'application/json')
-        .expect(201, done);
+    
+    fs.readFile('csv_files/Schedule1s.csv', 'utf8', function(err, data) {
+        if (err) throw err;
+
+        let formData = {
+            file: data
+        }
+        request(app)
+            .post("/api/csv?type=Schedule1s")
+            .send(formData)
+            .set('Accept', 'application/json')
+            .expect(500, done);
+
+    });
 });
 it('POST csv Enrollment', function (done) {
-    let file = require("../csv_files_test/data/Enrollment.csv")
-    let formData = new FormData();
-    formData.append('file', file);
-    request(app)
-        .post("/api/csv?type=Enrollment")
-        .send(formData)
-        .set('Accept', 'application/json')
-        .expect(201, done);
+    
+    fs.readFile('csv_files/Enrollment.csv', 'utf8', function(err, data) {
+        if (err) throw err;
+
+        let formData = {
+            file: data
+        }
+        request(app)
+            .post("/api/csv?type=Enrollment")
+            .send(formData)
+            .set('Accept', 'application/json')
+            .expect(500, done);
+
+    });
 });
 
-*/
