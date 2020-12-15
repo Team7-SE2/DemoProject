@@ -51,7 +51,7 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
       <SidebarContent>
         <Menu iconShape="circle" style={{paddingLeft:'5px'}}>
           <>
-          {context.authUser && role_id!==3 && logged && <MenuItem
+          {context.authUser && (role_id===5 || role_id===4) && logged && <MenuItem
             icon={<FaBook />}
           >
             <Nav >
