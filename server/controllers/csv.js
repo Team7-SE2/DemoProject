@@ -38,14 +38,23 @@ module.exports = function () {
             case 'Schedule1s':
                 destPath = './csv_files/Schedule1s.csv'
                 break;
+            default:
+                res.status(500).end();
         }
-        fs.rename(req.file.path, destPath, function (err) {
-            if (err) {
-                return;
-            } else {
-                csvHelper.parse(requestType);
-            }
-        });
+        try{
+
+            fs.rename(req.file.path, destPath, function (err) {
+                if (err) {
+                    res.status(500).end();
+                } else {
+                    csvHelper.parse(requestType);
+                    res.status(201).end();
+                }
+            });
+
+        } catch (err) {
+            res.status(500).end();
+        }
 
     })
 
