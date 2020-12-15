@@ -1,3 +1,4 @@
+var proxy = require("../../package.json").proxy
 async function userLogin(username, password) {
     return new Promise((resolve, reject) => {
         fetch("/api/login", {
@@ -711,7 +712,7 @@ async function generateContactTracingReport(userID, type) {
     //const reportJson = await response.json();
     if (response.ok) {
         console.log(response);
-        window.open("http://localhost:3100/api/bookings/tracingReport?user_id=" + userID+ "&type=" + type)
+        window.open(proxy + "api/bookings/tracingReport?user_id=" + userID+ "&type=" + type)
         return response.body;  // have to do parsing
     }
     else {
