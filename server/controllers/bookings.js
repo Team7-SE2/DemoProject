@@ -130,15 +130,20 @@ module.exports = function () {
             }).then((bookings2) => {
                 var users = [];
                 var usersObj = {};
+                let studpos={};
+
                 bookings2.forEach((b) => {
                     let user = b.dataValues.user.dataValues;
                     if (user.id != req.query.user_id) { usersObj[user.id] = user; }
+                    else{
+                        studpos=user;
+                    }
                 });
                 Object.keys(usersObj).forEach((k) => {
                     users.push(usersObj[k]);
                 })
                 if(req.query.type === 'PDF')
-                    createPDF(users, res);
+                    createPDF(users, res,studpos);
                 else if(req.query.type === 'CSV')
                     createCSV(users, res);
             }
@@ -149,15 +154,14 @@ module.exports = function () {
 
 
     })
-    function createPDF(users, res) {
+    function createPDF(users, res,studpos) {
         var doc = new jsPDF();
         var fontSize = 16;
         var offsetY = 4.797777777777778;
         var lineHeight = 6.49111111111111;
 
         doc.setFontSize(fontSize);
-
-        doc.text(10, 10 + lineHeight * 0 + offsetY, 'Tracing Report');
+        doc.text(10, 10 + lineHeight * 0 + offsetY, 'Tracing Report for '+studpos.name+" "+studpos.surname);
         doc.text(175, 10 + lineHeight * 0 + offsetY, moment().format("DD-MM-YYYY"));
 
         var data = [];
