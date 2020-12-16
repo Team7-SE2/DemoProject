@@ -29,7 +29,7 @@ csvParser.parse = function (type){
 csvParser.Students = function (data){
     data.forEach((s,index)=>{
         data[index].role_id = 5;
-        data[index].password = "$2a$10$mMyE5EzEhdYq6rwpMVd.9.BLr360p6x9aUQ7uF7SpulEd5agm7lja";
+       // data[index].password = "$2a$10$mMyE5EzEhdYq6rwpMVd.9.BLr360p6x9aUQ7uF7SpulEd5agm7lja";
     })
     
     /*let ids = []
@@ -60,7 +60,7 @@ csvParser.Students = function (data){
 csvParser.Professors = function (data){
     data.forEach((s,index)=>{
         data[index].role_id = 4;
-        data[index].password = "$2a$10$mMyE5EzEhdYq6rwpMVd.9.BLr360p6x9aUQ7uF7SpulEd5agm7lja";
+        //data[index].password = "$2a$10$mMyE5EzEhdYq6rwpMVd.9.BLr360p6x9aUQ7uF7SpulEd5agm7lja";
     })
     
     /*let ids = []

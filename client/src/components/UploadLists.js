@@ -27,11 +27,11 @@ class UploadLists extends React.Component {
 
 
 
-    updateFields = (name, value, error, f) => {
+    updateFields = (value, error, f) => {
 
         let file = value.split(".");
         let ext = file[file.length - 1];
-        const formData = new FormData();
+        //const formData = new FormData();
         if (ext != "csv") {
             switch (error) {
                 case 1:
@@ -271,7 +271,7 @@ function UploadClassesList(props) {
 
 
 function ExError(props) {
-    let { updateFields, error, closeError } = props;
+    let { error, closeError } = props;
     const [show, setShow] = useState(true);
     const handleClose = () => { setShow(false); closeError(error); }
     if (show) {

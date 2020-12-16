@@ -6,10 +6,9 @@ var formidable = require('formidable');
 var bodyParser = require('body-parser');
 var multer = require ('multer');
 const fastcsv = require("fast-csv");
-const fs = require("fs");
 var csvHelper = require('../helpers/csv_parser')
 
-var upload_middleware = multer({dest: './csv_files/uploads/'});
+var upload_middleware = multer({dest: './csv_files/uploads/', limits: {fileSize: 8000000} });
 
 module.exports = function () {
 

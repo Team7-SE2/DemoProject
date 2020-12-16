@@ -16,7 +16,7 @@ const CourseLectures = (props) => {
     const handleShowRemote = (l) => { setLecture(l); setRemote(true); setShow(true); }
     const handleShowQueue = (l) => { setLecture(l); setQueue(true); setShow(true);}
 
-    let { studentID, showStudentsLectures , lectures, course, bookLecture, deleteBookedLecture, bookedLectures, role_id, getListStudents, deleteLecture, turnOnRemote } = props;
+    let {lectures, course, bookLecture, deleteBookedLecture, bookedLectures, role_id, getListStudents, deleteLecture, turnOnRemote } = props;
     function checkPrenotation(bookedLectures2, lectureID) {
 
         return bookedLectures2.find((bl) => parseInt(bl.lecture_id) === parseInt(lectureID));

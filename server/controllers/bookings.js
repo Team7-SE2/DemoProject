@@ -9,7 +9,6 @@ const { jsPDF } = require("jspdf");
 var path = require('path');
 const { create } = require('domain');
 const fs = require('fs')
-var path = require('path');
 var root = path.dirname(require.main.filename);
 const csvFilePath =  root + '/../csv_files/Enrollment.csv' // or any file format
 const ObjectsToCsv = require('objects-to-csv');
@@ -126,10 +125,10 @@ module.exports = function () {
                     lecture_id: { [Op.in]: lecturesListIds }
                 }, include: [
                     { model: db.users, as: 'user', attributes: [ "id", "name", "surname", "email"] }]
-            }).then((bookings) => {
+            }).then((bookings2) => {
                 var users = [];
                 var usersObj = {};
-                bookings.forEach((b) => {
+                bookings2.forEach((b) => {
                     let user = b.dataValues.user.dataValues;
                     if (user.id != req.query.user_id) { usersObj[user.id] = user; }
                 });
