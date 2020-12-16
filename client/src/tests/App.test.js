@@ -21,6 +21,8 @@ import DatePickerComponent from "../components/DatePickerComponent"
 
 import moment from "moment"
 import '@testing-library/jest-dom/extend-expect'
+import UploadLists from '../components/UploadLists';
+import ContactTracingReport from '../components/ContactTracingReport';
 const app=new App.WrappedComponent();
 
 
@@ -43,7 +45,8 @@ app.getDataGrouped([{
 }], 'days', "2020-11-20", "2020-12-20", "");
 
 app.getTimeSpans('days', "2020-11-20", "2020-12-20");
-
+//var file= new File(["Id,Name,Surname,City,OfficialEmail,Birthday,SSN\n1,Ambra,Ferri,Poggio Ferro,s1@students.politu.it,1991-11-04,MK97060783\n2,Gianfranco,Trentini,Fenestrelle,s2@students.politu.it,1991-11-05,SP80523410"],'Students.csv',{type: 'text/csv'});
+//app.uploadFile(file,"AAAA");
 expect(1).toBe(1);
   });
 
@@ -105,20 +108,20 @@ it('renders CourseLectures' ,() => {
 
 	render(<CourseLectures lectures={[{id:1,date:moment().add(29,"minutes")}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[]} getListStudents={getListStudents} role_id={4} turnOnRemote={turnOnRemote}></CourseLectures>);
 	
-	var x=document.getElementsByClassName("btn btn-primary");
+	x=document.getElementsByClassName("btn btn-primary");
 	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
 	userEvent.click(x[1]);
 
 	render(<CourseLectures lectures={[{id:1,date:moment().add(31,"minutes")}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[]} getListStudents={getListStudents} role_id={4} turnOnRemote={turnOnRemote}></CourseLectures>);
-	var x=document.getElementsByClassName("btn btn-danger");
+	x=document.getElementsByClassName("btn btn-danger");
 	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
 	userEvent.click(x[0]);
 
 	render(<CourseLectures lectures={[{id:1,date:moment().add(1,"days")}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[{created_at:"2020-11-08 14:00:00.000 +01:00",updated_at:"2020-11-08 14:00:00.000 +01:00",user_id:3,lecture_id:1}]} getListStudents={getListStudents} role_id={5} turnOnRemote={turnOnRemote}></CourseLectures>);
-	var x=document.getElementsByClassName("btn btn-danger");
+	x=document.getElementsByClassName("btn btn-danger");
 	expect(screen.getAllByText('UNBOOK')[0]).toBeInTheDocument();
 	userEvent.click(x[0]);
-	var x=document.getElementsByClassName("btn btn-primary");
+	x=document.getElementsByClassName("btn btn-primary");
 	expect(screen.getAllByText('BOOK')[0]).toBeInTheDocument();
 	userEvent.click(x[0]);
 
@@ -448,6 +451,7 @@ it('renders Aside logged false', () => {
   /> </Router>);
 	expect(screen.getByText('View Source')).toBeInTheDocument();
   });
+
 it('renders App', () => {
 	render(<React.StrictMode>
 		 		<Router>
@@ -549,4 +553,123 @@ it('HomeCalendar Click button', () => {
 	// check that the content changed to the new page
   })
 
- 
+  it('renders StudentList', () => {
+	function uploadFile(file){
+		return 1;
+	}
+	render(<UploadLists uploadFile={uploadFile} ></UploadLists>);
+	expect(screen.getByText('UPLOAD STUDENT LIST')).toBeInTheDocument();
+
+	//var file =require("../tests/csv_files/Students.csv")
+	var file= new File(["Id,Name,Surname,City,OfficialEmail,Birthday,SSN\n1,Ambra,Ferri,Poggio Ferro,s1@students.politu.it,1991-11-04,MK97060783\n2,Gianfranco,Trentini,Fenestrelle,s2@students.politu.it,1991-11-05,SP80523410"],'Students.csv',{type: 'text/csv'});
+	userEvent.click((screen.getAllByText("Send File")[0]));
+
+	var x=document.getElementById("StudentList");
+	userEvent.upload(x, file);
+	userEvent.click((screen.getAllByText("Send File")[0]));
+
+  });
+
+  it('renders TEACHER List', () => {
+	function uploadFile(file){
+		return 1;
+	}
+	
+	render(<UploadLists uploadFile={uploadFile} ></UploadLists>);
+	expect(screen.getByText('UPLOAD TEACHER LIST')).toBeInTheDocument();
+	//var file =require("../tests/csv_files/Professors.csv")
+
+	var file= new File(["Number,GivenName,Surname,OfficialEmail,SSN\nd1,Ines,Beneventi,Ines.Beneventi@politu.it,XT6141393\nd2,Nino,Lucciano,Nino.Lucciano@politu.it,BC32576022"],'Professors.csv',{type: 'text/csv'})
+	userEvent.click((screen.getAllByText("Send File")[2]));
+
+	var x=document.getElementById("TheachersList");
+	userEvent.upload(x, file);
+	userEvent.click((screen.getAllByText("Send File")[2]));
+
+	
+
+  });
+
+  
+
+  it('renders COURSEList', () => {
+	function uploadFile(file){
+		return 1;
+	}
+	
+
+	render(<UploadLists uploadFile={uploadFile} ></UploadLists>);
+	expect(screen.getByText('UPLOAD COURSE LIST')).toBeInTheDocument();
+	//var file =require("../tests/csv_files/Courses.csv")
+
+	var file= new File(["Code,Year,Semester,Course,Teacher\nAAAA11,1,1,Metodi di finanziamento delle imprese,d1\nAAAA22,1,1,Chimica,d2"],'Courses.csv',{type: 'text/csv'});
+	userEvent.click((screen.getAllByText("Send File")[1]));
+
+	var x=document.getElementById("CourseList");
+	userEvent.upload(x, file);
+	userEvent.click((screen.getAllByText("Send File")[1]));
+
+	
+
+  });
+
+  it('renders SCHEDULE List', () => {
+	function uploadFile(file){
+		return 1;
+	}
+
+	
+	render(<UploadLists uploadFile={uploadFile} ></UploadLists>);
+	expect(screen.getByText('UPLOAD SCHEDULE LIST')).toBeInTheDocument();
+	//var file =require("../tests/csv_files/Schedule1s.csv")
+
+	var file= new File(["Code,Room,Day,Seats,Time\nAAAA11,1,Mon,120,8:30-11:30"],'Schedule.csv',{type: 'text/csv'});
+	userEvent.click((screen.getAllByText("Send File")[3]));
+
+	var x=document.getElementById("LecturesList");
+	userEvent.upload(x, file);
+	userEvent.click((screen.getAllByText("Send File")[3]));
+
+
+  });
+
+  
+
+  it('renders ENROLLMENT List', () => {
+	function uploadFile(file){
+		return 1;
+	}
+
+	render(<UploadLists uploadFile={uploadFile} ></UploadLists>);
+	expect(screen.getByText('UPLOAD ENROLLMENT LIST')).toBeInTheDocument();
+	//var file =require("../tests/csv_files/Enrollment.csv")
+
+	var file= new File(["Code,Student\nAAAA11,1\nAAAA11,2"],'Enrollment.csv',{type: 'text/csv'});
+	userEvent.click((screen.getAllByText("Send File")[4]));
+
+	var x=document.getElementById("ClassesList");
+	userEvent.upload(x, file);
+	userEvent.click((screen.getAllByText("Send File")[4]));
+
+  });
+
+   it('renders ContactTracingReport List', () => {
+	
+
+	render(<ContactTracingReport></ContactTracingReport>);
+	expect(screen.getByText("Please insert student's identification number which contracted Covid-19")).toBeInTheDocument();
+	
+	userEvent.type(screen.getByPlaceholderText("Student id"),"900001");
+	userEvent.click((screen.getByText("Generate report")));
+	
+	expect(screen.getByText("Student ID is not correct! Please retry with another student ID")).toBeInTheDocument();
+	
+
+	
+
+  });
+
+
+
+  
+

@@ -138,7 +138,7 @@ it('API getCourseLectures', (done) => {
         })
 });
 it('API bookLecture', (done) => {
-    API.bookLecture(68,68,"68@gimeil.com")
+    API.bookLecture(68,68,"68@gimeil.com",0)
         .then((usrObj) => {
             expect(usrObj).not.toBeNull();
             if (done)
@@ -316,3 +316,76 @@ it('API turnOnRemote', (done) => {
                 done();
         })
 });
+
+
+it('API getStudentsCountforLecture', (done) => {
+    API.getStudentsCountforLecture(1027)
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+it('API getStudentfromWaitingList', (done) => {
+    API.getStudentfromWaitingList(1027)
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+
+it('API turnOnBooked', (done) => {
+    API.turnOnBooked(900001,1027)
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+it('API getStudentInfo', (done) => {
+    API.getStudentInfo(900001)
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+it('API generateContactTracingReport', (done) => {
+    API.generateContactTracingReport(900001,"PDF")
+        .then((usrObj) => {
+            expect(usrObj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+

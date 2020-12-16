@@ -101,7 +101,6 @@ class UploadLists extends React.Component {
 
             case 1:
                 this.props.uploadFile(this.state.fileS, 'Students');
-
                 break;
 
             case 2:
