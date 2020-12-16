@@ -108,12 +108,12 @@ describe('API test', function () {
             .expect(200, done);
     });
 
-    it('GET lectures csv', function (done) {
+    /*it('GET lectures csv', function (done) {
         request(app)
             .get('/api/lectures/csv')
             .set('Accept', 'application/json')
             .expect(200, done);
-    });
+    });*/
     it('GET lectures deleted', function (done) {
         request(app)
             .get('/api/lectures/includeDeleted')
@@ -201,12 +201,12 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
-    it('GET csv files bookings', function (done) {
+    /*it('GET csv files bookings', function (done) {
         request(app)
             .get('/api/bookings/csv')
             .set('Accept', 'application/json')
             .expect(200, done);
-    });
+    });*/
 
     it('GET csv files getStudentWaitingList', function (done) {
         request(app)
@@ -318,12 +318,12 @@ describe('API test', function () {
             .expect(200, done);
     });
     //==================== subjects API test ====================
-    it('GET subjects csv', function (done) {
+    /*it('GET subjects csv', function (done) {
         request(app)
             .get('/api/subjects/csv')
             .set('Accept', 'application/json')
             .expect(200, done);
-    });
+    });*/
     //==================== teachers API test ====================
 
     it('GET teachers', function (done) {
@@ -332,12 +332,12 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     });
-    it('GET teachers csv', function (done) {
+    /*it('GET teachers csv', function (done) {
         request(app)
             .get('/api/teachers/csv')
             .set('Accept', 'application/json')
             .expect(200, done);
-    });
+    });*/
 
     it('GET teachers/nextLecture', function (done) {
         request(app)
@@ -371,12 +371,12 @@ describe('API test', function () {
             .expect(200, done);
     });
 
-    it('GET students csv', function (done) {
+    /*it('GET students csv', function (done) {
         request(app)
             .get('/api/students/csv')
             .set('Accept', 'application/json')
             .expect(200, done);
-    });
+    });*/
 
     //==================== DELETE API test ====================
 

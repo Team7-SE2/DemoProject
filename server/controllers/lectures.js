@@ -5,10 +5,10 @@ var db = require('../models/index');
 var moment = require('moment');
 const Op = db.Sequelize.Op;
 var transporter = require('../helpers/email');
-const fs = require('fs')
-var path = require('path');
-var root = path.dirname(require.main.filename);
-const csvFilePath =  root + '/../csv_files/Schedule1s.csv' // or any file format
+//const fs = require('fs')
+//var path = require('path');
+//var root = path.dirname(require.main.filename);
+//const csvFilePath =  root + '/../csv_files/Schedule1s.csv' // or any file format
 
 /*
     *** API LIST ***
@@ -21,7 +21,7 @@ const csvFilePath =  root + '/../csv_files/Schedule1s.csv' // or any file format
 
 module.exports = function () {
 
-    router.get('/csv', (req, res) => {
+    /*router.get('/csv', (req, res) => {
 
         console.log(csvFilePath)
         // Check if file specified by the filePath exists 
@@ -36,7 +36,7 @@ module.exports = function () {
             }
         });
         
-    })
+    })*/
     
     router.get('/includeDeleted',function (req, res){
         var paramsQuery = {}

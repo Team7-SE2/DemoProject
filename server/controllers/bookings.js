@@ -8,9 +8,11 @@ var moment = require("moment")
 const { jsPDF } = require("jspdf");
 var path = require('path');
 const { create } = require('domain');
-const fs = require('fs')
-var root = path.dirname(require.main.filename);
-const csvFilePath =  root + '/../csv_files/Enrollment.csv' // or any file format
+//const fs = require('fs')
+var path = require('path');
+//var root = path.dirname(require.main.filename);
+//const csvFilePath =  root + '/../csv_files/Enrollment.csv' // or any file format
+
 const ObjectsToCsv = require('objects-to-csv');
 
 /*
@@ -23,7 +25,7 @@ const ObjectsToCsv = require('objects-to-csv');
 */
 module.exports = function () {
 
-    router.get('/csv', (req, res) => {
+    /*router.get('/csv', (req, res) => {
 
         console.log(csvFilePath)
         // Check if file specified by the filePath exists 
@@ -38,7 +40,7 @@ module.exports = function () {
             }
         });
         
-    })
+    })*/
 
 //http://localhost:3100/api/bookings/getStudentWaitingList?lecture_id=1027
     router.get('/getStudentWaitingList', (req, res) => {
