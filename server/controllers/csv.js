@@ -7,8 +7,9 @@ var bodyParser = require('body-parser');
 var multer = require ('multer');
 const fastcsv = require("fast-csv");
 var csvHelper = require('../helpers/csv_parser')
+var fs = require('fs');
 
-var upload_middleware = multer({dest: './csv_files/uploads/', limits: {fileSize: 8000000} });
+var upload_middleware = multer({dest: './csv_files/uploads/' });
 
 module.exports = function () {
 
@@ -38,12 +39,15 @@ module.exports = function () {
                 destPath = './csv_files/Schedule1s.csv'
                 break;
             default:
+                { console.log("nel default")
                 res.status(500).end();
+                }
         }
         try{
 
             fs.rename(req.file.path, destPath, function (err) {
                 if (err) {
+                    console.log("Rename : "+ err);
                     res.status(500).end();
                 } else {
                     csvHelper.parse(requestType);
@@ -52,6 +56,7 @@ module.exports = function () {
             });
 
         } catch (err) {
+            console.log("Nel catch " + err);
             res.status(500).end();
         }
 

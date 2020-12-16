@@ -58,7 +58,15 @@ Object.keys(db).forEach(function (modelName) {
 
 
 sequelize.sync().then(() => { 
-    
+    db['roles'].findOrCreate({where:{id:1},defaults:{role:'Administrator',system_role:true}})
+    .then(() => {db['roles'].findOrCreate({where:{id:2},defaults:{role:'Support Officer',system_role:true}} )
+        .then(()=>{ db['roles'].findOrCreate({where:{id:3},defaults:{role:'Booking Manager',system_role:true}})
+            .then(()=>{ db['roles'].findOrCreate({where:{id:4},defaults:{role:'Teacher'}})
+                .then(()=> {  db['roles'].findOrCreate({where:{id:5},defaults:{role:'Student'}})
+                    .then(()=> { 
+                        db['users'].findOrCreate({where:{id:'bm001'}, defaults:{id:'bm001', name:'BookingManager', surname:'1', email: 'bm001@politu.it', role_id: 3}})
+                        db['users'].findOrCreate({where:{id:'so001'}, defaults:{id:'so001', name:'SupportOfficer', surname:'1', email: 'so001@politu.it', role_id: 2}})
+                    } ) } ) } ) }) } )  
 })
 /*await db['roles'].findOrCreate({where:{id:1},defaults:{role:'Administrator',system_role:true}})
 await db['roles'].findOrCreate({where:{id:2},defaults:{role:'Support Officer',system_role:true}})

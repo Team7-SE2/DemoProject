@@ -27,7 +27,7 @@ class UploadLists extends React.Component {
 
 
 
-    updateFields = (value, error, f) => {
+    updateFields = (name, value, error, f) => {
 
         let file = value.split(".");
         let ext = file[file.length - 1];

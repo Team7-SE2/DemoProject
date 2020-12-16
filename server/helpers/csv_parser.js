@@ -196,7 +196,7 @@ csvParser.Schedule1s = function(data){
                 date: moment(dates).hours(startHours.split(":")[0]).minutes(startHours.split(":")[1]),
                 subject_id: s.code,
                 duration: duration,
-                room: s.room
+                room_id: s.room
         })
         })
     })
