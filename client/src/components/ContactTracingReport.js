@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Alert from "react-bootstrap/Alert"
 import API from '../api/api';
 import Modal from "react-bootstrap/Modal"
 class ContactTracingReport extends React.Component {
