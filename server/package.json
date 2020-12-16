@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "start": "node --inspect=0.0.0.0 ./bin/www",
-    "test": "set NODE_ENV=test&& jest --coverage --detectOpenHandles"
+    "test": "set NODE_ENV=test&& jest --coverage --detectOpenHandles",
+    "client-test": "set NODE_ENV=test&& npm start"
   },
   "description": "PULSBS",
   "author": {

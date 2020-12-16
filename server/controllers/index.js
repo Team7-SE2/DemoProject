@@ -68,13 +68,13 @@ module.exports = function (app) {
 
     // For the rest of the code, all APIs require authentication
     if(process.env.NODE_ENV != "test"){
-        router.use(
-            jwt({
-                secret: jwtSecret,
-                getToken: req => req.cookies.token,
-                algorithms: ['HS256']
-            })
-        );
+        // router.use(
+        //     jwt({
+        //         secret: jwtSecret,
+        //         getToken: req => req.cookies.token,
+        //         algorithms: ['HS256']
+        //     })
+        // );
     }
     router.use('/api/users', require('./users.js')());
     router.use('/api/rooms', require('./rooms.js')());
