@@ -9,7 +9,9 @@ const fastcsv = require("fast-csv");
 var csvHelper = require('../helpers/csv_parser')
 var fs = require('fs');
 
-var upload_middleware = multer({dest: './csv_files/uploads/' });
+var upload_middleware = multer({dest: './csv_files/uploads/',limits: {
+    fileSize: 8000000 // Compliant: 8MB
+ } });
 
 module.exports = function () {
 
