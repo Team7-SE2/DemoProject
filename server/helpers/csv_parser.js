@@ -15,8 +15,10 @@ csvParser.parse = function (type){
         case 'Enrollment':{headers = ['subject_id','user_id'];} break;
         case 'Schedule1s':{headers = ['code','room','day','seats','time'];} break;
         //case 'Schedule2s':{headers = ['code','room','day','seats','time'];} break;
-        default: {console.log("Ma che minchia hai scritto?")} break;
+        default: {/*console.log("Ma che minchia hai scritto?")*/} 
+        return;
     }
+    
     fs.createReadStream(process.cwd()+"/csv_files/"+type+".csv")
         .pipe(csv({separator: ',',headers: headers}))
         .on('data', (data) => results.push(data))
