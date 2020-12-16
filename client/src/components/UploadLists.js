@@ -138,7 +138,7 @@ class UploadLists extends React.Component {
             <Row>
                 <Col sm={3} />
                 <Col sm={6}>
-                    <UploadCoursesList handleSubmit={this.handleSubmit} updateFields={this.updateFields} error={this.state.errorC} closeError={this.closeError} />
+                    <UploadTeachersList handleSubmit={this.handleSubmit} updateFields={this.updateFields} error={this.state.errorT} closeError={this.closeError} />
                 </Col>
             </Row>
             <br />
@@ -146,7 +146,7 @@ class UploadLists extends React.Component {
             <Row>
                 <Col sm={3} />
                 <Col sm={6}>
-                    <UploadTeachersList handleSubmit={this.handleSubmit} updateFields={this.updateFields} error={this.state.errorT} closeError={this.closeError} />
+                    <UploadCoursesList handleSubmit={this.handleSubmit} updateFields={this.updateFields} error={this.state.errorC} closeError={this.closeError} />
                 </Col>
             </Row>
             <br />
