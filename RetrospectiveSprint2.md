@@ -71,7 +71,7 @@ TEMPLATE FOR RETROSPECTIVE Team - 7
 
 - What lessons did you learn (both positive and negative) in this sprint? 
   - Positive: we improved our skills 
-  - Negative: we learned that group works eats some time. 
+  - Negative: we learned that group works takes too much time. 
 
 - Which improvement goals set in the previous retrospective were you able to achieve? 
   - we were able to work in order to realize E2E tests.
