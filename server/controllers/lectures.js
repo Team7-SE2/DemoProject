@@ -17,9 +17,84 @@ var transporter = require('../helpers/email');
     DELETE -> /api/lectures/:id -> elimina la singola prenotazione
     PUT -> /api/lectures/:id -> modifica dettagli della lezione
     POST -> /api/lectures -> body:{campi della tabella} -> crea una lezione
-*/  
+*/
 
 module.exports = function () {
+
+
+    //  GET -> /api/lectures/getCourseSchedule/:subjectId -> restituisce l'orario del corso--> lista di lezioni -->lecture.dayschedule
+    router.get('/getCourseSchedule/:subjectId', function (req, res) {
+        let schedules = [];
+
+        db['lectures'].findAll({
+            where: {
+                date: {
+                    [Op.lt]: moment().add(7, "days").toDate(),
+                    [Op.gte]: moment().toDate()
+                },
+                subject_id: { [Op.eq]: req.params.subjectId }
+            }
+        })
+            .then((lectures) => {
+
+                lectures.forEach((l) => {
+                    l.dataValues.dayschedule = moment(l.dataValues.date).format("dddd kk:mm");
+                }
+                );
+                res.send(lectures);
+            })
+    })
+
+    //  PUT -> /api/lectures//changeSchedule/Course/:subjectId/Day/:oldDay -> modifica l'orario del corso subjectId cambiando il giorno oldDay con il nuovo req.body.new_day e req.body.new_time
+    //inviare al server il body con  new_day=moment(lecture.date).format('dddd') e new_time in formato hh:mm
+    //ex. body:{ new_day: "Monday", new_time: "16:00"}
+
+    router.put('/changeSchedule/Course/:subjectId/Day/:oldDay', function (req, res) {
+        let idlectures = [];
+        db['lectures'].findAll({ where: { subject_id: req.params.subjectId } })
+            .then((lectures) => {
+
+                lectures.forEach((l) => {
+                    if (moment(l.dataValues.date).format("dddd").toString() == req.params.oldDay &&
+                        moment(l.dataValues.date).isAfter(moment()) &&
+                        moment(moment(l.dataValues.date).day(req.body.new_day).format("YYYY-MM-DD").toString() + " " + req.body.new_time).isAfter(moment())) {
+
+                        idlectures.push(l.dataValues.id);
+                        db['lectures'].update(
+                            // Values to update
+                            {
+                                date: moment(moment(l.dataValues.date).day(req.body.new_day).format("YYYY-MM-DD").toString() + " " + req.body.new_time).toString()
+                            },
+                            { // Clause
+                                where:
+                                {
+                                    id: {
+                                        [Op.eq]: l.dataValues.id
+                                    }
+                                }
+                            }
+                        )
+
+                    }
+                }
+
+                )
+
+                res.status(200).send("Schedule updated\nRows: " + idlectures.length);
+            }
+            )
+
+
+
+    })
+
+
+
+
+
+
+
+
 
     /*router.get('/csv', (req, res) => {
 
@@ -37,50 +112,52 @@ module.exports = function () {
         });
         
     })*/
-    
-    router.get('/includeDeleted',function (req, res){
+
+    router.get('/includeDeleted', function (req, res) {
         var paramsQuery = {}
         var paramsQuerySubject = {}
         paramsQuery = req.query;
-        if (req.query.startDate){
-            paramsQuery.date = {[Op.gt]: moment(req.query.startDate).toDate()}
+        if (req.query.startDate) {
+            paramsQuery.date = { [Op.gt]: moment(req.query.startDate).toDate() }
         }
-        if (req.query.endDate){
-            paramsQuery.date = {[Op.lt]: moment(req.query.endDate).toDate()}
+        if (req.query.endDate) {
+            paramsQuery.date = { [Op.lt]: moment(req.query.endDate).toDate() }
         }
-        if (req.query.startDate && req.query.endDate){
+        if (req.query.startDate && req.query.endDate) {
             paramsQuery.date = {
                 [Op.gt]: moment(req.query.startDate).toDate(),
                 [Op.lt]: moment(req.query.endDate).toDate()
             }
         }
-        if (req.query.teacher_id){
+        if (req.query.teacher_id) {
             paramsQuerySubject.teacher_id = req.query.teacher_id;
             delete paramsQuery.teacher_id;
         }
 
         delete paramsQuery.startDate;
         delete paramsQuery.endDate;
-        db['lectures'].findAll({where: paramsQuery,paranoid:false,include:[
-            {model: db.subjects, as: 'subject', where: paramsQuerySubject},
-            {model:db.rooms, as: 'room'},
-            {model:db.users, as: 'lecture_bookings'}
-        ]})
-        .then((lectures)=>{
-            res.send(lectures)
+        db['lectures'].findAll({
+            where: paramsQuery, paranoid: false, include: [
+                { model: db.subjects, as: 'subject', where: paramsQuerySubject },
+                { model: db.rooms, as: 'room' },
+                { model: db.users, as: 'lecture_bookings' }
+            ]
         })
+            .then((lectures) => {
+                res.send(lectures)
+            })
     })
     // API teacher LECTURES LOADS 
     router.get('/users/:user_id', function (req, res) {
         var paramsQuery = {}
         paramsQuery = req.query;
-        if (req.query.startDate){
-            paramsQuery.date = {[Op.gt]: moment(req.query.startDate).toDate()}
+        if (req.query.startDate) {
+            paramsQuery.date = { [Op.gt]: moment(req.query.startDate).toDate() }
         }
-        if (req.query.endDate){
-            paramsQuery.date = {[Op.lt]: moment(req.query.endDate).toDate()}
+        if (req.query.endDate) {
+            paramsQuery.date = { [Op.lt]: moment(req.query.endDate).toDate() }
         }
-        if (req.query.startDate && req.query.endDate){
+        if (req.query.startDate && req.query.endDate) {
             paramsQuery.date = {
                 [Op.gt]: moment(req.query.startDate).toDate(),
                 [Op.lt]: moment(req.query.endDate).toDate()
@@ -95,15 +172,15 @@ module.exports = function () {
                 include: [{
                     model: db.subjects,
                     as: 'subject',
-                    where: { 
-                        teacher_id: req.params.user_id 
+                    where: {
+                        teacher_id: req.params.user_id
                     },
                 },
-                {model:db.rooms, as: 'room'}]
+                { model: db.rooms, as: 'room' }]
             })
-            .then((lectures) => {
-                res.send(lectures);
-            })
+                .then((lectures) => {
+                    res.send(lectures);
+                })
         }
         else {
             console.log("Some params missing requesting sudent's load 1!");
@@ -111,7 +188,7 @@ module.exports = function () {
         }
 
     })
-    
+
     // Initialize finale
     finale.initialize({
         app: router,
@@ -121,52 +198,56 @@ module.exports = function () {
     // Create REST resource
     var LecturesResource = finale.resource({
         model: db.lectures,
-        endpoints: ['/','/:id'], //MANAGE GET, POST, PUT, DELETE
+        endpoints: ['/', '/:id'], //MANAGE GET, POST, PUT, DELETE
         search: [
             {
-            operator: Op.gt,
-            param: 'startDate',
-            attributes: [ 'date' ]
-          },
-          {
-            operator: Op.lt,
-            param: 'endDate',
-            attributes: [ 'date' ]
-          }
+                operator: Op.gt,
+                param: 'startDate',
+                attributes: ['date']
+            },
+            {
+                operator: Op.lt,
+                param: 'endDate',
+                attributes: ['date']
+            }
         ],
-        include:[{model:db.rooms, as: 'room'}],
-        paranoid:false
-        
+        include: [{ model: db.rooms, as: 'room' }],
+        paranoid: false
+
     });
-    
-    LecturesResource.delete.fetch(function(req,res,context){
-        if(req.params.id){
+
+    LecturesResource.delete.fetch(function (req, res, context) {
+        if (req.params.id) {
             //TODO
             //vanno cancellati anche i bookings per quella lezione?
-            db['lectures'].findOne({where:{id:req.params.id},
-                include:[{model:db.subjects,as:'subject',
-                    include:[{model:db.users}]}
-                ]})
-                .then((lecture)=>{
-                    if(lecture && lecture.subject && lecture.subject.users){
+            db['lectures'].findOne({
+                where: { id: req.params.id },
+                include: [{
+                    model: db.subjects, as: 'subject',
+                    include: [{ model: db.users }]
+                }
+                ]
+            })
+                .then((lecture) => {
+                    if (lecture && lecture.subject && lecture.subject.users) {
                         console.log("Invio una mail a tutti gli studenti che avevano la materia nel carico didattico");
-                        lecture.subject.users.forEach((student)=>{
+                        lecture.subject.users.forEach((student) => {
                             var mailOptions = {
                                 from: "pulsbsnoreply@gmail.com",
-                                subject: 'Canceled a lecture of '+lecture.subject.description,
-                                text: 'Dear '+student.name+",\nthe lecture of "+lecture.subject.description+" scheduled for "+moment(lecture.date).format('LLL')+" was canceled.\nRegards"
+                                subject: 'Canceled a lecture of ' + lecture.subject.description,
+                                text: 'Dear ' + student.name + ",\nthe lecture of " + lecture.subject.description + " scheduled for " + moment(lecture.date).format('LLL') + " was canceled.\nRegards"
                             }
                             // set the teacher email
                             mailOptions.to = student.email;
-                    
+
                             // send the email to the student
                             transporter.sendEmail(mailOptions);
                         })
                     }
-                    console.log("Cancellata lezione con id: "+req.params.id);
+                    console.log("Cancellata lezione con id: " + req.params.id);
                     context.continue();
                 })
-            }
+        }
         else
             context.continue();
     })
