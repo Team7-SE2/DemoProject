@@ -103,7 +103,7 @@ describe('API test', function () {
     
     it('PUT lectures changeSchedule', function (done) {
         request(app)
-            .put('/api/lectures/changeSchedule/Course/XY1211/Day/Monday')
+            .put('/api/lectures/changeSchedule/Course/XY1211/Day/Monday 08:30')
             .send({ new_day: "Friday", new_time: "16:00" })
             .set('Accept', 'application/json')
             .expect(200, done);
