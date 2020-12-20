@@ -45,8 +45,9 @@ module.exports = function () {
             })
     })
 
-    //  PUT -> /api/lectures//changeSchedule/Course/:subjectId/Day/:oldDay -> modifica l'orario del corso subjectId cambiando il giorno oldDay con il nuovo req.body.new_day e req.body.new_time
+    //  PUT -> /api/lectures/changeSchedule/Course/:subjectId/Day/:oldDay -> modifica l'orario del corso subjectId cambiando il giorno oldDay con il nuovo req.body.new_day e req.body.new_time
     //inviare al server il body con  new_day=moment(lecture.date).format('dddd') e new_time in formato hh:mm
+    // oldDay="Monday 16:00"
     //ex. body:{ new_day: "Monday", new_time: "16:00"}
 
     router.put('/changeSchedule/Course/:subjectId/Day/:oldDay', function (req, res) {
@@ -55,7 +56,7 @@ module.exports = function () {
             .then((lectures) => {
 
                 lectures.forEach((l) => {
-                    if (moment(l.dataValues.date).format("dddd").toString() == req.params.oldDay &&
+                    if (moment(l.dataValues.date).format("dddd kk:mm").toString() == req.params.oldDay &&
                         moment(l.dataValues.date).isAfter(moment()) &&
                         moment(moment(l.dataValues.date).day(req.body.new_day).format("YYYY-MM-DD").toString() + " " + req.body.new_time).isAfter(moment())) {
 

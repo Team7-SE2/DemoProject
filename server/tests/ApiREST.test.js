@@ -100,10 +100,25 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     })
+    
+    it('PUT lectures changeSchedule', function (done) {
+        request(app)
+            .put('/api/lectures/changeSchedule/Course/XY1211/Day/Monday')
+            .send({ new_day: "Friday", new_time: "16:00" })
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    })
 
     it('GET lectures', function (done) {
         request(app)
             .get('/api/lectures')
+            .set('Accept', 'application/json')
+            .expect(200, done);
+    });
+
+    it('GET getCourseSchedule', function (done) {
+        request(app)
+            .get('/api/lectures/getCourseSchedule/XY1211')
             .set('Accept', 'application/json')
             .expect(200, done);
     });
