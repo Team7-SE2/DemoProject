@@ -20,6 +20,7 @@ import CourseLectures from './components/CourseLectures';
 import moment from 'moment';
 import TeacherStatistics from './components/TeacherStatistics';
 import UploadLists from './components/UploadLists';
+import SupportOfficerListCourses from './components/SupportOfficerListCourses'
 function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
   var q = str.split("?");
@@ -145,7 +146,12 @@ class App extends React.Component {
         }
 
         if(info.role_id===2) {
-          this.props.history.push("/supportOfficer");
+          //this.loadInitialSubjects();
+          API.getSubjects()
+          .then((courses) => {
+            this.setState({ courses: courses})
+            this.props.history.push("/supportOfficer");
+          })
         }
 
       }
@@ -194,6 +200,20 @@ class App extends React.Component {
         this.handleErrors(err);
       });
   }
+  
+  showCourseLectures = (course) => {
+    API.getStudentCourseLectures(course.id)
+      .then((lectures) => {
+        this.setState({ course: course });
+        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
+        this.props.history.push("/supportOfficer/courseSchedule/" + course.subjectID + "/lectures");
+
+      })
+      .catch((err) => {
+        this.handleErrors(err);
+      });
+  }
+  
 
   getStudentsList = (lecture) => {
     API.getStudentListforLecture(lecture.id)
@@ -672,6 +692,38 @@ class App extends React.Component {
                 <Route exact path="/supportOfficer">
                     {!this.state.logged &&  <Redirect to="/login" />}    
                   <UploadLists  uploadFile={this.uploadFile} />
+                </Route>
+
+                <Route exact path="/supportOfficer/courseSchedule">
+                    {!this.state.logged &&  <Redirect to="/login" />}    
+                    <Container fluid>
+                      <Row >
+                        <Col sm={1}></Col>
+                        <Col sm={10} className="below-nav">
+                          <Card>
+                            <Card.Header className="text-center">
+                              <h3>All Courses</h3>
+                            </Card.Header>
+                            <Card.Body>
+                              <SupportOfficerListCourses courses={this.state.courses} showLectures={this.showCourseLectures} role_id={this.state.info_user.role_id} />
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
+                    </Container>
+                </Route>
+                <Route exact path={"/supportOfficer/courseSchedule/" + this.state.course.subjectID + "/lectures"}>
+                  <Container fluid>
+                    <Row >
+                      <Col sm={1} className="below-nav" />
+                      <Col sm={10} className="below-nav">
+                        <CourseLectures turnOnRemote={this.turnOnRemote} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} />
+                      </Col>
+                      <Col sm={1} className="below-nav" />
+
+                    </Row>
+                  </Container>
+
                 </Route>
 
                 <Route exact path="/student">

@@ -37,7 +37,15 @@ const CourseLectures = (props) => {
 
     ]);
 
-
+    const weekDays = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday'
+    ]
 
     const [columns] = useState(
         role_id === 4 ?
@@ -48,9 +56,15 @@ const CourseLectures = (props) => {
                 { name: 'Switch to remote', title: 'Switch to remote' },
                 { name: 'Delete the lecture', title: 'Delete the lecture' }
             ]
-            :
+            : role_id === 5 ?
             [{ name: 'lectureDate', title: 'Lecture Date' },
             { name: 'book', title: ' ' }]
+            :
+            [
+                { name: 'lectureDate', title: 'Lecture Date' },
+                { name: 'lectureDay', title: 'Lecture Day' },
+                { name: 'lectureDuration', title: 'Lecture Duration' }
+            ]
     );
 
     const [sortingStateColumnExtensions] = useState([
@@ -112,7 +126,7 @@ const CourseLectures = (props) => {
             }
         }
 
-        if (role_id == 5) {
+        else if (role_id == 5) {
             console.log("LECTURE: " + JSON.stringify(lec))
             return {
                 id: lec.id,
@@ -124,6 +138,15 @@ const CourseLectures = (props) => {
                 }}>
                     {lec.deleted_at == null ? checkPrenotation(bookedLectures, lec.id) ? <Button variant="danger" onClick={() => {deleteBookedLecture(lec.id, course); }}> {(lec.full && bookedLectures.find((item)=> item.lecture_id == lec.id).waiting == true)/*&& lec.lecture_bookings.find((item)=>item.id == studentID).bookings.waiting ==true */ ? "LEAVE THE WAITING LIST" : "UNBOOK"} </Button> : <Button variant= {lec.full ? "warning" : "success"} onClick={() => {if(lec.full) {handleShowQueue(lec);} else {bookLecture(lec.id, 0);}} /*bookLecture(lec.id)*/}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
                 </div>,
+            }
+        }
+
+        else if (role_id == 2) {
+            return {
+                id: lec.id,
+                lectureDate: moment(new Date(lec.date)).format("LLL"),
+                lectureDay: weekDays[moment(new Date(lec.date)).day() - 1],
+                lectureDuration: lec.duration + " hours",
             }
         }
     })

@@ -205,3 +205,11 @@ button:focus {
 .MuiFormControl-marginNormal{
   margin-top:0 !important;
 }
+
+.TableFilterCell-cell-28:nth-child(6) div{
+  visibility:hidden;
+}
+
+.TableFilterCell-cell-28:nth-child(7) div{
+  visibility:hidden;
+}
