@@ -48,9 +48,9 @@ module.exports = function () {
     //  PUT -> /api/lectures/changeSchedule/Course/:subjectId/Day/:oldDay -> modifica l'orario del corso subjectId cambiando il giorno oldDay con il nuovo req.body.new_day e req.body.new_time
     //inviare al server il body con  new_day=moment(lecture.date).format('dddd') e new_time in formato hh:mm
     // oldDay="Monday 16:00"
-    //ex. body:{ new_day: "Monday", new_time: "16:00"}
+    //ex. body:{ new_day: "Monday", new_time: "16:00", new_duration: 3}
 
-    router.put('/changeSchedule/Course/:subjectId/Day/:oldDay', function (req, res) {
+    router.put('/changeSchedule/Course/:subjectId/Day/:oldDay/duration/:oldDuration', function (req, res) {
         let idlectures = [];
         db['lectures'].findAll({ where: { subject_id: req.params.subjectId } })
             .then((lectures) => {
@@ -58,13 +58,15 @@ module.exports = function () {
                 lectures.forEach((l) => {
                     if (moment(l.dataValues.date).format("dddd kk:mm").toString() == req.params.oldDay &&
                         moment(l.dataValues.date).isAfter(moment()) &&
-                        moment(moment(l.dataValues.date).day(req.body.new_day).format("YYYY-MM-DD").toString() + " " + req.body.new_time).isAfter(moment())) {
+                        moment(moment(l.dataValues.date).day(req.body.new_day).format("YYYY-MM-DD").toString() + " " + req.body.new_time).isAfter(moment())
+                        && l.dataValues.duration==req.params.oldDuration) {
                         console.log("match")
                         idlectures.push(l.dataValues.id);
                         db['lectures'].update(
                             // Values to update
                             {
-                                date: moment(moment(l.dataValues.date).day(req.body.new_day).format("YYYY-MM-DD").toString() + " " + req.body.new_time).toString()
+                                date: moment(moment(l.dataValues.date).day(req.body.new_day).format("YYYY-MM-DD").toString() + " " + req.body.new_time).toString(),
+                                duration: req.body.new_duration
                             },
                             { // Clause
                                 where:
