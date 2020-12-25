@@ -59,7 +59,7 @@ module.exports = function () {
                     if (moment(l.dataValues.date).format("dddd kk:mm").toString() == req.params.oldDay &&
                         moment(l.dataValues.date).isAfter(moment()) &&
                         moment(moment(l.dataValues.date).day(req.body.new_day).format("YYYY-MM-DD").toString() + " " + req.body.new_time).isAfter(moment())) {
-
+                        console.log("match")
                         idlectures.push(l.dataValues.id);
                         db['lectures'].update(
                             // Values to update

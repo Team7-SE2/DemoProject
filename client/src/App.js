@@ -332,6 +332,21 @@ class App extends React.Component {
       });
   }
 
+  putCourseLectureSchedule = (subject_id, old_day, new_day, new_hour) => {
+
+    API.putCourseLectureSchedule(subject_id, old_day, new_day, new_hour)
+      .then(() => {
+          API.getStudentCourseLectures(subject_id)
+            .then((lectures) => {
+              this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
+              this.props.history.push("/supportOfficer/courseSchedule/");
+            })
+            .catch((err) => {
+              this.handleErrors(err);
+            });
+      })
+  }
+
   deleteLecture = (lecture) => {
     API.deleteLecture(lecture.id)
       .then(() => {
@@ -715,7 +730,7 @@ class App extends React.Component {
                         <Col sm={10} className="below-nav">
                           <Card>
                             <Card.Header className="text-center">
-                              <h3>All Courses</h3>
+                              <h3>All Courses schedule</h3>
                             </Card.Header>
                             <Card.Body>
                               <SupportOfficerListCourses courses={this.state.courses} showLectures={this.showCourseLectures} showLecturesSchedule={this.showCourseLecturesSchedule} role_id={this.state.info_user.role_id} />
@@ -733,10 +748,10 @@ class App extends React.Component {
                         <Col sm={10} className="below-nav">
                           <Card>
                             <Card.Header className="text-center">
-                              <h3>"{this.state.course.description}" lectures schedule</h3>
+                              <h3>"{this.state.course.description}" schedule</h3>
                             </Card.Header>
                             <Card.Body>
-                              <SupportOfficerListLectures lectures={this.state.lectures} showLectures={this.showCourseLectures} role_id={this.state.info_user.role_id} />
+                              <SupportOfficerListLectures course_id = {this.state.course.id} lectures={this.state.lectures} showLectures={this.showCourseLectures} putCourseLectureSchedule={this.putCourseLectureSchedule} role_id={this.state.info_user.role_id} />
                             </Card.Body>
                           </Card>
                         </Col>

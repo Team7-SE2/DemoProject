@@ -13,14 +13,14 @@ const TimePickerComponent = (props) => {
   let { type, setStateDate } = props;
 
 
-  let date = type === "startDate" ? moment().add(-7, "days").startOf("day") : moment().endOf("day");
+  let date = moment();
 
   // The first commit of Material-UI
   const [selectedDate, setSelectedDate] = React.useState(date);
 
   const handleDateChange = (d) => {
     setSelectedDate(d);
-    setStateDate(props.type, d);
+    setStateDate(d);
   };
 
   return (
@@ -30,8 +30,8 @@ const TimePickerComponent = (props) => {
           margin="normal"
           id="time-picker"
           /*label= {label}*/
-          /*value={selectedDate}
-          onChange={handleDateChange}*/
+          value={selectedDate}
+          onChange={handleDateChange}
           KeyboardButtonProps={{
             'aria-label': 'change time',
           }}

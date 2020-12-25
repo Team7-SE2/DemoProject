@@ -3,6 +3,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from "react-bootstrap/Button";
 import { SortingState, PagingState, SearchState, FilteringState, IntegratedFiltering, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
 import { Grid, Table, TableHeaderRow, TableFilterRow, PagingPanel, Toolbar, SearchPanel } from '@devexpress/dx-react-grid-material-ui';
+import { FaUsers, FaTrashAlt, FaList, FaCogs } from 'react-icons/fa';
 
 const SupportOfficerListCourses = (props) => {
 
@@ -19,12 +20,12 @@ const SupportOfficerListCourses = (props) => {
       semester: course.semester,
       lecturesList: <div key={course.subjectID} onClick={() => showLectures(course)} style = {{textAlign : "center"}}> 
       
-        <Button variant="primary">View lectures</Button>
+        <Button variant="primary"> <FaList size={20}></FaList></Button>
 
       </div>,
       lecturesSchedule: <div key={course.subjectID} onClick={() => showLecturesSchedule(course)} style = {{textAlign : "center"}}> 
       
-        <Button variant="primary">Schedule lectures</Button>
+        <Button variant="primary"> <FaCogs size={20}></FaCogs></Button>
 
       </div>
     }

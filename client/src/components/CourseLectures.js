@@ -38,13 +38,13 @@ const CourseLectures = (props) => {
     ]);
 
     const weekDays = [
+        'Sunday',
         'Monday',
         'Tuesday',
         'Wednesday',
         'Thursday',
         'Friday',
         'Saturday',
-        'Sunday'
     ]
 
     const [columns] = useState(
@@ -145,7 +145,7 @@ const CourseLectures = (props) => {
             return {
                 id: lec.id,
                 lectureDate: moment(new Date(lec.date)).format("LLL"),
-                lectureDay: weekDays[moment(new Date(lec.date)).day() - 1],
+                lectureDay: weekDays[moment(new Date(lec.date)).day()],
                 lectureDuration: lec.duration + " hours",
             }
         }

@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import TimePickerComponent from './TimePickerComponent';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import {FaCog } from 'react-icons/fa';
 
 class SupportOfficerListLectures extends React.Component {
 
@@ -16,30 +17,35 @@ class SupportOfficerListLectures extends React.Component {
     super(props);
     
     const weekDays = [
+      'Sunday',
       'Monday',
       'Tuesday',
       'Wednesday',
       'Thursday',
       'Friday',
       'Saturday',
-      'Sunday'
     ] 
 
     let scheduled = [];
+
     // prepare scheduledLectures
     for(let i = 0; i < props.lectures.length; i++){
 
       let lec = props.lectures[i];
-      let index = moment(new Date(lec.date)).day() - 1;
-      console.log(lec)
-      if(scheduled.length > index)
-      scheduled[index].scheduledLectures ++;
+      let index = moment(new Date(lec.date)).day();
+
+      // find the lecture inside the array
+      let arrayIndex = scheduled.findIndex(x => x.lectureDay === weekDays[index] && x.beginHour === moment(lec.date).format("HH:mm") && x.duration === lec.duration)
+
+      if(arrayIndex >= 0)
+        scheduled[arrayIndex].scheduledLectures ++;
       else{
         scheduled.push({
           scheduledLectures : 1,
           lectureDay : weekDays[index],
           beginHour: moment(lec.date).format("HH:mm"),
-          endHour: moment(lec.date).add(lec.duration, 'hours').format("HH:mm")
+          endHour: moment(lec.date).add(lec.duration, 'hours').format("HH:mm"),
+          duration: lec.duration
         })
       }
 
@@ -53,7 +59,7 @@ class SupportOfficerListLectures extends React.Component {
         scheduledLectures: lec.scheduledLectures,
         changeSchedule: <div style = {{textAlign : "center"}}> 
         
-          <Button key={lec.lectureDay} variant="primary" onClick={(e) => this.confirm(lec.lectureDay, e)} type="submit">Change Schedule</Button>
+          <Button key={lec.lectureDay} variant="primary" onClick={(e) => this.confirm(lec.lectureDay, lec.beginHour, e)} type="submit"><FaCog size={20}></FaCog></Button>
   
         </div>,
       }
@@ -61,7 +67,7 @@ class SupportOfficerListLectures extends React.Component {
     });
     
     this.state = {
-
+      course_id: props.course_id,
       lectures: props.lectures,
       showLectures : props.showLectures,
       showLectureSchedule: props.showLectureSchedule,
@@ -77,30 +83,54 @@ class SupportOfficerListLectures extends React.Component {
         { name: 'changeSchedule', title: 'Change Schedule' }
       ],
       pageSizes: [5, 10, 15, 0],
-      dayOfWeek: ''
+      dayOfWeek: '',
+      newBeginHour: moment().format("HH:mm"),
+      newDay: 'Monday'
         
     };
   }
-  //let { lectures ,showLectures, showLectureSchedule, role_id} = props;
   
-  confirm = (dayOfWeek, event) => {
+  confirm = (dayOfWeek, beginHour, event) => {
 
     event.preventDefault();
-    /*API.getStudentInfo(this.state.studentID)
-    .then((studentinfo) =>{this.setState({name: studentinfo.name, surname: studentinfo.surname, role_id: studentinfo.role_id, SSN: studentinfo.SSN})})
-    .catch(() =>{})*/
-    this.showModal(dayOfWeek);
+    this.showModal(dayOfWeek, beginHour);
     
   }
 
-  showModal = (dayOfWeek) => {
-    this.setState({ show: true, dayOfWeek: dayOfWeek });
+  setNewBeginHour = (e) => {
+    console.log(e)
+      this.setState({
+        newBeginHour: moment(e).format("HH:mm")
+      })
+
+
+  }
+
+  setNewDay = (day) => {
+
+    this.setState({newDay: day.target.value})
+
+  }
+
+  showModal = (dayOfWeek, beginHour) => {
+    this.setState({ show: true, dayOfWeek: dayOfWeek, beginHour: beginHour });
+  };
+
+  confirmModal = () => {
+    console.log(this.state.course_id, this.state.dayOfWeek+":"+this.state.beginHour, this.state.newDay, this.state.newBeginHour)
+    this.props.putCourseLectureSchedule(this.state.course_id, this.state.dayOfWeek+" "+this.state.beginHour, this.state.newDay, this.state.newBeginHour)
+    this.setState({ show: false, name: '', surname: '', role_id: null});
   };
 
   hideModal = () => {
     this.setState({ show: false, name: '', surname: '', role_id: null});
   };
 
+  /*onStatisticGroupByChange = (e) => {
+  
+    this.setState({ statisticsGroupBy: e.target.value })
+
+  }*/
   /*const test = scheduledLectures.map((lec) => {
     
     return {
@@ -177,7 +207,7 @@ class SupportOfficerListLectures extends React.Component {
 
                 <Form.Group controlId="exampleForm.StartDay">
                   <Form.Label className="titleStatisticsCard">NEW DAY OF WEEK: </Form.Label>
-                    <Form.Control defaultValue="Monday" as="select" custom>
+                    <Form.Control defaultValue="Monday" as="select" onChange={this.setNewDay} custom>
                       <option>Monday</option>
                       <option>Tuesday</option>
                       <option>Wednesday</option>
@@ -194,7 +224,7 @@ class SupportOfficerListLectures extends React.Component {
 
                 <Form.Group controlId="exampleForm.StartDay">
                   <Form.Label className="titleStatisticsCard">NEW STARTING HOUR: </Form.Label>
-                  <TimePickerComponent type="startDate"  ></TimePickerComponent>
+                  <TimePickerComponent type="startDate" setStateDate={this.setNewBeginHour} ></TimePickerComponent>
                 </Form.Group>
 
               </Col>
@@ -207,7 +237,7 @@ class SupportOfficerListLectures extends React.Component {
               }
           </Modal.Body>
           <Modal.Footer>
-                <Button variant="success" onClick={() => {this.hideModal();}} > Confirm </Button>
+                <Button variant="success" onClick={() => {this.confirmModal();}} > Confirm </Button>
                 <Button variant="danger" onClick={() => {this.hideModal();}} > Go Back </Button>
           </Modal.Footer>
       </Modal>

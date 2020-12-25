@@ -749,6 +749,43 @@ async function uploadFile(file, type) {
 
 }
 
+/////////////////////////
+//      PULSBS-20     //
+/////////////////////////
 
-const API = {uploadFile,getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport };
+async function putCourseLectureSchedule(subject_id, old_day, new_day, new_hour) {
+   
+    console.log("PARAMS: ",subject_id, old_day, new_day, new_hour)
+    let obj = {
+        new_day: new_day,
+        new_time: new_hour
+    };
+
+    const url = `/api/lectures/changeSchedule/Course/${subject_id}/Day/${old_day}`;
+    
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            },
+            body: JSON.stringify(obj),
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+
+            } else {
+                // analyze the cause of error
+                console.log(response);
+                response.json()
+                    .then((ob) => { reject(ob); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+    });
+}
+
+const API = {putCourseLectureSchedule, uploadFile,getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport };
 export default API;
