@@ -6,7 +6,7 @@ import { Grid, Table, TableHeaderRow, TableFilterRow, PagingPanel, Toolbar, Sear
 
 const SupportOfficerListCourses = (props) => {
 
-  let { courses ,showLectures, role_id} = props;
+  let { courses ,showLectures, showLecturesSchedule, role_id} = props;
   
   const test = courses.map((course) => {
     return {
@@ -22,7 +22,11 @@ const SupportOfficerListCourses = (props) => {
         <Button variant="primary">View lectures</Button>
 
       </div>,
-      scheduleCourse: ' '
+      lecturesSchedule: <div key={course.subjectID} onClick={() => showLecturesSchedule(course)} style = {{textAlign : "center"}}> 
+      
+        <Button variant="primary">Schedule lectures</Button>
+
+      </div>
     }
   })
 
@@ -36,19 +40,20 @@ const SupportOfficerListCourses = (props) => {
     { name: 'year', title: 'year'},
     { name: 'semester', title: 'semester'},
     { name: 'lecturesList', title: "Lectures List"},
-    { name: 'scheduleCourse', title: "Schedule Course"}
+    { name: 'lecturesSchedule', title: "Lectures Schedule"}
   ]);
   const [integratedSortingColumnExtensions] = useState([
     //{ columnName: 'subjectID', compare: compareKey },
   ]);
 
   const [sortingStateColumnExtensions] = useState([
-    //{ columnName: 'book', sortingEnabled: false }
+    { columnName: 'lecturesList', sortingEnabled: false },
+    { columnName: 'lecturesSchedule', sortingEnabled: false },
   ]);
 
   const [filteringStateColumnExtensions] = useState([
     { columnName: 'lecturesList', filteringEnabled: false },
-    { columnName: 'scheduleCourse', filteringEnabled: false },
+    { columnName: 'lecturesSchedule', filteringEnabled: false },
   ]);
 
   return (

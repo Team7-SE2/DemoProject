@@ -21,6 +21,7 @@ import moment from 'moment';
 import TeacherStatistics from './components/TeacherStatistics';
 import UploadLists from './components/UploadLists';
 import SupportOfficerListCourses from './components/SupportOfficerListCourses'
+import SupportOfficerListLectures from './components/SupportOfficerListLectures'
 function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
   var q = str.split("?");
@@ -214,7 +215,19 @@ class App extends React.Component {
       });
   }
   
+  showCourseLecturesSchedule = (course) => {
+    API.getStudentCourseLectures(course.id)
+      .then((lectures) => {
+        this.setState({ course: course });
+        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
+        this.props.history.push("/supportOfficer/courseSchedule/" + course.subjectID + "/lectureSchedule");
 
+      })
+      .catch((err) => {
+        this.handleErrors(err);
+      });
+  }
+  
   getStudentsList = (lecture) => {
     API.getStudentListforLecture(lecture.id)
       .then((students) => {
@@ -705,7 +718,25 @@ class App extends React.Component {
                               <h3>All Courses</h3>
                             </Card.Header>
                             <Card.Body>
-                              <SupportOfficerListCourses courses={this.state.courses} showLectures={this.showCourseLectures} role_id={this.state.info_user.role_id} />
+                              <SupportOfficerListCourses courses={this.state.courses} showLectures={this.showCourseLectures} showLecturesSchedule={this.showCourseLecturesSchedule} role_id={this.state.info_user.role_id} />
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      </Row>
+                    </Container>
+                </Route>
+                <Route exact path={"/supportOfficer/courseSchedule/" + this.state.course.subjectID + "/lectureSchedule"}>
+                    {!this.state.logged &&  <Redirect to="/login" />}    
+                    <Container fluid>
+                      <Row >
+                        <Col sm={1}></Col>
+                        <Col sm={10} className="below-nav">
+                          <Card>
+                            <Card.Header className="text-center">
+                              <h3>"{this.state.course.description}" lectures schedule</h3>
+                            </Card.Header>
+                            <Card.Body>
+                              <SupportOfficerListLectures lectures={this.state.lectures} showLectures={this.showCourseLectures} role_id={this.state.info_user.role_id} />
                             </Card.Body>
                           </Card>
                         </Col>
