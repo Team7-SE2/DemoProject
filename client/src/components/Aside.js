@@ -86,6 +86,14 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
               }
             </Nav>
           </MenuItem>}
+          {context.authUser && role_id===2 && logged && <MenuItem 
+            icon={<FaCalendarWeek />}>
+            <Nav >
+              {
+                <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/supportOfficer/lectures"  ><h6>Update bookable lectures</h6></Nav.Link>
+              }
+            </Nav>
+          </MenuItem>}
           </>
           <>
           {context.authUser && role_id===3 && logged && <MenuItem 

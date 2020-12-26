@@ -22,6 +22,8 @@ import TeacherStatistics from './components/TeacherStatistics';
 import UploadLists from './components/UploadLists';
 import SupportOfficerListCourses from './components/SupportOfficerListCourses'
 import SupportOfficerListLectures from './components/SupportOfficerListLectures'
+import SupportOfficerLecturesRules from './components/SupportOfficerLecturesRules';
+
 function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
   var q = str.split("?");
@@ -764,6 +766,20 @@ class App extends React.Component {
                       <Col sm={1} className="below-nav" />
                       <Col sm={10} className="below-nav">
                         <CourseLectures turnOnRemote={this.turnOnRemote} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} />
+                      </Col>
+                      <Col sm={1} className="below-nav" />
+
+                    </Row>
+                  </Container>
+
+                </Route>
+
+                <Route exact path = {"/supportOfficer/lectures"}>
+                <Container fluid>
+                    <Row >
+                      <Col sm={1} className="below-nav" />
+                      <Col sm={10} className="below-nav">
+                        <SupportOfficerLecturesRules/>
                       </Col>
                       <Col sm={1} className="below-nav" />
 
