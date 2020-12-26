@@ -753,15 +753,16 @@ async function uploadFile(file, type) {
 //      PULSBS-20     //
 /////////////////////////
 
-async function putCourseLectureSchedule(subject_id, old_day, new_day, new_hour) {
+async function putCourseLectureSchedule(subject_id, old_day, old_duration, new_day, new_hour, new_duration) {
    
-    console.log("PARAMS: ",subject_id, old_day, new_day, new_hour)
+    console.log("PARAMS: ",subject_id, old_day, new_day, new_hour, new_duration)
     let obj = {
         new_day: new_day,
-        new_time: new_hour
+        new_time: new_hour,
+        new_duration: new_duration
     };
 
-    const url = `/api/lectures/changeSchedule/Course/${subject_id}/Day/${old_day}`;
+    const url = `/api/lectures/changeSchedule/Course/${subject_id}/Day/${old_day}/duration/${old_duration}`;
     
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL

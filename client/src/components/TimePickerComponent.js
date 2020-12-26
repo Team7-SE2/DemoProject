@@ -10,10 +10,9 @@ var moment = require("moment");
 
 const TimePickerComponent = (props) => {
 
-  let { type, setStateDate } = props;
+  let { type, initialValue, setStateDate } = props;
 
-
-  let date = moment();
+  let date = initialValue ? moment(initialValue) : moment();
 
   // The first commit of Material-UI
   const [selectedDate, setSelectedDate] = React.useState(date);

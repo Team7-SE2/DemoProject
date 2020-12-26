@@ -41,6 +41,7 @@ class SupportOfficerListLectures extends React.Component {
         scheduled[arrayIndex].scheduledLectures ++;
       else{
         scheduled.push({
+          date: lec.date,
           scheduledLectures : 1,
           lectureDay : weekDays[index],
           beginHour: moment(lec.date).format("HH:mm"),
@@ -51,15 +52,17 @@ class SupportOfficerListLectures extends React.Component {
 
     }
     let finalScheduled = scheduled.map((lec) => {
-    
+      console.log(lec)
       return {
+        lectureDate: lec.date,
         lectureDay: lec.lectureDay,
         beginHour: lec.beginHour,
+        beginDuration: lec.duration,
         endHour: lec.endHour,
         scheduledLectures: lec.scheduledLectures,
         changeSchedule: <div style = {{textAlign : "center"}}> 
         
-          <Button key={lec.lectureDay} variant="primary" onClick={(e) => this.confirm(lec.lectureDay, lec.beginHour, e)} type="submit"><FaCog size={20}></FaCog></Button>
+          <Button key={lec.lectureDay} variant="primary" onClick={(e) => this.confirm(lec.lectureDay, lec.beginHour, lec.date, lec.duration, e)} type="submit"><FaCog size={20}></FaCog></Button>
   
         </div>,
       }
@@ -90,10 +93,10 @@ class SupportOfficerListLectures extends React.Component {
     };
   }
   
-  confirm = (dayOfWeek, beginHour, event) => {
-
+  confirm = (dayOfWeek, beginHour, beginDate, beginDuration, event) => {
+    console.log(dayOfWeek, beginHour, beginDate, beginDuration)
     event.preventDefault();
-    this.showModal(dayOfWeek, beginHour);
+    this.showModal(dayOfWeek, beginHour, beginDate, beginDuration);
     
   }
 
@@ -112,13 +115,19 @@ class SupportOfficerListLectures extends React.Component {
 
   }
 
-  showModal = (dayOfWeek, beginHour) => {
-    this.setState({ show: true, dayOfWeek: dayOfWeek, beginHour: beginHour });
+  setNewDuration = (day) => {
+
+    this.setState({newDuration: day.target.value})
+
+  }
+
+  showModal = (dayOfWeek, beginHour, beginDate, beginDuration) => {
+    this.setState({ show: true, dayOfWeek: dayOfWeek, beginHour: beginHour, beginDate: beginDate, beginDuration: beginDuration, newDay: dayOfWeek, newBeginHour: beginHour, newDuration: beginDuration });
   };
 
   confirmModal = () => {
     console.log(this.state.course_id, this.state.dayOfWeek+":"+this.state.beginHour, this.state.newDay, this.state.newBeginHour)
-    this.props.putCourseLectureSchedule(this.state.course_id, this.state.dayOfWeek+" "+this.state.beginHour, this.state.newDay, this.state.newBeginHour)
+    this.props.putCourseLectureSchedule(this.state.course_id, this.state.dayOfWeek+" "+this.state.beginHour, this.state.beginDuration, this.state.newDay, this.state.newBeginHour, this.state.newDuration)
     this.setState({ show: false, name: '', surname: '', role_id: null});
   };
 
@@ -207,7 +216,7 @@ class SupportOfficerListLectures extends React.Component {
 
                 <Form.Group controlId="exampleForm.StartDay">
                   <Form.Label className="titleStatisticsCard">NEW DAY OF WEEK: </Form.Label>
-                    <Form.Control defaultValue="Monday" as="select" onChange={this.setNewDay} custom>
+                    <Form.Control defaultValue={this.state.dayOfWeek} as="select" onChange={this.setNewDay} custom>
                       <option>Monday</option>
                       <option>Tuesday</option>
                       <option>Wednesday</option>
@@ -224,11 +233,26 @@ class SupportOfficerListLectures extends React.Component {
 
                 <Form.Group controlId="exampleForm.StartDay">
                   <Form.Label className="titleStatisticsCard">NEW STARTING HOUR: </Form.Label>
-                  <TimePickerComponent type="startDate" setStateDate={this.setNewBeginHour} ></TimePickerComponent>
+                  <TimePickerComponent type="startDate" initialValue={this.state.beginDate} setStateDate={this.setNewBeginHour} ></TimePickerComponent>
                 </Form.Group>
 
               </Col>
               <Col sm={1}></Col>
+            </Row>
+            <Row>
+              <Col sm={3}></Col>
+              <Col sm={6}>
+
+                <Form.Group controlId="exampleForm.StartDay">
+                  <Form.Label className="titleStatisticsCard">NEW LECTURE DURATION (h): </Form.Label>
+                    <Form.Control defaultValue={this.state.beginDuration} as="select" onChange={this.setNewDuration} custom>
+                      <option>1.5</option>
+                      <option>3</option>
+                    </Form.Control>
+                </Form.Group>
+
+              </Col>
+              <Col sm={3}></Col>
             </Row>
               { /*(this.state.name && this.state.role_id ==5) ?
               <> Do you want to confirm that <b> {this.state.name} {this.state.surname} </b> (SSN : <b>{this.state.SSN}</b>)  contracted Covid-19? </>

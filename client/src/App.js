@@ -332,9 +332,9 @@ class App extends React.Component {
       });
   }
 
-  putCourseLectureSchedule = (subject_id, old_day, new_day, new_hour) => {
+  putCourseLectureSchedule = (subject_id, old_day, old_duration, new_day, new_hour, new_duration) => {
 
-    API.putCourseLectureSchedule(subject_id, old_day, new_day, new_hour)
+    API.putCourseLectureSchedule(subject_id, old_day, old_duration, new_day, new_hour, new_duration)
       .then(() => {
           API.getStudentCourseLectures(subject_id)
             .then((lectures) => {
