@@ -788,5 +788,16 @@ async function putCourseLectureSchedule(subject_id, old_day, old_duration, new_d
     });
 }
 
-const API = {putCourseLectureSchedule, uploadFile,getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport };
+/////////////////////////
+//      PULSBS-17     //
+/////////////////////////
+async function updateRules (rules) {
+
+    return new Promise ((resolve, reject) => {
+            return resolve();
+    });
+
+}
+
+const API = {updateRules,putCourseLectureSchedule, uploadFile,getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport };
 export default API;
