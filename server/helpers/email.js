@@ -6,7 +6,8 @@ emailHelper.transporter = nodemailer.createTransport({
     secure: false,
     port: 25,
     auth: {
-        user: "pulsbs.noreply2020@gmail.com",
+        user: "pulsbs.noreply@gmail.com",  //"pulsbs.noreply2020@gmail.com"
+
         pass: "provanoreply1"
     }, tls: {
         rejectUnauthorized: false

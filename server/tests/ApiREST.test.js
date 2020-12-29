@@ -103,8 +103,8 @@ describe('API test', function () {
     
     it('PUT lectures changeSchedule', function (done) {
         request(app)
-            .put('/api/lectures/changeSchedule/Course/XY1211/Day/Monday 08:30')
-            .send({ new_day: "Friday", new_time: "16:00" })
+            .put('/api/lectures/changeSchedule/Course/XY1211/Day/Monday 08:30/duration/3')
+            .send({ new_day: "Friday", new_time: "16:00",new_duration: 3 })
             .set('Accept', 'application/json')
             .expect(200, done);
     })
@@ -166,14 +166,14 @@ describe('API test', function () {
     it('POST bookings', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 900001, lecture_id: 2, email: "prova@prova.it", waiting: 0 })
+            .send({ user_id: 900001, lecture_id: 2, email: "prova@prova.it", waiting: 0, present:false})
             .set('Accept', 'application/json')
             .expect(201, done);
     });
     it('POST bookings 2', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 900001, lecture_id: 1, email: "prova@prova.it", waiting: null })
+            .send({ user_id: 900001, lecture_id: 1, email: "prova@prova.it", waiting: null , present:false})
             .set('Accept', 'application/json')
             .expect(201, done);
     });
@@ -456,7 +456,7 @@ it('POST csv Students', function (done) {
             .post("/api/csv?type=Students")
             .send(formData)
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect(505, done);
 
     });
 });
@@ -473,7 +473,7 @@ it('POST csv Teachers', function (done) {
             .post("/api/csv?type=Professors")
             .send(formData)
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect(505, done);
 
     });
 });
@@ -490,7 +490,7 @@ it('POST csv Courses', function (done) {
             .post("/api/csv?type=Courses")
             .send(formData)
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect(505, done);
 
     });
 });
@@ -506,7 +506,7 @@ it('POST csv Schedule1s', function (done) {
             .post("/api/csv?type=Schedule1s")
             .send(formData)
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect(505, done);
 
     });
 });
@@ -522,7 +522,7 @@ it('POST csv Enrollment', function (done) {
             .post("/api/csv?type=Enrollment")
             .send(formData)
             .set('Accept', 'application/json')
-            .expect(500, done);
+            .expect(505, done);
 
     });
 });
