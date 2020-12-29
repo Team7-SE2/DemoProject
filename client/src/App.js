@@ -23,6 +23,7 @@ import UploadLists from './components/UploadLists';
 import SupportOfficerListCourses from './components/SupportOfficerListCourses'
 import SupportOfficerListLectures from './components/SupportOfficerListLectures'
 import SupportOfficerLecturesRules from './components/SupportOfficerLecturesRules';
+import PastLectures from './components/PastLectures';
 
 function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
@@ -204,6 +205,20 @@ class App extends React.Component {
       });
   }
 
+  showPastLectures = (course) => {
+    API.getStudentCourseLectures(course.id)
+      .then((lectures) => {
+        this.setState({ course: course });
+        this.setState({ lectures: lectures.filter((s) => moment(s.date).isSameOrBefore(moment())) });
+        this.props.history.push("/teacher/courses/" + course.subjectID + "/PastLectures");
+
+      })
+      .catch((err) => {
+        this.handleErrors(err);
+      });
+  }
+
+
   showCourseLectures = (course) => {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
@@ -235,6 +250,19 @@ class App extends React.Component {
       .then((students) => {
         this.setState({ students: students, lecture: lecture });
         this.props.history.push("/teacher/lectures/" + lecture.id + "/students");
+
+      })
+      .catch((err) => {
+        this.handleErrors(err);
+      });
+
+  }
+
+  getListStudentsPast = (lecture) => {
+    API.getStudentListforLecture(lecture.id)
+      .then((students) => {
+        this.setState({ students: students, lecture: lecture });
+        this.props.history.push("/teacher/PastLectures/" + lecture.id + "/students");
 
       })
       .catch((err) => {
@@ -864,7 +892,7 @@ class App extends React.Component {
                             <h3>My Courses</h3>
                           </Card.Header>
                           <Card.Body>
-                            <ListCourses courses={this.state.courses} showLectures={this.showTeachersLectures} role_id={this.state.info_user.role_id} />
+                            <ListCourses courses={this.state.courses} showLectures={this.showTeachersLectures} role_id={this.state.info_user.role_id} showPastLectures={this.showPastLectures} />
                           </Card.Body>
                         </Card>
                       </Col>
@@ -898,13 +926,42 @@ class App extends React.Component {
 
                 </Route>
 
+                <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/PastLectures"}>
+                  <Container fluid>
+                    <Row >
+                      <Col sm={1} className="below-nav" />
+                      <Col sm={10} className="below-nav">
+                       <PastLectures lectures={this.state.lectures} course={this.state.course} getListStudentsPast={this.getListStudentsPast} />
+                      </Col>
+                      <Col sm={1} className="below-nav" />
+
+                    </Row>
+                  </Container>
+
+                </Route>
+
+
+                <Route exact path={"/teacher/PastLectures/" + this.state.lecture.id + "/students"}>
+                  <Container fluid>
+                    <Row >
+                      <Col sm={3} className="below-nav" />
+                      <Col sm={6} className="below-nav">
+                        <StudentList switchRoute={this.switchRoute} students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} recordPresence ={true}/>
+                      </Col>
+                      <Col sm={3} className="below-nav" />
+
+                    </Row>
+                  </Container>
+
+                </Route>
+
 
                 <Route exact path={"/teacher/lectures/" + this.state.lecture.id + "/students"}>
                   <Container fluid>
                     <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
-                        <StudentList switchRoute={this.switchRoute} students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} />
+                        <StudentList switchRoute={this.switchRoute} students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} recordPresence ={false} />
                       </Col>
                       <Col sm={3} className="below-nav" />
 

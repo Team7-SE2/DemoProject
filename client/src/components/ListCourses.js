@@ -6,7 +6,7 @@ import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-g
 
 const ListCourses = (props) => {
 
-  let { courses ,showLectures, role_id} = props;
+  let { courses ,showLectures, role_id, showPastLectures} = props;
   
   const test = courses.map((course) => {
     return {
@@ -19,16 +19,34 @@ const ListCourses = (props) => {
       {role_id===4 && <Button variant="primary">View details</Button>}
 
     </div>,
-    }
+    
+    'record': 
+    role_id===4 && 
+    <div key={course.subjectID} onClick={() => showPastLectures(course)} style = {{textAlign : "center"}}> 
+    <Button variant="primary">Record presences</Button>
+     </div>
+    
+  }
   })
 
   const [pageSizes] = useState([5, 10, 15, 0]);
 
-  const [columns] = useState([
+  const [columns] = useState(
+    showPastLectures ?
+    [
     { name: 'subjectID', title: 'Subject ID'},
     { name: 'description', title: 'Description'},
-    {name: ' ', title: " "}
-  ]);
+    {name: ' ', title: " "},
+    {name: 'record', title: " "}
+    ]
+    :
+    [
+      { name: 'subjectID', title: 'Subject ID'},
+      { name: 'description', title: 'Description'},
+      {name: ' ', title: " "}
+      ]
+  
+  );
   const [integratedSortingColumnExtensions] = useState([
     //{ columnName: 'subjectID', compare: compareKey },
   ]);
