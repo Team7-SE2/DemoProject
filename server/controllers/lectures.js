@@ -5,10 +5,6 @@ var db = require('../models/index');
 var moment = require('moment');
 const Op = db.Sequelize.Op;
 var transporter = require('../helpers/email');
-//const fs = require('fs')
-//var path = require('path');
-//var root = path.dirname(require.main.filename);
-//const csvFilePath =  root + '/../csv_files/Schedule1s.csv' // or any file format
 
 /*
     *** API LIST ***
@@ -86,9 +82,23 @@ module.exports = function () {
                 res.status(200).send("Schedule updated\nRows: " + idlectures.length);
             }
             )
-
-
-
+        db['teaching_loads'].findAll({ 
+            where: { subject_id: req.params.subjectId }, 
+            include:[{model: db.users, as: 'user'},{model: db.subjects, as: 'subject'}]
+        })
+            .then((t_l)=>{
+                if(t_l.user && t_l.user.name && t_l.user.email && t_l.subject && t_l.subject.description) {
+                    var mailOptions = {
+                        from: "pulsbsnoreply@gmail.com",
+                        subject: 'Changed schedule of a subject',
+                        text: 'Dear ' + t_l.user.name + ",\n"+"the subject "+ t_l.subject.description+" changed his scheduled lectures, please check calendar to see changes.\n" + "Regards"
+                    }
+                    // set the student email
+                    mailOptions.to =t_l.user.email;
+                    // send the email to the student
+                    transporter.sendEmail(mailOptions);
+                }
+            })
     })
 
 

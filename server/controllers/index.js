@@ -1,8 +1,6 @@
 ﻿var express = require('express');
 var router = express.Router();
-var io = require('../helpers/socketIo')();
 var db = require('../models/index');
-const csvParser = require("../helpers/csv_parser");
 // autentication token dependencies
 const jwtSecret = '6xvL4xkAAbG49hcXf5GIYSvkDICiUAR6EdR5dLdwW7hMzUjjMUe9t6M5kSAYxsvX';
 const jwt = require('express-jwt');
@@ -51,7 +49,7 @@ module.exports = function (app) {
                     } else {
 
                         //AUTHENTICATION SUCCESS
-                        const token = jsonwebtoken.sign({ user: user.dataValues.id, email: user.dataValues.email }, jwtSecret, { expiresIn: expireTime });
+                        const token = jsonwebtoken.sign({ user: user.dataValues.id, email: user.dataValues.email }, jwtSecret, { expiresIn: 1000 * expireTime });
                         res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 1000 * expireTime });
                         res.send({ id: user.dataValues.id, name: user.dataValues.name, email: user.dataValues.email, role_id: user.dataValues.role_id });
 
@@ -68,13 +66,13 @@ module.exports = function (app) {
 
     // For the rest of the code, all APIs require authentication
     if(process.env.NODE_ENV != "test"){
-        // router.use(
-        //     jwt({
-        //         secret: jwtSecret,
-        //         getToken: req => req.cookies.token,
-        //         algorithms: ['HS256']
-        //     })
-        // );
+        router.use(
+            jwt({
+                secret: jwtSecret,
+                getToken: req => req.cookies.token,
+                algorithms: ['HS256']
+            })
+        );
     }
     router.use('/api/users', require('./users.js')());
     router.use('/api/rooms', require('./rooms.js')());
