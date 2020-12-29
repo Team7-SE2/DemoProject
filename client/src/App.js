@@ -634,19 +634,7 @@ class App extends React.Component {
     })
   }
 
-  uploadFile = (file, type) => {
-    console.log(file, type);
-      API.uploadFile(file, type)
-      .then ( ()=> {
-        console.log(file);
-          console.log("Upload avvenuto con successo");
-      })
-      .catch(()=>{
-        console.log(file);
-        console.log("Errore nell'upload del file");
-      })
-     
-  }
+
 
   render() {
 
@@ -721,7 +709,7 @@ class App extends React.Component {
 
                 <Route exact path="/supportOfficer">
                     {!this.state.logged &&  <Redirect to="/login" />}    
-                  <UploadLists  uploadFile={this.uploadFile} />
+                  <UploadLists />
                 </Route>
 
                 <Route exact path="/supportOfficer/courseSchedule">

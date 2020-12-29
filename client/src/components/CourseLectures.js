@@ -136,7 +136,7 @@ const CourseLectures = (props) => {
                     justifyContent: "center",
                     alignItems: "center"
                 }}>
-                    {lec.deleted_at == null ? checkPrenotation(bookedLectures, lec.id) ? <Button variant="danger" onClick={() => {deleteBookedLecture(lec.id, course); }}> {(lec.full && bookedLectures.find((item)=> item.lecture_id == lec.id).waiting == true)/*&& lec.lecture_bookings.find((item)=>item.id == studentID).bookings.waiting ==true */ ? "LEAVE THE WAITING LIST" : "UNBOOK"} </Button> : <Button variant= {lec.full ? "warning" : "success"} onClick={() => {if(lec.full) {handleShowQueue(lec);} else {bookLecture(lec.id, 0);}} /*bookLecture(lec.id)*/}> BOOK </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
+                    {lec.deleted_at == null ? checkPrenotation(bookedLectures, lec.id) ? <Button variant="danger" onClick={() => {deleteBookedLecture(lec.id, course); }}> {(lec.full && bookedLectures.find((item)=> item.lecture_id == lec.id).waiting == true)/*&& lec.lecture_bookings.find((item)=>item.id == studentID).bookings.waiting ==true */ ? "LEAVE THE WAITING LIST" : "UNBOOK"} </Button> : <Button variant= {lec.full ? "warning" : "success"} onClick={() => {if(lec.full) {handleShowQueue(lec);} else {bookLecture(lec.id, 0);}} /*bookLecture(lec.id)*/}> {lec.full ? "ADD ME IN WAITING LIST" : "BOOK"} </Button> : <h5 style={{ color: "red", fontWeight: "bold" }}>Canceled</h5>}
                 </div>,
             }
         }

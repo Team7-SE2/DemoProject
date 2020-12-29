@@ -5,13 +5,17 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert"
+import API from '../api/api.js';
+import Modal from "react-bootstrap/Modal"
+
 class UploadLists extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             file_selected: "", submitted: false, errorS: false, errorC: false, errorT: false, errorL: false, errorCl: false,
-            fileS: null, fileC: null, fileT: null, fileL: null, fileCl: null
+            fileS: null, fileC: null, fileT: null, fileL: null, fileCl: null,
+            upload_ok: false
         };
     }
 
@@ -24,6 +28,22 @@ class UploadLists extends React.Component {
             case 5: this.setState({ errorCl: false }); break;
         }
     }
+
+    uploadFile = (file, type) => {
+        console.log(file, type);
+          API.uploadFile(file, type)
+          .then ( ()=> {
+            console.log(file);
+              console.log("Upload avvenuto con successo");
+              this.setState({upload_ok: true})
+            
+          })
+          .catch(()=>{
+            console.log(file);
+            console.log("Errore nell'upload del file");
+          })
+         
+      }
 
 
 
@@ -55,42 +75,77 @@ class UploadLists extends React.Component {
         else {
             switch (error) {
                 case 1:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Students.csv"
+                    {
+                    this.setState({ errorS: false, fileS: f }, () =>{
+                        if (this.state.fileS.name !== "Students.csv")
+                                this.setState({ errorS: true });
+                            else {
+                                Object.defineProperty(f, 'name', {
+                                writable: true,
+                                value: "Students.csv"
+                                });
+                            }     
                     });
-                    this.setState({ errorS: false, fileS: f });
                     break;
+                    }
                 case 2:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Courses.csv"
-                    });
-                    this.setState({ errorC: false, fileC: f });
-                    break;
+                    {
+                        this.setState({ errorC: false, fileC: f }, () =>{
+                            if (this.state.fileC.name !== "Courses.csv")
+                                    this.setState({ errorC: true });
+                                else {
+                                    Object.defineProperty(f, 'name', {
+                                    writable: true,
+                                    value: "Courses.csv"
+                                    });
+                                }     
+                        });
+                        break;
+                    }
                 case 3:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Professors.csv"
-                    });
-                    this.setState({ errorT: false, fileT: f });
-                    break;
+                    {
+                        this.setState({ errorT: false, fileT: f }, () =>{
+                            if (this.state.fileT.name !== "Professors.csv")
+                                    this.setState({ errorT: true });
+                                else {
+                                    Object.defineProperty(f, 'name', {
+                                    writable: true,
+                                    value: "Professors.csv"
+                                    });
+                                }     
+                        });
+                        break;
+                    }
 
                 case 4:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Schedule1s.csv"
-                    });
-                    this.setState({ errorL: false, fileL: f });
-                    break;
+                    {
+                        this.setState({ errorL: false, fileL: f }, () =>{
+                            if (this.state.fileL.name !== "Schedule1s.csv")
+                                    this.setState({ errorL: true });
+                                else {
+                                    Object.defineProperty(f, 'name', {
+                                    writable: true,
+                                    value: "Schedule1s.csv"
+                                    });
+                                }     
+                        });
+                        break;
+                    }
 
                 case 5:
-                    Object.defineProperty(f, 'name', {
-                        writable: true,
-                        value: "Enrollment.csv"
-                    });
-                    this.setState({ errorCl: false, fileCl: f });
-                    break;
+                    {
+                        this.setState({ errorCl: false, fileCl: f }, () =>{
+                            if (this.state.fileCl.name !== "Enrollment.csv")
+                                    this.setState({ errorCl: true });
+                                else {
+                                    Object.defineProperty(f, 'name', {
+                                    writable: true,
+                                    value: "Enrollment.csv"
+                                    });
+                                }     
+                        });
+                        break;
+                    }
             }
         }
     }
@@ -100,23 +155,23 @@ class UploadLists extends React.Component {
         switch (file) {
 
             case 1:
-                this.props.uploadFile(this.state.fileS, 'Students');
+                this.uploadFile(this.state.fileS, 'Students')
                 break;
 
             case 2:
-                this.props.uploadFile(this.state.fileC, 'Courses');
+                this.uploadFile(this.state.fileC, 'Courses');
                 break;
 
             case 3:
-                this.props.uploadFile(this.state.fileT, 'Professors');
+                this.uploadFile(this.state.fileT, 'Professors');
                 break;
 
             case 4:
-                this.props.uploadFile(this.state.fileL, 'Schedule1s');
+                this.uploadFile(this.state.fileL, 'Schedule1s');
                 break;
 
             case 5:
-                this.props.uploadFile(this.state.fileCl, 'Enrollment');
+                this.uploadFile(this.state.fileCl, 'Enrollment');
                 break;
 
         }
@@ -124,7 +179,26 @@ class UploadLists extends React.Component {
 
 
     render() {
-        return <>
+        return <> {this.state.upload_ok &&
+                        <Modal
+                        className="my-modal"
+                    show={this.state.upload_ok}
+                    onHide={() => this.setState({upload_ok: false})}
+                    backdrop="static" keyboard={false}
+                    aria-labelledby="contained-modal-title-vcenter"
+                >
+                    <Modal.Header closeButton>
+                    <Modal.Title >
+                        Great!
+                    </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                    <p>
+                        Your csv file has been correctly uploaded!
+                    </p>
+                    </Modal.Body>
+                </Modal>
+    }
             <br /> <br /> <br />
 
             <Row>
@@ -279,12 +353,14 @@ function ExError(props) {
             <Alert variant="danger" onClose={() => handleClose()} dismissible>
                 <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
                 <p>
-                    Sorry, insert only csv files.
+                    Please insert only right csv files.
           </p>
             </Alert>
         );
     }
 
 }
+
+
 
 export default UploadLists;
