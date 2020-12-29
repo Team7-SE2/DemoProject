@@ -420,7 +420,7 @@ module.exports = function () {
 
                             // set the student email
                             mailOptions.to = email;
-                            mailOptions.text = "Dear student, you correctly" + (req.body.waiting ? "added in waiting list" : "booked") + "for the \"" + (lecture.subject ? lecture.subject.description : '...') + "\" course-lesson.\nIt will take on date: " + lecture.date + ".\n\nRegards"
+                            mailOptions.text = "Dear student, you correctly " + (req.body.waiting ? "added in waiting list" : "booked") + " for the \"" + (lecture.subject ? lecture.subject.description : '...') + "\" course-lesson.\nIt will take on date: " + lecture.date + ".\n\nRegards"
                             // respond to the caller
                             transporter.sendEmail(mailOptions);
                             res.status(201).end();
