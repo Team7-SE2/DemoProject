@@ -28,19 +28,19 @@ function parseQuery(str) {
   if (typeof str != "string" || str.length == 0) return {};
   var q = str.split("?");
   if (q[1]) {
-      var s = q[1].split("&");
-      var s_length = s.length;
-      var bit, query = {}, first, second;
-      for (var i = 0; i < s_length; i++) {
-          bit = s[i].split("=");
-          first = decodeURIComponent(bit[0]);
-          if (first.length == 0) continue;
-          second = decodeURIComponent(bit[1]);
-          if (typeof query[first] == "undefined") query[first] = second;
-          else if (query[first] instanceof Array) query[first].push(second);
-          else query[first] = [query[first], second];
-      }
-      return query;
+    var s = q[1].split("&");
+    var s_length = s.length;
+    var bit, query = {}, first, second;
+    for (var i = 0; i < s_length; i++) {
+      bit = s[i].split("=");
+      first = decodeURIComponent(bit[0]);
+      if (first.length == 0) continue;
+      second = decodeURIComponent(bit[1]);
+      if (typeof query[first] == "undefined") query[first] = second;
+      else if (query[first] instanceof Array) query[first].push(second);
+      else query[first] = [query[first], second];
+    }
+    return query;
   }
   return {};
 }
@@ -133,7 +133,7 @@ class App extends React.Component {
         this.setState({ startFilterDate: moment().add(-7, "days").startOf("day") })
         this.setState({ endFilterDate: moment().endOf("day") })
 
-        
+
 
         if (info.role_id === 5) {
           this.loadInitialDataStudent();
@@ -141,20 +141,20 @@ class App extends React.Component {
         }
         if (info.role_id === 4) {
           this.loadInitialDataTeacher();
-          
+
         }
         if (info.role_id === 3) {
           this.setState({ statisticsSubject: 'All' })
           this.loadInitialSubjects();
         }
 
-        if(info.role_id===2) {
+        if (info.role_id === 2) {
           //this.loadInitialSubjects();
           API.getSubjects()
-          .then((courses) => {
-            this.setState({ courses: courses})
-            this.props.history.push("/supportOfficer");
-          })
+            .then((courses) => {
+              this.setState({ courses: courses })
+              this.props.history.push("/supportOfficer");
+            })
         }
 
       }
@@ -203,7 +203,7 @@ class App extends React.Component {
         this.handleErrors(err);
       });
   }
-  
+
   showCourseLectures = (course) => {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
@@ -216,7 +216,7 @@ class App extends React.Component {
         this.handleErrors(err);
       });
   }
-  
+
   showCourseLecturesSchedule = (course) => {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
@@ -229,7 +229,7 @@ class App extends React.Component {
         this.handleErrors(err);
       });
   }
-  
+
   getStudentsList = (lecture) => {
     API.getStudentListforLecture(lecture.id)
       .then((students) => {
@@ -295,7 +295,7 @@ class App extends React.Component {
 
     API.getSubjects()
       .then((subjects) => {
-        this.setState({ subjects: subjects})
+        this.setState({ subjects: subjects })
         this.setState({ statisticsSubject: 'All' })
         this.props.history.push("/bookingManager");
       })
@@ -310,10 +310,10 @@ class App extends React.Component {
 
   bookLecture = (LectureID, LectureWaiting) => {
     console.log("****************************" + LectureWaiting);
-    API.bookLecture(this.state.authUser.ID_User, LectureID, this.state.info_user.email, LectureWaiting )
+    API.bookLecture(this.state.authUser.ID_User, LectureID, this.state.info_user.email, LectureWaiting)
       .then(() => {
 
-      
+
         this.loadInitialDataStudent();
 
       })
@@ -327,7 +327,7 @@ class App extends React.Component {
       .then(() => {
         this.showStudentsLectures(course);
         this.loadInitialDataStudent();
-        
+
       })
       .catch((err) => {
         this.handleErrors(err);
@@ -338,14 +338,14 @@ class App extends React.Component {
 
     API.putCourseLectureSchedule(subject_id, old_day, old_duration, new_day, new_hour, new_duration)
       .then(() => {
-          API.getStudentCourseLectures(subject_id)
-            .then((lectures) => {
-              this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
-              this.props.history.push("/supportOfficer/courseSchedule/");
-            })
-            .catch((err) => {
-              this.handleErrors(err);
-            });
+        API.getStudentCourseLectures(subject_id)
+          .then((lectures) => {
+            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
+            this.props.history.push("/supportOfficer/courseSchedule/");
+          })
+          .catch((err) => {
+            this.handleErrors(err);
+          });
       })
   }
 
@@ -368,7 +368,7 @@ class App extends React.Component {
   }
 
   onStatisticGroupByChange = (e) => {
-  
+
     this.setState({ statisticsGroupBy: e.target.value })
   }
 
@@ -383,7 +383,7 @@ class App extends React.Component {
         //this.loadInitialDataTeacher();
         API.getStudentCourseLectures(lecture.subject_id)
           .then((lectures) => {
-            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment()))});
+            this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
           });
 
       })
@@ -407,9 +407,9 @@ class App extends React.Component {
     }
     data.forEach((d) => {
       var index;
-      if(type == 'bookings')
+      if (type == 'bookings')
         index = moment(d.lecture.date).startOf(groupBy).diff(start, groupBy);
-      else{
+      else {
         if (d.date)
           index = moment(d.date).startOf(groupBy).diff(start, groupBy);
         else
@@ -420,7 +420,7 @@ class App extends React.Component {
       res[index]++;
     })
 
-   
+
     return res;
   }
 
@@ -441,18 +441,18 @@ class App extends React.Component {
       default: { formatString = 'lll' } break;
     }
     for (var i = 0; i <= numSpans; i++) {
-      if(groupBy == 'weeks')
-        res[i] = start.clone().add(i, groupBy).format(formatString) +' - '+ start.clone().add(i, groupBy).endOf(groupBy).format(formatString);
+      if (groupBy == 'weeks')
+        res[i] = start.clone().add(i, groupBy).format(formatString) + ' - ' + start.clone().add(i, groupBy).endOf(groupBy).format(formatString);
       else
         res[i] = start.clone().add(i, groupBy).format(formatString);
     }
 
-    
+
     return res;
   }
-  
+
   generateData = () => {
-    
+
     let get = parseQuery(document.URL);
     let startDate = moment(this.state.startFilterDate).toDate();
     let endDate = moment(this.state.endFilterDate).toDate();
@@ -469,15 +469,15 @@ class App extends React.Component {
       endDate: endDate, //moment().toISOString()
     }
 
-    if(this.state.info_user.role_id != 3)
+    if (this.state.info_user.role_id != 3)
       courseLecturesParams.teacher_id = this.state.authUser.ID_User;
 
-    if(get.subjectId)
+    if (get.subjectId)
       courseLecturesParams.subject_id = get.subjectId;
-    
-    if(this.state.info_user.role_id == 3 && this.state.statisticsSubject != 'All')
+
+    if (this.state.info_user.role_id == 3 && this.state.statisticsSubject != 'All')
       courseLecturesParams.subject_id = this.state.statisticsSubject;
-    
+
     API.getCourseLectures(courseLecturesParams)
       .then((lectures) => {
 
@@ -493,7 +493,7 @@ class App extends React.Component {
         var lecturesRemote = lecturesFiltered.filter((a) => {
           return a.remote;
         });
-        
+
         statistics.numberOfLessons = lectures.length;
 
         lectures.forEach((elem) => {
@@ -534,22 +534,22 @@ class App extends React.Component {
                 borderWidth: 1
               },
             ],
-            
+
           },
           //statistics: statistics
         })
 
-        
+
       })
       .catch((err) => {
         console.log("err: " + JSON.stringify(err))
       })
-    
+
     API.getStatisticsBookings(courseLecturesParams)
       .then((bookings) => {
         statistics.studentsBookings = bookings.length;
-        
-        bookings.sort((a, b)=>{
+
+        bookings.sort((a, b) => {
           return moment(a.lecture.date).unix() - moment(b.lecture.date).unix()
         })
         this.setState({
@@ -572,16 +572,27 @@ class App extends React.Component {
         var bookingsPerLectureData = [];
         var bookingsPerLectureLabels = [];
 
-        bookings.forEach((booking)=>{
-          if(booking.lecture && booking.lecture.date && booking.lecture.subject && booking.lecture.subject.subjectID){
-            if(!bookingsPerLectureObj[booking.lecture.date])
-              bookingsPerLectureObj[booking.lecture.date] ={count: 0, subjectID: booking.lecture.subject.subjectID}
-            bookingsPerLectureObj[booking.lecture.date].count ++;
+        var attendancePerLectureObj = {};
+        var attendancePerLectureData = [];
+
+        bookings.forEach((booking) => {
+          if (booking.lecture && booking.lecture.date && booking.lecture.subject && booking.lecture.subject.subjectID) {
+            if (!bookingsPerLectureObj[booking.lecture.date])
+              bookingsPerLectureObj[booking.lecture.date] = { count: 0, subjectID: booking.lecture.subject.subjectID }
+
+            if (!attendancePerLectureObj[booking.lecture.date])
+              attendancePerLectureObj[booking.lecture.date] = { count: 0, subjectID: booking.lecture.subject.subjectID }
+
+            if (booking.present)
+              attendancePerLectureObj[booking.lecture.date].count++;
+            bookingsPerLectureObj[booking.lecture.date].count++;
+
           }
         })
-        Object.keys(bookingsPerLectureObj).forEach((k)=>{
+        Object.keys(bookingsPerLectureObj).forEach((k) => {
           bookingsPerLectureData.push(bookingsPerLectureObj[k].count);
-          bookingsPerLectureLabels.push(bookingsPerLectureObj[k].subjectID +' - '+ moment(k).format("lll"));
+          attendancePerLectureData.push(attendancePerLectureObj[k].count);          
+          bookingsPerLectureLabels.push(bookingsPerLectureObj[k].subjectID + ' - ' + moment(k).format("lll"));
         })
 
         this.setState({
@@ -599,7 +610,7 @@ class App extends React.Component {
               },
               {
                 label: 'Attendances',
-                data: bookingsPerLectureData,
+                data: attendancePerLectureData,
                 fill: false,
                 // borderColor: '#EC932F',
                 // backgroundColor: '#EC932F',
@@ -627,10 +638,10 @@ class App extends React.Component {
 
   resetState = () => {
     this.setState({
-      statistics:{},
-      lectureData:{labels:[],datasets:[]},
-      bookingsData:{labels:[],datasets:[]},
-      bookingsLectureData:{labels:[],datasets:[]}
+      statistics: {},
+      lectureData: { labels: [], datasets: [] },
+      bookingsData: { labels: [], datasets: [] },
+      bookingsLectureData: { labels: [], datasets: [] }
     })
   }
 
@@ -662,7 +673,7 @@ class App extends React.Component {
                   userLogout={this.userLogout}
                   role_id={this.state.info_user.role_id}
                   logged={this.state.logged}
-                  resetState = {this.resetState}
+                  resetState={this.resetState}
                 />
               </div>
             </Col> : <></>}
@@ -684,8 +695,8 @@ class App extends React.Component {
                 </Route>
 
                 <Route exact path="/bookingManager">
-                    {this.state.logged ? <Redirect to="/bookingManager" /> : <Redirect to="/login" />}                      
-                        <TeacherStatistics title = {(this.state.statisticsSubject == 'All')?'Overall Statistics':(this.state.subjects? this.state.subjects.find((el) =>{ return (el.id == this.state.statisticsSubject)}):'OVERALL STATISTICS').description + ' Statistics'} subjects = {this.state.subjects} statisticsSubject = {this.state.statisticsSubject} statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} onStatisticSubjectChange = {this.onStatisticSubjectChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
+                  {this.state.logged ? <Redirect to="/bookingManager" /> : <Redirect to="/login" />}
+                  <TeacherStatistics title={(this.state.statisticsSubject == 'All') ? 'Overall Statistics' : (this.state.subjects ? this.state.subjects.find((el) => { return (el.id == this.state.statisticsSubject) }) : 'OVERALL STATISTICS').description + ' Statistics'} subjects={this.state.subjects} statisticsSubject={this.state.statisticsSubject} statisticsGroupBy={this.state.statisticsGroupBy} onStatisticGroupByChange={this.onStatisticGroupByChange} onStatisticSubjectChange={this.onStatisticSubjectChange} setStateDate={this.setStateDate} generateData={this.generateData} statistics={this.state.statistics} lectureData={this.state.lectureData} optionsBarChart={optionsBarChart} bookingsData={this.state.bookingsData} bookingsLectureData={this.state.bookingsLectureData} options={options}></TeacherStatistics>
                 </Route>
 
                 <Route exact path="/bookingManager/contactTracingReport">
@@ -697,9 +708,9 @@ class App extends React.Component {
                           <Card.Header className="text-center">
                             <h3>Contact Tracing Report</h3>
                           </Card.Header>
-                          <Card.Body style ={{alignSelf : "center"}} >
+                          <Card.Body style={{ alignSelf: "center" }} >
                             {/* qui ci metto il form dove segnalo la positività di un paziente */}
-                            <ContactTracingReport/>
+                            <ContactTracingReport />
                           </Card.Body>
                         </Card>
                       </Col>
@@ -708,45 +719,45 @@ class App extends React.Component {
                 </Route>
 
                 <Route exact path="/supportOfficer">
-                    {!this.state.logged &&  <Redirect to="/login" />}    
+                  {!this.state.logged && <Redirect to="/login" />}
                   <UploadLists />
                 </Route>
 
                 <Route exact path="/supportOfficer/courseSchedule">
-                    {!this.state.logged &&  <Redirect to="/login" />}    
-                    <Container fluid>
-                      <Row >
-                        <Col sm={1}></Col>
-                        <Col sm={10} className="below-nav">
-                          <Card>
-                            <Card.Header className="text-center">
-                              <h3>All Courses schedule</h3>
-                            </Card.Header>
-                            <Card.Body>
-                              <SupportOfficerListCourses courses={this.state.courses} showLectures={this.showCourseLectures} showLecturesSchedule={this.showCourseLecturesSchedule} role_id={this.state.info_user.role_id} />
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-                    </Container>
+                  {!this.state.logged && <Redirect to="/login" />}
+                  <Container fluid>
+                    <Row >
+                      <Col sm={1}></Col>
+                      <Col sm={10} className="below-nav">
+                        <Card>
+                          <Card.Header className="text-center">
+                            <h3>All Courses schedule</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            <SupportOfficerListCourses courses={this.state.courses} showLectures={this.showCourseLectures} showLecturesSchedule={this.showCourseLecturesSchedule} role_id={this.state.info_user.role_id} />
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                  </Container>
                 </Route>
                 <Route exact path={"/supportOfficer/courseSchedule/" + this.state.course.subjectID + "/lectureSchedule"}>
-                    {!this.state.logged &&  <Redirect to="/login" />}    
-                    <Container fluid>
-                      <Row >
-                        <Col sm={1}></Col>
-                        <Col sm={10} className="below-nav">
-                          <Card>
-                            <Card.Header className="text-center">
-                              <h3>"{this.state.course.description}" schedule</h3>
-                            </Card.Header>
-                            <Card.Body>
-                              <SupportOfficerListLectures course_id = {this.state.course.id} lectures={this.state.lectures} showLectures={this.showCourseLectures} putCourseLectureSchedule={this.putCourseLectureSchedule} role_id={this.state.info_user.role_id} />
-                            </Card.Body>
-                          </Card>
-                        </Col>
-                      </Row>
-                    </Container>
+                  {!this.state.logged && <Redirect to="/login" />}
+                  <Container fluid>
+                    <Row >
+                      <Col sm={1}></Col>
+                      <Col sm={10} className="below-nav">
+                        <Card>
+                          <Card.Header className="text-center">
+                            <h3>"{this.state.course.description}" schedule</h3>
+                          </Card.Header>
+                          <Card.Body>
+                            <SupportOfficerListLectures course_id={this.state.course.id} lectures={this.state.lectures} showLectures={this.showCourseLectures} putCourseLectureSchedule={this.putCourseLectureSchedule} role_id={this.state.info_user.role_id} />
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                  </Container>
                 </Route>
                 <Route exact path={"/supportOfficer/courseSchedule/" + this.state.course.subjectID + "/lectures"}>
                   <Container fluid>
@@ -762,12 +773,12 @@ class App extends React.Component {
 
                 </Route>
 
-                <Route exact path = {"/supportOfficer/lectures"}>
-                <Container fluid>
+                <Route exact path={"/supportOfficer/lectures"}>
+                  <Container fluid>
                     <Row >
                       <Col sm={1} className="below-nav" />
                       <Col sm={10} className="below-nav">
-                        <SupportOfficerLecturesRules/>
+                        <SupportOfficerLecturesRules />
                       </Col>
                       <Col sm={1} className="below-nav" />
 
@@ -832,7 +843,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
-                        <CourseLectures studentID = {this.state.info_user.ID} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} deleteLecture={this.deleteLecture} showStudentsLectures ={this.showStudentsLectures} />
+                        <CourseLectures studentID={this.state.info_user.ID} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} bookLecture={this.bookLecture} deleteBookedLecture={this.deleteBookedLecture} bookedLectures={this.state.bookedLectures} deleteLecture={this.deleteLecture} showStudentsLectures={this.showStudentsLectures} />
                       </Col>
                       <Col sm={3} className="below-nav" />
 
@@ -878,7 +889,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={1} className="below-nav" />
                       <Col sm={10} className="below-nav">
-                        <CourseLectures turnOnRemote={this.turnOnRemote} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} deleteLecture={this.deleteLecture}  />
+                        <CourseLectures turnOnRemote={this.turnOnRemote} role_id={this.state.info_user.role_id} lectures={this.state.lectures} course={this.state.course} getListStudents={this.getStudentsList} deleteLecture={this.deleteLecture} />
                       </Col>
                       <Col sm={1} className="below-nav" />
 
@@ -906,13 +917,13 @@ class App extends React.Component {
                 {this.state.info_user.role_id == 4 ?
                   <>
                     <Route exact path={"/teacher/statistics/overall"}>
-                      <TeacherStatistics title = "OVERALL" statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
+                      <TeacherStatistics title="OVERALL" statisticsGroupBy={this.state.statisticsGroupBy} onStatisticGroupByChange={this.onStatisticGroupByChange} setStateDate={this.setStateDate} generateData={this.generateData} statistics={this.state.statistics} lectureData={this.state.lectureData} optionsBarChart={optionsBarChart} bookingsData={this.state.bookingsData} bookingsLectureData={this.state.bookingsLectureData} options={options}></TeacherStatistics>
                     </Route>
                     {this.state.courses.map((course) => <Route exact path={"/teacher/statistics/" + course.subjectID}>
-                      <TeacherStatistics title = {course.description.toUpperCase()} statisticsGroupBy = {this.state.statisticsGroupBy} onStatisticGroupByChange = {this.onStatisticGroupByChange} setStateDate = {this.setStateDate} generateData = {this.generateData} statistics = {this.state.statistics} lectureData = {this.state.lectureData} optionsBarChart = {optionsBarChart} bookingsData = {this.state.bookingsData} bookingsLectureData = {this.state.bookingsLectureData} options = {options}></TeacherStatistics>
+                      <TeacherStatistics title={course.description.toUpperCase()} statisticsGroupBy={this.state.statisticsGroupBy} onStatisticGroupByChange={this.onStatisticGroupByChange} setStateDate={this.setStateDate} generateData={this.generateData} statistics={this.state.statistics} lectureData={this.state.lectureData} optionsBarChart={optionsBarChart} bookingsData={this.state.bookingsData} bookingsLectureData={this.state.bookingsLectureData} options={options}></TeacherStatistics>
                     </Route>)}
                   </> : <Redirect to="/login" />}
-                
+
               </Switch>
 
             </Col>
