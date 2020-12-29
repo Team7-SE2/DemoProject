@@ -18,6 +18,13 @@ class UploadLists extends React.Component {
             upload_ok: false
         };
     }
+    showModal = () => {
+        this.setState({ show: true });
+      };
+    
+      hideModal = () => {
+        this.setState({ show: false });
+      };
 
     closeError = (error) => {
         switch (error) {
@@ -40,6 +47,7 @@ class UploadLists extends React.Component {
           })
           .catch(()=>{
             console.log(file);
+            this.showModal();
             console.log("Errore nell'upload del file");
           })
          
@@ -77,42 +85,42 @@ class UploadLists extends React.Component {
                 case 1:
                     {
                     this.setState({ errorS: false, fileS: f }, () =>{
-                        if (this.state.fileS.name !== "Students.csv")
-                                this.setState({ errorS: true });
-                            else {
+                        // if (this.state.fileS.name !== "Students.csv")
+                        //         this.setState({ errorS: true });
+                        //     else {
                                 Object.defineProperty(f, 'name', {
                                 writable: true,
                                 value: "Students.csv"
                                 });
-                            }     
+                            //}     
                     });
                     break;
                     }
                 case 2:
                     {
                         this.setState({ errorC: false, fileC: f }, () =>{
-                            if (this.state.fileC.name !== "Courses.csv")
-                                    this.setState({ errorC: true });
-                                else {
+                            // if (this.state.fileC.name !== "Courses.csv")
+                            //         this.setState({ errorC: true });
+                            //     else {
                                     Object.defineProperty(f, 'name', {
                                     writable: true,
                                     value: "Courses.csv"
                                     });
-                                }     
+                                //}     
                         });
                         break;
                     }
                 case 3:
                     {
                         this.setState({ errorT: false, fileT: f }, () =>{
-                            if (this.state.fileT.name !== "Professors.csv")
-                                    this.setState({ errorT: true });
-                                else {
+                            // if (this.state.fileT.name !== "Professors.csv")
+                            //         this.setState({ errorT: true });
+                            //     else {
                                     Object.defineProperty(f, 'name', {
                                     writable: true,
                                     value: "Professors.csv"
                                     });
-                                }     
+                                //}     
                         });
                         break;
                     }
@@ -120,14 +128,14 @@ class UploadLists extends React.Component {
                 case 4:
                     {
                         this.setState({ errorL: false, fileL: f }, () =>{
-                            if (this.state.fileL.name !== "Schedule1s.csv")
-                                    this.setState({ errorL: true });
-                                else {
+                            // if (this.state.fileL.name !== "Schedule1s.csv")
+                            //         this.setState({ errorL: true });
+                            //     else {
                                     Object.defineProperty(f, 'name', {
                                     writable: true,
                                     value: "Schedule1s.csv"
                                     });
-                                }     
+                                //}     
                         });
                         break;
                     }
@@ -135,14 +143,14 @@ class UploadLists extends React.Component {
                 case 5:
                     {
                         this.setState({ errorCl: false, fileCl: f }, () =>{
-                            if (this.state.fileCl.name !== "Enrollment.csv")
-                                    this.setState({ errorCl: true });
-                                else {
+                            // if (this.state.fileCl.name !== "Enrollment.csv")
+                            //         this.setState({ errorCl: true });
+                            //     else {
                                     Object.defineProperty(f, 'name', {
                                     writable: true,
                                     value: "Enrollment.csv"
                                     });
-                                }     
+                                //}     
                         });
                         break;
                     }
@@ -199,6 +207,20 @@ class UploadLists extends React.Component {
                     </Modal.Body>
                 </Modal>
     }
+            <Modal show={this.state.show} handleClose={this.hideModal} backdrop="static" keyboard={false}  aria-labelledby="contained-modal-title-vcenter" centered>
+                <Modal.Header >
+                    <Modal.Title>Pay attention! </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                     <> <h4> Format of CSV file sent is not correct! </h4></>
+                </Modal.Body>
+                <Modal.Footer>
+                       <> 
+                       <Button variant="primary" onClick={() => {this.hideModal();}} > OK </Button>
+                       </>
+
+                </Modal.Footer>
+            </Modal>
             <br /> <br /> <br />
 
             <Row>

@@ -52,14 +52,18 @@ module.exports = function () {
                     console.log("Rename : "+ err);
                     res.status(500).end();
                 } else {
-                    csvHelper.parse(requestType);
-                    res.status(201).end();
+                    csvHelper.parse(requestType, function (err){
+                        if(err)
+                            res.status(505).end();
+                        else
+                            res.status(201).end();
+                    });
                 }
             });
 
         } catch (err) {
             console.log("Nel catch " + err);
-            res.status(500).end();
+            res.status(505).end();
         }
 
     })
