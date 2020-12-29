@@ -110,8 +110,8 @@ module.exports = function () {
         db['bookings'].findAll({
             where: {
                 user_id: { [Op.eq]: req.query.user_id },
-                waiting:{ [Op.eq]: 0 }
-
+                waiting:{ [Op.eq]: 0 },
+                present: true
 
             }, distinct: true, include: [
                 { model: db.lectures, as: 'lecture', where: { date: { [Op.gte]: moment().add(-14, "days").toDate() } } }
@@ -124,7 +124,8 @@ module.exports = function () {
 
             db['bookings'].findAll({
                 where: {
-                    lecture_id: { [Op.in]: lecturesListIds }
+                    lecture_id: { [Op.in]: lecturesListIds },
+                    present: true
                 }, include: [
                     { model: db.users, as: 'user', attributes: [ "id", "name", "surname", "email"] }]
             }).then((bookings2) => {
@@ -419,7 +420,7 @@ module.exports = function () {
 
                             // set the student email
                             mailOptions.to = email;
-                            mailOptions.text = "Dear student, you correctly" + req.body.waiting ? "added in waiting list" : "booked" + "for the \"" + (lecture.subject ? lecture.subject.description : '...') + "\" course-lesson.\nIt will take on date: " + lecture.date + ".\n\nRegards"
+                            mailOptions.text = "Dear student, you correctly" + (req.body.waiting ? "added in waiting list" : "booked") + "for the \"" + (lecture.subject ? lecture.subject.description : '...') + "\" course-lesson.\nIt will take on date: " + lecture.date + ".\n\nRegards"
                             // respond to the caller
                             transporter.sendEmail(mailOptions);
                             res.status(201).end();
