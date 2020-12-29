@@ -2,12 +2,6 @@ var express = require('express');
 var router = express.Router();
 var finale = require('finale-rest')
 var db = require('../models/index');
-//var moment = require('moment');
-//const Op = db.Sequelize.Op;
-//const FS = require('fs')
-//var path = require('path');
-//var root = path.dirname(require.main.filename);
-//const csvFilePath =  root + '/../csv_files/Courses.csv' // or any file format
 
 /*
     *** API LIST ***
@@ -19,23 +13,6 @@ var db = require('../models/index');
 */  
 
 module.exports = function () {
-
-    /*router.get('/csv', (req, res) => {
-
-        console.log(csvFilePath)
-        // Check if file specified by the filePath exists 
-        FS.exists(csvFilePath, function(exists){
-            if (exists) {  
-                
-                res.download(csvFilePath)
-                
-            } else {
-                res.writeHead(400, {"Content-Type": "text/plain"});
-                res.end("ERROR File does not exist");
-            }
-        });
-        
-    })*/
 
     // Initialize finale
     finale.initialize({

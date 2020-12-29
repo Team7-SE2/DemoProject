@@ -8,10 +8,6 @@ var moment = require("moment")
 const { jsPDF } = require("jspdf");
 var path = require('path');
 const { create } = require('domain');
-//const fs = require('fs')
-//var path = require('path');
-//var root = path.dirname(require.main.filename);
-//const csvFilePath =  root + '/../csv_files/Enrollment.csv' // or any file format
 
 const ObjectsToCsv = require('objects-to-csv');
 
@@ -24,23 +20,6 @@ const ObjectsToCsv = require('objects-to-csv');
     POST -> /api/bookings -> body:{user_id,lecture_id} -> crea una prenotazione (manda in automatico una mail all'utente che si prenota)
 */
 module.exports = function () {
-
-    /*router.get('/csv', (req, res) => {
-
-        console.log(csvFilePath)
-        // Check if file specified by the filePath exists 
-        fs.exists(csvFilePath, function(exists){
-            if (exists) {  
-                
-                res.download(csvFilePath)
-                
-            } else {
-                res.writeHead(400, {"Content-Type": "text/plain"});
-                res.end("ERROR File does not exist");
-            }
-        });
-        
-    })*/
 
 //http://localhost:3100/api/bookings/getStudentWaitingList?lecture_id=1027
     router.get('/getStudentWaitingList', (req, res) => {
@@ -92,16 +71,6 @@ module.exports = function () {
           })
 
     })
-
-
-
-
-
-
-
-
-
-
 
     //http://localhost:3100/api/bookings/tracingReport?user_id=3&type='PDF'
     router.get('/tracingReport', (req, res) => {
@@ -343,45 +312,6 @@ module.exports = function () {
           })
 
     })
-
-    // bookingsResource.create.fetch(function(req,res,context){
-    //     if(req.body.user_id && req.body.lecture_id){
-    //         db['users'].findByPk(req.body.user_id).then((user)=>{
-    //             //TODO
-    //             //controllare che lo user in questione sia uno students
-
-    //             // save the student email
-    //             let email = user.email;
-    //             console.log(email);
-    //             var mailOptions = {
-
-    //                 from: "pulsbsnoreply@gmail.com",
-    //                 subject: 'using Node.js',
-    //                 text: 'Ti sei iscritto correttamente alla lezione'
-
-    //             }
-    //             // set the student email
-    //             mailOptions.to = email;
-    //             // respond to the caller
-
-    //             // send the email to the student
-    //             transporter.sendMail(mailOptions, function (error, info) {
-    //                 if (error) {
-    //                     console.log(error);
-    //                 } else {
-    //                     console.log('Email sent: ' + info.response);
-    //                 }
-    //             })
-    //             context.continue();
-    //         })
-    //         .catch((err)=>{
-    //             console.log(err);
-    //             context.continue();
-    //         })
-    //     }
-    //     else
-    //         context.continue();
-    // })
 
     // // API ADD booking for student
     router.post('/student', function (req, res) {
