@@ -10,64 +10,15 @@ import TimePickerComponent from './TimePickerComponent';
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {FaCog } from 'react-icons/fa';
+import API from '../api/api.js';
+import Alert from 'react-bootstrap/Alert';
 
 class SupportOfficerListLectures extends React.Component {
 
   constructor(props) {
     super(props);
-    
-    const weekDays = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ] 
 
-    let scheduled = [];
-
-    // prepare scheduledLectures
-    for(let i = 0; i < props.lectures.length; i++){
-
-      let lec = props.lectures[i];
-      let index = moment(new Date(lec.date)).day();
-
-      // find the lecture inside the array
-      let arrayIndex = scheduled.findIndex(x => x.lectureDay === weekDays[index] && x.beginHour === moment(lec.date).format("HH:mm") && x.duration === lec.duration)
-
-      if(arrayIndex >= 0)
-        scheduled[arrayIndex].scheduledLectures ++;
-      else{
-        scheduled.push({
-          date: lec.date,
-          scheduledLectures : 1,
-          lectureDay : weekDays[index],
-          beginHour: moment(lec.date).format("HH:mm"),
-          endHour: moment(lec.date).add(lec.duration, 'hours').format("HH:mm"),
-          duration: lec.duration
-        })
-      }
-
-    }
-    let finalScheduled = scheduled.map((lec) => {
-      console.log(lec)
-      return {
-        lectureDate: lec.date,
-        lectureDay: lec.lectureDay,
-        beginHour: lec.beginHour,
-        beginDuration: lec.duration,
-        endHour: lec.endHour,
-        scheduledLectures: lec.scheduledLectures,
-        changeSchedule: <div style = {{textAlign : "center"}}> 
-        
-          <Button key={lec.lectureDay} variant="primary" onClick={(e) => this.confirm(lec.lectureDay, lec.beginHour, lec.date, lec.duration, e)} type="submit"><FaCog size={20}></FaCog></Button>
-  
-        </div>,
-      }
-  
-    });
+    let finalScheduled = this.getScheduledLectures(props.lectures)
     
     this.state = {
       course_id: props.course_id,
@@ -88,7 +39,8 @@ class SupportOfficerListLectures extends React.Component {
       pageSizes: [5, 10, 15, 0],
       dayOfWeek: '',
       newBeginHour: moment().format("HH:mm"),
-      newDay: 'Monday'
+      newDay: 'Monday',
+      showSuccess:false
         
     };
   }
@@ -96,6 +48,7 @@ class SupportOfficerListLectures extends React.Component {
   confirm = (dayOfWeek, beginHour, beginDate, beginDuration, event) => {
     console.log(dayOfWeek, beginHour, beginDate, beginDuration)
     event.preventDefault();
+    this.setState({showSuccess:false})
     this.showModal(dayOfWeek, beginHour, beginDate, beginDuration);
     
   }
@@ -120,14 +73,99 @@ class SupportOfficerListLectures extends React.Component {
     this.setState({newDuration: day.target.value})
 
   }
+  
+  getScheduledLectures = (lectures) => {
+     
+    const weekDays = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+    ] 
+    
+    let scheduled = [];
 
+    // prepare scheduledLectures
+    for(let i = 0; i < lectures.length; i++){
+
+      let lec = lectures[i];
+      let index = moment(new Date(lec.date)).day();
+
+      // find the lecture inside the array
+      let arrayIndex = scheduled.findIndex(x => x.lectureDay === weekDays[index] && x.beginHour === moment(lec.date).format("HH:mm") && x.duration === lec.duration)
+
+      if(arrayIndex >= 0)
+        scheduled[arrayIndex].scheduledLectures ++;
+      else{
+        scheduled.push({
+          date: lec.date,
+          scheduledLectures : 1,
+          lectureDay : weekDays[index],
+          beginHour: moment(lec.date).format("HH:mm"),
+          endHour: moment(lec.date).add(lec.duration, 'hours').format("HH:mm"),
+          duration: lec.duration
+        })
+      }
+
+    }
+    let finalScheduled = scheduled.map((lec) => {
+      return {
+        lectureDate: lec.date,
+        lectureDay: lec.lectureDay,
+        beginHour: lec.beginHour,
+        beginDuration: lec.duration,
+        endHour: lec.endHour,
+        scheduledLectures: lec.scheduledLectures,
+        changeSchedule: <div style = {{textAlign : "center"}}> 
+        
+          <Button key={lec.lectureDay} variant="primary" onClick={(e) => this.confirm(lec.lectureDay, lec.beginHour, lec.date, lec.duration, e)} type="submit"><FaCog size={20}></FaCog></Button>
+  
+        </div>,
+      }
+  
+    });
+    return finalScheduled;
+    
+  }
+
+  putCourseLectureSchedule = (subject_id, old_day, old_duration, new_day, new_hour, new_duration) => {
+
+    API.putCourseLectureSchedule(subject_id, old_day, old_duration, new_day, new_hour, new_duration)
+      .then(() => {
+              
+        API.getStudentCourseLectures(subject_id)
+        .then((lecs) => {
+          
+          let lectures = lecs.filter((s) => moment(s.date).isAfter(moment()));
+          
+          let finalScheduled = this.getScheduledLectures(lectures)
+          this.setState({
+            scheduledLectures: finalScheduled,
+            showSuccess: true
+          });
+
+        })
+        .catch((err) => {
+          this.handleErrors(err);
+        });
+
+      })
+  }
+
+  closeSuccess = () => {
+    this.setState({showSuccess:false});
+  }
   showModal = (dayOfWeek, beginHour, beginDate, beginDuration) => {
     this.setState({ show: true, dayOfWeek: dayOfWeek, beginHour: beginHour, beginDate: beginDate, beginDuration: beginDuration, newDay: dayOfWeek, newBeginHour: beginHour, newDuration: beginDuration });
   };
 
   confirmModal = () => {
-    console.log(this.state.course_id, this.state.dayOfWeek+":"+this.state.beginHour, this.state.newDay, this.state.newBeginHour)
-    this.props.putCourseLectureSchedule(this.state.course_id, this.state.dayOfWeek+" "+this.state.beginHour, this.state.beginDuration, this.state.newDay, this.state.newBeginHour, this.state.newDuration)
+    // send if the user has changed something
+    if(this.state.dayOfWeek !== this.state.newDay || this.state.beginHour !== this.state.newBeginHour || this.state.beginDuration !== this.state.newDuration )
+      this.putCourseLectureSchedule(this.state.course_id, this.state.dayOfWeek+" "+this.state.beginHour, this.state.beginDuration, this.state.newDay, this.state.newBeginHour, this.state.newDuration)
     this.setState({ show: false, name: '', surname: '', role_id: null});
   };
 
@@ -135,53 +173,8 @@ class SupportOfficerListLectures extends React.Component {
     this.setState({ show: false, name: '', surname: '', role_id: null});
   };
 
-  /*onStatisticGroupByChange = (e) => {
-  
-    this.setState({ statisticsGroupBy: e.target.value })
-
-  }*/
-  /*const test = scheduledLectures.map((lec) => {
-    
-    return {
-      lectureDay: lec.lectureDay,
-      beginHour: lec.beginHour,
-      endHour: lec.endHour,
-      scheduledLectures: lec.scheduledLectures,
-      changeSchedule: <div style = {{textAlign : "center"}}> 
-      
-        <Button variant="primary">Change Schedule</Button>
-
-      </div>,
-    }
-
-  })*/
-
-
   render(){
     
-    /*const [pageSizes] = useState([5, 10, 15, 0]);
-
-    const [columns] = useState(
-      [
-          { name: 'lectureDay', title: 'Lecture Day' },
-          { name: 'beginHour', title: 'Begin Hour' },
-          { name: 'endHour', title: 'End Hour' },
-          { name: 'scheduledLectures', title: 'Scheduled Lectures' },
-          { name: 'changeSchedule', title: 'Change Schedule' }
-      ]
-    );
-    const [integratedSortingColumnExtensions] = useState([
-      //{ columnName: 'changeSchedule', compare: compareKey },
-    ]);
-
-    const [sortingStateColumnExtensions] = useState([
-      { columnName: 'changeSchedule', sortingEnabled: false }
-    ]);
-
-    const [filteringStateColumnExtensions] = useState([
-      { columnName: 'changeSchedule', filteringEnabled: false },
-      { columnName: 'scheduleCourse', filteringEnabled: false },
-    ]);*/
     return (
       <>
       
@@ -203,7 +196,9 @@ class SupportOfficerListLectures extends React.Component {
           <PagingPanel pageSizes={this.state.pageSizes}/>
         </Grid>
       </Paper>
-  
+      <br/>
+      <Success showSuccess={this.state.showSuccess} closeSuccess={this.closeSuccess} course_id = {this.state.course_id} old_day={this.state.dayOfWeek} old_begin_hour = {this.state.beginHour} old_duration = {this.state.beginDuration} new_day={this.state.newDay} new_begin_hour = {this.state.newBeginHour} new_duration = {this.state.newDuration}/>
+
   
       <Modal show={this.state.show} handleClose={this.hideModal} backdrop="static" keyboard={false}  aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header >
@@ -270,6 +265,37 @@ class SupportOfficerListLectures extends React.Component {
     );
   }
   
+}
+function Success(props) {
+
+  let {showSuccess, closeSuccess, course_id, old_day, old_begin_hour, old_duration, new_day, new_begin_hour, new_duration} = props;
+
+  if (showSuccess) {
+      return (
+          <Alert variant="success" onClose={() => closeSuccess()} dismissible>
+              <Alert.Heading>New lecture scheduled applied for course {course_id}!</Alert.Heading>
+              <p>
+                  The old lecture schedule was: <br/>
+                  <ul>
+                  {old_day !== new_day ? <li>lecture old Day: {old_day}</li> : <></>}
+                  {old_begin_hour !== new_begin_hour ? <li>lecture old Starting Hour: {old_begin_hour}</li> : <></>}
+                  {old_duration !== new_duration ? <li>lecture old Duration: {old_duration}</li> : <></>}
+                  
+                  </ul>
+        </p>
+              <p>
+                  The new lecture schedule is: <br/>
+                  <ul>
+                  {old_day !== new_day ? <li>lecture new Day: {new_day}</li> : <></>}
+                  {old_begin_hour !== new_begin_hour ? <li>lecture new Starting Hour: {new_begin_hour}</li> : <></>}
+                  {old_duration !== new_duration ? <li>lecture new Duration: {new_duration}</li> : <></>}
+                  </ul>
+        </p>
+          </Alert>
+      );
+      
+  }
+return <> </>
 }
 
 export default SupportOfficerListLectures;

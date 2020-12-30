@@ -10,7 +10,7 @@ import {
 } from 'react-pro-sidebar';
 
 import 'react-pro-sidebar/dist/css/styles.css';
-import { FaBook, FaCalendar, FaGithub, FaRegChartBar, FaFileCsv, FaCalendarWeek } from 'react-icons/fa';
+import { FaBook, FaCalendar, FaGithub, FaRegChartBar, FaFileCsv, FaCalendarWeek, FaClipboardList } from 'react-icons/fa';
 import {RiVirusFill} from "react-icons/ri";
 import Nav from 'react-bootstrap/Nav';
 import { AuthContext } from '../auth/AuthContext'
@@ -79,7 +79,7 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
           </>
           <>
           {context.authUser && role_id===2 && logged && <MenuItem 
-            icon={<FaCalendarWeek />}>
+            icon={<FaClipboardList />}>
             <Nav >
               {
                 <Nav.Link style={{paddingLeft:0}} as={NavLink} to="/supportOfficer/courseSchedule"  ><h6>Course Schedule</h6></Nav.Link>

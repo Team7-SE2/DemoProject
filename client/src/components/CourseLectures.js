@@ -73,12 +73,12 @@ const CourseLectures = (props) => {
         { columnName: 'View list of students', sortingEnabled: false }
     ]);
 
+    console.log("lectures: " + lectures)
+
     const test = lectures.sort((a,b) =>{return moment(a.date).unix() - moment(b.date).unix()}).filter(function (l) {
         {if (role_id == 5) return (l.remote == null)
-         else if (role_id == 4) return l;};
+         else /*if (role_id == 4)*/ return l;};
     }).map((lec) => {
-        console.log("lecture deleted at" + lec.deleted_at)
-
 
         if (role_id == 4) {
             return {

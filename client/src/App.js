@@ -195,8 +195,8 @@ class App extends React.Component {
   showTeachersLectures = (course) => {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
-        this.setState({ course: course });
-        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
+        //this.setState({ course: course });
+        this.setState({ course: course, lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
         this.props.history.push("/teacher/courses/" + course.subjectID + "/lectures");
 
       })
@@ -208,8 +208,8 @@ class App extends React.Component {
   showPastLectures = (course) => {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
-        this.setState({ course: course });
-        this.setState({ lectures: lectures.filter((s) => moment(s.date).isSameOrBefore(moment())) });
+        //this.setState({ course: course });
+        this.setState({ course: course, lectures: lectures.filter((s) => moment(s.date).isSameOrBefore(moment())) });
         this.props.history.push("/teacher/courses/" + course.subjectID + "/PastLectures");
 
       })
@@ -222,8 +222,9 @@ class App extends React.Component {
   showCourseLectures = (course) => {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
-        this.setState({ course: course });
-        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
+        console.log(lectures)
+        //this.setState({ course: course });
+        this.setState({ course: course, lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
         this.props.history.push("/supportOfficer/courseSchedule/" + course.subjectID + "/lectures");
 
       })
@@ -235,8 +236,9 @@ class App extends React.Component {
   showCourseLecturesSchedule = (course) => {
     API.getStudentCourseLectures(course.id)
       .then((lectures) => {
-        this.setState({ course: course });
-        this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
+        //this.setState({ course: course });
+        console.log("LECTURES: " + lectures.length)
+        this.setState({ course: course, lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
         this.props.history.push("/supportOfficer/courseSchedule/" + course.subjectID + "/lectureSchedule");
 
       })
@@ -366,14 +368,16 @@ class App extends React.Component {
 
     API.putCourseLectureSchedule(subject_id, old_day, old_duration, new_day, new_hour, new_duration)
       .then(() => {
-        API.getStudentCourseLectures(subject_id)
+        this.showCourseLecturesSchedule(this.state.course)
+        /*API.getStudentCourseLectures(subject_id)
           .then((lectures) => {
+            console.log("LETTURE:_ " + JSON.stringify(lectures.filter((s) => moment(s.date).isAfter(moment()))))
             this.setState({ lectures: lectures.filter((s) => moment(s.date).isAfter(moment())) });
-            this.props.history.push("/supportOfficer/courseSchedule/");
+            //this.props.history.push("/supportOfficer/courseSchedule/" + subject_id + "/lectureSchedule");
           })
           .catch((err) => {
             this.handleErrors(err);
-          });
+          });*/
       })
   }
 
