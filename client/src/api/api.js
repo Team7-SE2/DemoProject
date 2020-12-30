@@ -798,6 +798,42 @@ async function updateRules (rules) {
     });
 
 }
+/////////////////////////
+//      PULSBS-18     //
+/////////////////////////
 
-const API = {updateRules,putCourseLectureSchedule, uploadFile,getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport };
+
+async function putPresence(user_id, lecture_id, present) {
+   
+    console.log("PARAMS: " + user_id + " "+ lecture_id + " PRESENT: " + present)
+    let obj = {
+        present: present
+    };
+
+    const url = `/api/bookings/students/${user_id}/lectures/${lecture_id}`;
+    
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+
+            },
+            body: JSON.stringify(obj),
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+
+            } else {
+                // analyze the cause of error
+                console.log(response);
+                response.json()
+                    .then((ob) => { reject(ob); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
+    });
+}
+const API = {updateRules,putCourseLectureSchedule, uploadFile,getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport, putPresence };
 export default API;

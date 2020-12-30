@@ -9,7 +9,7 @@ import Col from "react-bootstrap/Col";
 
 const StudentList = (props) => {
 
-  let {students, course, lecture, switchRoute, recordPresence} = props;
+  let {students, course, lecture, switchRoute, recordPresence, changePresence} = props;
 
 
   const test = students.map((student) => {
@@ -24,7 +24,8 @@ const StudentList = (props) => {
         id: student.user.id,
         name: student.user.name,
         surname: student.user.surname,
-        presence: <Button variant="danger"> <ImCross></ImCross> </Button>
+        presence: student.present ? <Button variant="success" onClick={() =>{changePresence(student.user.id, lecture.id, false)}}> <ImCheckmark></ImCheckmark> </Button> 
+                                  : <Button variant="danger" onClick={() =>{changePresence(student.user.id, lecture.id, true)}}> <ImCross></ImCross> </Button>
       }
 
   });

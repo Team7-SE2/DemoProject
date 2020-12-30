@@ -352,6 +352,22 @@ class App extends React.Component {
       });
   }
 
+  changePresence = (studentID, LectureID, present) => {
+
+    API.putPresence(studentID, LectureID, present)
+      .then(() => {
+        API.getStudentListforLecture(LectureID)
+      .then((students) => {
+        this.setState({ students: students});
+        this.props.history.push("/teacher/PastLectures/" + this.state.lecture.id + "/students");
+
+      })
+      .catch((err) => {
+        this.handleErrors(err);
+      });
+    });
+  }
+
   deleteBookedLecture = (LectureID, course) => {
     API.deleteBookedLecture(this.state.authUser.ID_User, LectureID)
       .then(() => {
@@ -950,7 +966,7 @@ class App extends React.Component {
                     <Row >
                       <Col sm={3} className="below-nav" />
                       <Col sm={6} className="below-nav">
-                        <StudentList switchRoute={this.switchRoute} students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} recordPresence ={true}/>
+                        <StudentList switchRoute={this.switchRoute} students={this.state.students} course={this.state.course} lecture={this.state.lecture} role_id={this.state.info_user.role_id} recordPresence ={true}  changePresence={this.changePresence}/>
                       </Col>
                       <Col sm={3} className="below-nav" />
 
