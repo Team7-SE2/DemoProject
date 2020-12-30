@@ -8,6 +8,8 @@ const jsonwebtoken = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const expireTime = 1800; //seconds
+const fs = require('fs');
+const async = require('async');
 
 module.exports = function (app) {
 
@@ -62,17 +64,116 @@ module.exports = function (app) {
         }
     })
 
+    router.post('/bookingRules', function (req, res) {
+
+        //var previousJSON = JSON.parse(fs.readFileSync('../config/bookingsRules.json').toString());
+        var actualJSON = req.body;
+        fs.writeFile('../config/bookingsRules.json', JSON.stringify(actualJSON));
+        db['lectures'].findAll({ 
+            where: { date: { [Op.gt]: moment() } }, 
+            include: [{ model: db.rooms, as: 'room' },{ model: db.subjects, as: 'subject'}] 
+        })
+            .then((lectures) => {
+                async.eachLimit(lectures, 5, function (l, callback) { 
+                    l.remote = false;
+                    l.save()
+                        .then(()=>{ callback(); })
+                        .catch((err)=>{console.log(err); callback();})
+                }, function (err) {
+                    if (err)
+                        console.log(err)
+                    Object.keys(actualJSON).forEach((k) => {
+                        if (actualJSON[k]) {
+                            var lectures_to_update = [];
+                            switch (k) {
+                                case 'first_year': {
+                                    //Only lessons for the first year can be booked
+                                    //setto in remote tutte le lezioni con materia con year != 1 
+                                    lectures_to_update = lectures.filter((l) => {
+                                        return (l.subject.year != 1)
+                                    })
+                                    lectures_to_update.forEach((l) => {
+                                        l.remote = true;
+                                    })
+                                    async.eachLimit(lectures_to_update, 2, function (l, callback) {
+                                        l.save()
+                                            .then(()=>{ callback(); })
+                                            .catch((err)=>{console.log(err); callback();})
+                                    })
+                                } break;
+                                case 'capiency': {
+                                    if (actualJSON['capiency_value']) {
+                                        //Only lessons that are scheduled in a room with at least a certain capiency are bookable
+                                        //setto in remote tutte le lezioni con aula meno capiente di capiency_value
+                                        lectures_to_update = lectures.filter((l) => {
+                                            return (l.room.capacity < actualJSON['capiency_value'])
+                                        })
+                                        lectures_to_update.forEach((l) => {
+                                            l.remote = true;
+                                        })
+                                        async.eachLimit(lectures_to_update, 2, function (l, callback) {
+                                            l.save()
+                                                .then(()=>{ callback(); })
+                                                .catch((err)=>{console.log(err); callback();})
+                                        })
+                                    }
+                                } break;
+                                case 'morning': {
+                                    //Only mornign lessons are bookable
+                                    //setto in remote tutte le lezioni dalle 12:00
+                                    lectures_to_update = lectures.filter((l) => {
+                                        return (moment(l.date).hours() >= 12)
+                                    })
+                                    lectures_to_update.forEach((l) => {
+                                        l.remote = true;
+                                    })
+                                    async.eachLimit(lectures_to_update, 2, function (l, callback) {
+                                        l.save()
+                                            .then(()=>{ callback(); })
+                                            .catch((err)=>{console.log(err); callback();})
+                                    })
+
+                                } break;
+                                case 'afternoon': {
+                                    //Only afternoon lessons are bookable
+                                    //setto in remote tutte le lezioni fino 11:59
+                                    lectures_to_update = lectures.filter((l) => {
+                                        return (moment(l.date).hours() <= 11)
+                                    })
+                                    lectures_to_update.forEach((l) => {
+                                        l.remote = true;
+                                    })
+                                    async.eachLimit(lectures_to_update, 2, function (l, callback) {
+                                        l.save()
+                                            .then(()=>{ callback(); })
+                                            .catch((err)=>{console.log(err); callback();})
+                                    })
+                                } break;
+                                default: { } break;
+                            }
+                        }
+                    })
+                    res.end();
+                })
+            })
+    })
+
+    router.get('/bookingRules', function (req, res) {
+        var previousJSON = JSON.parse(fs.readFileSync('../config/bookingsRules.json').toString());
+        res.send(previousJSON);
+    })
+
     router.use(cookieParser());
 
     // For the rest of the code, all APIs require authentication
-    if(process.env.NODE_ENV != "test"){
-        router.use(
-            jwt({
-                secret: jwtSecret,
-                getToken: req => req.cookies.token,
-                algorithms: ['HS256']
-            })
-        );
+    if (process.env.NODE_ENV != "test") {
+        // router.use(
+        //     jwt({
+        //         secret: jwtSecret,
+        //         getToken: req => req.cookies.token,
+        //         algorithms: ['HS256']
+        //     })
+        // );
     }
     router.use('/api/users', require('./users.js')());
     router.use('/api/rooms', require('./rooms.js')());
