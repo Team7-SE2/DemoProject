@@ -5,6 +5,7 @@ var db = require('../models/index');
 var moment = require('moment');
 const Op = db.Sequelize.Op;
 var transporter = require('../helpers/email');
+var async = require('async');
 
 /*
     *** API LIST ***
@@ -86,18 +87,27 @@ module.exports = function () {
             where: { subject_id: req.params.subjectId }, 
             include:[{model: db.users, as: 'user'},{model: db.subjects, as: 'subject'}]
         })
-            .then((t_l)=>{
-                if(t_l.user && t_l.user.name && t_l.user.email && t_l.subject && t_l.subject.description) {
-                    var mailOptions = {
-                        from: "pulsbsnoreply@gmail.com",
-                        subject: 'Changed schedule of a subject',
-                        text: 'Dear ' + t_l.user.name + ",\n"+"the subject "+ t_l.subject.description+" changed his scheduled lectures, please check calendar to see changes.\n" + "Regards"
+            .then((t_ls)=>{
+                t_ls.splice(10);
+                async.eachLimit(t_ls, 2, function(t_l, callback){
+                    if(t_l.user && t_l.user.name && t_l.user.email && t_l.subject && t_l.subject.description) {
+                        var mailOptions = {
+                            from: "pulsbsnoreply@gmail.com",
+                            subject: 'Changed schedule of a subject',
+                            text: 'Dear ' + t_l.user.name + ",\n"+"the subject "+ t_l.subject.description+" changed his scheduled lectures, please check calendar to see changes.\n" + "Regards"
+                        }
+                        // set the student email
+                        mailOptions.to =t_l.user.email;
+                        // send the email to the student
+                        transporter.sendEmail(mailOptions, callback);
                     }
-                    // set the student email
-                    mailOptions.to =t_l.user.email;
-                    // send the email to the student
-                    transporter.sendEmail(mailOptions);
-                }
+                },function(err){
+                    if(err)
+                        console.log(err)
+                    else
+                        console.log("INVIO MAIL PER CAMBIO SCHEDULE FINITO!")
+                })
+                
             })
     })
 

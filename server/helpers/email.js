@@ -6,7 +6,7 @@ emailHelper.transporter = nodemailer.createTransport({
     secure: false,
     port: 25,
     auth: {
-        user: "pulsbs.noreply@gmail.com",  //"pulsbs.noreply2020@gmail.com"
+        user: /*"pulsbs.noreply@gmail.com",*/"pulsbs.noreply2020@gmail.com",
 
         pass: "provanoreply1"
     }, tls: {
@@ -14,8 +14,13 @@ emailHelper.transporter = nodemailer.createTransport({
     }
 });
 
-emailHelper.sendEmail = async function (mailOptions) {
-    emailHelper.transporter.sendMail(mailOptions)
+emailHelper.sendEmail = async function (mailOptions, callback) {
+    emailHelper.transporter.sendMail(mailOptions, function(error, info){
+        if(error)
+            console.log(error)
+        if(callback)
+            callback();
+    })
 }
 
 module.exports = emailHelper;
