@@ -74,7 +74,8 @@ const CourseLectures = (props) => {
     ]);
 
     const test = lectures.sort((a,b) =>{return moment(a.date).unix() - moment(b.date).unix()}).filter(function (l) {
-        return (l.remote == null);
+        {if (role_id == 5) return (l.remote == null)
+         else if (role_id == 4) return l;};
     }).map((lec) => {
         console.log("lecture deleted at" + lec.deleted_at)
 
