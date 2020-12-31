@@ -213,3 +213,10 @@ button:focus {
 .TableFilterCell-cell-28:nth-child(7) div{
   visibility:hidden;
 }
+
+.pro-sidebar-content {
+  background-image: url("./img/logo.png");
+  background-repeat: no-repeat;
+  background-size: 500px 500px;
+	background-position: 95% 155%;
+}

@@ -22,7 +22,7 @@ const Aside = ({ courses,collapsed, rtl, toggled, handleToggleSidebar, userLogou
     <AuthContext.Consumer >
       {(context) => (
      
-    <ProSidebar
+    <ProSidebar className="asideBarBackground"
       //image={sidebarBg}
       rtl={rtl}
       collapsed={collapsed}
