@@ -10,6 +10,8 @@ const bcrypt = require('bcrypt');
 const expireTime = 1800; //seconds
 const fs = require('fs');
 const async = require('async');
+const Op = db.Sequelize.Op;
+const moment = require('moment');
 
 module.exports = function (app) {
 
@@ -68,7 +70,9 @@ module.exports = function (app) {
 
         //var previousJSON = JSON.parse(fs.readFileSync('../config/bookingsRules.json').toString());
         var actualJSON = req.body;
-        fs.writeFile('../config/bookingsRules.json', JSON.stringify(actualJSON));
+        fs.writeFileSync('./config/bookingsRules.json', JSON.stringify(actualJSON)/*, (result) => {
+            console.log(result)
+        }*/);
         db['lectures'].findAll({ 
             where: { date: { [Op.gt]: moment() } }, 
             include: [{ model: db.rooms, as: 'room' },{ model: db.subjects, as: 'subject'}] 
@@ -159,7 +163,7 @@ module.exports = function (app) {
     })
 
     router.get('/bookingRules', function (req, res) {
-        var previousJSON = JSON.parse(fs.readFileSync('../config/bookingsRules.json').toString());
+        var previousJSON = JSON.parse(fs.readFileSync('./config/bookingsRules.json').toString());
         res.send(previousJSON);
     })
 
