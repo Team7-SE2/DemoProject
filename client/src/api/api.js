@@ -81,7 +81,7 @@ async function getSubject(subjectId) {
 }
 
 async function getSubjects() {
-    
+
     let url = "/api/subjects"
     console.log(url)
     const response = await fetch(url);
@@ -105,7 +105,7 @@ async function getStudentBookings(studentId) {
     const studentBookingsJson = await response.json();
     let id = 1;
     if (response.ok) {
-        
+
         let array = studentBookingsJson.map(async (book) => {
 
             let startDate = new Date(book.lecture.date);
@@ -154,7 +154,7 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
     let courseInstances = [];
     let teacherInstances = [];
     if (response.ok) {
-        
+
         let array = studentBookingsJson.map(async (book) => {
 
             let startDate = new Date(book.lecture.date);
@@ -165,17 +165,17 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
             let subjectDescription = '';
 
             let index = courseInstances.findIndex(x => x === book.lecture.subject_id)
-            if(index < 0){
+            if (index < 0) {
                 courseInstances.push(book.lecture.subject_id);
                 index = courseInstances.length - 1
             }
 
             let teacherIndex = teacherInstances.findIndex(t => t === book.lecture.subject.teacher.surname + " " + book.lecture.subject.teacher.name)
-            if(teacherIndex < 0){
+            if (teacherIndex < 0) {
                 teacherInstances.push(book.lecture.subject.teacher.surname + " " + book.lecture.subject.teacher.name);
                 teacherIndex = teacherInstances.length - 1
             }
-            
+
             await getSubject(book.lecture.subject_id).then((subject) => {
                 subjectDescription = subject[0].description;
             })
@@ -195,7 +195,7 @@ async function getStudentBookingsexcludeLecturesCanceled(studentId) {
             }
         });
 
-        
+
 
         return await Promise.all(array);
 
@@ -212,14 +212,14 @@ async function getStudentCourseLectures(courseID) {
     let url = "/api/lectures/includeDeleted?subject_id=" + courseID;
     const response = await fetch(url);
     const studentCourseLecturesJson = await response.json();
-    
+
     if (response.ok) {
         return (studentCourseLecturesJson.map((lecture) => {
             lecture.full = false;
-            if(lecture.lecture_bookings.length >= lecture.room.capacity){
+            if (lecture.lecture_bookings.length >= lecture.room.capacity) {
                 lecture.full = true;
             }
-           return lecture;
+            return lecture;
         }));
     }
     else {
@@ -232,18 +232,18 @@ async function getStudentCourseLectures(courseID) {
 async function getCourseLectures(params) {
     let paramsString = '';
     Object.keys(params).forEach((k, index) => {
-        if(index == 0)
+        if (index == 0)
             paramsString = '?' + k + '=' + params[k]
-        else 
+        else
             paramsString += '&' + k + '=' + params[k]
 
     });
 
-    let url = "/api/lectures/includeDeleted"+paramsString;
-  
+    let url = "/api/lectures/includeDeleted" + paramsString;
+
     const response = await fetch(url);
     const studentCourseLecturesJson = await response.json();
-    
+
     if (response.ok) {
         return (studentCourseLecturesJson.map((lecture) => lecture));
     }
@@ -270,7 +270,7 @@ async function getStudentListforLecture(lectureId) {
 }
 
 async function bookLecture(user_id, lecture_id, email, LectureWaiting) {
-   
+
     let obj = {
         user_id: user_id,
         lecture_id: lecture_id,
@@ -367,17 +367,17 @@ async function getLectures(user_id) {
 
                 let index = courseInstances.findIndex(x => x === course.id)
                 let full = false;
-                if(index < 0){
+                if (index < 0) {
                     courseInstances.push(course.id);
                     index = courseInstances.length - 1
                 }
 
                 let teacherIndex = teacherInstances.findIndex(t => t === lecture.subject.teacher.surname + " " + lecture.subject.teacher.name)
-                if(teacherIndex < 0){
+                if (teacherIndex < 0) {
                     teacherInstances.push(lecture.subject.teacher.surname + " " + lecture.subject.teacher.name);
                     teacherIndex = teacherInstances.length - 1
                 }
-                if(lecture.lecture_bookings.length >= lecture.room.capacity){
+                if (lecture.lecture_bookings.length >= lecture.room.capacity) {
                     full = true;
                 }
                 return {
@@ -423,7 +423,7 @@ async function getTeacherLectures(user_id) {
             let endDate = new Date(startDate);
             endDate.setHours(startDate.getHours() + lecture.duration)
             let index = courseInstances.findIndex(x => x === lecture.subject_id)
-            if(index < 0){
+            if (index < 0) {
                 courseInstances.push(lecture.subject_id);
                 index = courseInstances.length - 1
             }
@@ -461,9 +461,9 @@ async function getTeacherLectures(user_id) {
 async function getTeacherLecturesWithParams(user_id, params) {
     let paramsString = '';
     Object.keys(params).forEach((k, index) => {
-        if(index == 0)
+        if (index == 0)
             paramsString = '?' + k + '=' + params[k]
-        else 
+        else
             paramsString += '&' + k + '=' + params[k]
 
     })
@@ -528,14 +528,14 @@ async function getStatisticsBookings(params) {
 
     let paramsString = '';
     Object.keys(params).forEach((k, index) => {
-        if(index == 0)
+        if (index == 0)
             paramsString = '?' + k + '=' + params[k]
-        else 
+        else
             paramsString += '&' + k + '=' + params[k]
 
     })
 
-    let url = "/api/bookings/statistics"+paramsString;
+    let url = "/api/bookings/statistics" + paramsString;
     const response = await fetch(url);
     const bookingsJson = await response.json();
 
@@ -583,7 +583,7 @@ async function turnOnRemote(lecture_id) {
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL
             method: 'PUT',
-            body: JSON.stringify({remote: true}),
+            body: JSON.stringify({ remote: true }),
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -603,7 +603,7 @@ async function turnOnRemote(lecture_id) {
             }
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
-} 
+}
 
 /////////////////////////
 //      PULSBS-13      //
@@ -633,10 +633,10 @@ As a student in the waiting list I want to be added to the list of students book
 when someone cancels their booking so that I can attend the lecture
 */
 async function getStudentfromWaitingList(lectureId) {
-    let url = "/api/bookings/getStudentWaitingList?lecture_id="+lectureId;
+    let url = "/api/bookings/getStudentWaitingList?lecture_id=" + lectureId;
     const response = await fetch(url);
     const StudentJson = await response.json();
-    
+
 
     if (response.ok) {
         return StudentJson;  // have to do parsing
@@ -653,7 +653,7 @@ async function getStudentfromWaitingList(lectureId) {
 
 // preleva lo studente dalla waiting list 
 async function turnOnBooked(student_id, lecture_id) {
-    const url = "/api/bookings/students/"+student_id+"/lectures/"+lecture_id;
+    const url = "/api/bookings/students/" + student_id + "/lectures/" + lecture_id;
     const body = {
         waiting: 0
     }
@@ -690,10 +690,10 @@ async function turnOnBooked(student_id, lecture_id) {
 /////////////////////////
 
 async function getStudentInfo(studentID) {
-    let url = "/api/users/"+studentID;
+    let url = "/api/users/" + studentID;
     const response = await fetch(url);
     const StudentJson = await response.json();
-    
+
 
     if (response.ok) {
         return StudentJson;  // have to do parsing
@@ -707,17 +707,17 @@ async function getStudentInfo(studentID) {
 //http://localhost:3100/api/bookings/tracingReport?user_id=3?type='PDF'
 
 async function generateContactTracingReport(userID, type) {
-    let url = "/api/bookings/tracingReport?user_id=" + userID+ "&type=" + type;
+    let url = "/api/bookings/tracingReport?user_id=" + userID + "&type=" + type;
     const response = await fetch(url);
     //const reportJson = await response.json();
     if (response.ok) {
         console.log(response);
-        window.open(proxy + "api/bookings/tracingReport?user_id=" + userID+ "&type=" + type)
+        window.open(proxy + "api/bookings/tracingReport?user_id=" + userID + "&type=" + type)
         return response.body;  // have to do parsing
     }
     else {
         console.log("generateContactTracingReport Error");
-        let err = { status: response.status};
+        let err = { status: response.status };
         throw err;
     }
 
@@ -725,7 +725,7 @@ async function generateContactTracingReport(userID, type) {
 
 async function uploadFile(file, type) {
 
-    const url = "/api/csv?type="+type;
+    const url = "/api/csv?type=" + type;
     console.log("API: " + type);
     let formData = new FormData();
     formData.append('file', file);
@@ -754,8 +754,8 @@ async function uploadFile(file, type) {
 /////////////////////////
 
 async function putCourseLectureSchedule(subject_id, old_day, old_duration, new_day, new_hour, new_duration) {
-   
-    console.log("PARAMS: ",subject_id, old_day, new_day, new_hour, new_duration)
+
+    console.log("PARAMS: ", subject_id, old_day, new_day, new_hour, new_duration)
     let obj = {
         new_day: new_day,
         new_time: new_hour,
@@ -763,7 +763,7 @@ async function putCourseLectureSchedule(subject_id, old_day, old_duration, new_d
     };
 
     const url = `/api/lectures/changeSchedule/Course/${subject_id}/Day/${old_day}/duration/${old_duration}`;
-    
+
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL
             method: 'PUT',
@@ -791,10 +791,29 @@ async function putCourseLectureSchedule(subject_id, old_day, old_duration, new_d
 /////////////////////////
 //      PULSBS-17     //
 /////////////////////////
-async function updateRules (rules) {
+async function updateRules(rules) {
+    console.log(rules);
+    const url = "/bookingRules";
+    return new Promise((resolve, reject) => {
+        fetch(url, {             //Set correct URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
 
-    return new Promise ((resolve, reject) => {
-            return resolve();
+            },
+            body: JSON.stringify(rules),
+        }).then((response) => {
+            if (response.ok) {
+                resolve(response.text());
+            } else {
+                // analyze the cause of error
+                console.log(response);
+                response.json()
+                    .then((ob) => { reject(ob); }) // error msg in the response body
+                    .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot parse server response" }] }) }); // something else
+            }
+        }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
 
 }
@@ -804,14 +823,14 @@ async function updateRules (rules) {
 
 
 async function putPresence(user_id, lecture_id, present) {
-   
-    console.log("PARAMS: " + user_id + " "+ lecture_id + " PRESENT: " + present)
+
+    console.log("PARAMS: " + user_id + " " + lecture_id + " PRESENT: " + present)
     let obj = {
         present: present
     };
 
     const url = `/api/bookings/students/${user_id}/lectures/${lecture_id}`;
-    
+
     return new Promise((resolve, reject) => {
         fetch(url, {             //Set correct URL
             method: 'PUT',
@@ -835,5 +854,5 @@ async function putPresence(user_id, lecture_id, present) {
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
 }
-const API = {updateRules,putCourseLectureSchedule, uploadFile,getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport, putPresence };
+const API = { updateRules, putCourseLectureSchedule, uploadFile, getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport, putPresence };
 export default API;

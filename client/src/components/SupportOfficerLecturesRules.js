@@ -15,11 +15,11 @@ class supportOfficerLecturesRules extends React.Component {
     constructor(props) {
         super(props);
         this.state = { //todo: caricare con il valore che si riceve dal json.
-            first_year: null,
-            capiency: null,
+            first_year: false,
+            capiency: false,
             capiency_value: 50,
-            morning: null,
-            afternoon: null,
+            morning: false,
+            afternoon: false,
             showSuccess: false,
         }
        
@@ -33,7 +33,7 @@ class supportOfficerLecturesRules extends React.Component {
         let new_rules = {
             first_year: this.state.first_year,
             capiency: this.state.capiency,
-            capiency_value: this.state.capiency_value,
+            capiency_value: this.state.capiency ? this.state.capiency_value: null,
             morning: this.state.morning,
             afternoon: this.state.afternoon,
         }
@@ -42,7 +42,7 @@ class supportOfficerLecturesRules extends React.Component {
             this.setState({showSuccess: true});
         })
         .catch(()=> {
-
+            console.log("ERRORE IN UPDATE RULES");
         });
         
         
