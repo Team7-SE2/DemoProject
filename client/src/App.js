@@ -744,11 +744,13 @@ class App extends React.Component {
 
                 <Route exact path="/bookingManager">
                   {this.state.logged ? <Redirect to="/bookingManager" /> : <Redirect to="/login" />}
-                  <TeacherStatistics title={(this.state.statisticsSubject == 'All') ? 'Overall Statistics' : (this.state.subjects ? this.state.subjects.find((el) => { return (el.id == this.state.statisticsSubject) }) : 'OVERALL STATISTICS').description + ' Statistics'} subjects={this.state.subjects} statisticsSubject={this.state.statisticsSubject} statisticsGroupBy={this.state.statisticsGroupBy} onStatisticGroupByChange={this.onStatisticGroupByChange} onStatisticSubjectChange={this.onStatisticSubjectChange} setStateDate={this.setStateDate} generateData={this.generateData} statistics={this.state.statistics} lectureData={this.state.lectureData} optionsBarChart={optionsBarChart} bookingsData={this.state.bookingsData} bookingsLectureData={this.state.bookingsLectureData} options={options}></TeacherStatistics>
+                  <TeacherStatistics title={(this.state.statisticsSubject == 'All') ? 'OVERALL STATISTICS' : (this.state.subjects ? this.state.subjects.find((el) => { return (el.id == this.state.statisticsSubject) }) : 'OVERALL STATISTICS').description + ' Statistics'} subjects={this.state.subjects} statisticsSubject={this.state.statisticsSubject} statisticsGroupBy={this.state.statisticsGroupBy} onStatisticGroupByChange={this.onStatisticGroupByChange} onStatisticSubjectChange={this.onStatisticSubjectChange} setStateDate={this.setStateDate} generateData={this.generateData} statistics={this.state.statistics} lectureData={this.state.lectureData} optionsBarChart={optionsBarChart} bookingsData={this.state.bookingsData} bookingsLectureData={this.state.bookingsLectureData} options={options}></TeacherStatistics>
                 </Route>
 
                 <Route exact path="/bookingManager/contactTracingReport">
-                  <Container fluid>
+                    <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>CONTACT TRACING REPORT</h3></Col>
+                    </Row>
                     <Row >
                       <Col sm={1}></Col>
                       <Col sm={10} className="below-nav">
@@ -763,16 +765,22 @@ class App extends React.Component {
                         </Card>
                       </Col>
                     </Row>
-                  </Container>
+                    
                 </Route>
 
                 <Route exact path="/supportOfficer">
                   {!this.state.logged && <Redirect to="/login" />}
+                  <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>UPLOAD CSV</h3></Col>
+                  </Row>
                   <UploadLists />
                 </Route>
 
                 <Route exact path="/supportOfficer/courseSchedule">
                   {!this.state.logged && <Redirect to="/login" />}
+                  <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>COURSE SCHEDULE</h3></Col>
+                  </Row>
                   <Container fluid>
                     <Row >
                       <Col sm={1}></Col>
@@ -791,6 +799,9 @@ class App extends React.Component {
                 </Route>
                 <Route exact path={"/supportOfficer/courseSchedule/" + this.state.course.subjectID + "/lectureSchedule"}>
                   {!this.state.logged && <Redirect to="/login" />}
+                  <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>COURSE SCHEDULE</h3></Col>
+                  </Row>
                   <Container fluid>
                     <Row >
                       <Col sm={1}></Col>
@@ -808,6 +819,9 @@ class App extends React.Component {
                   </Container>
                 </Route>
                 <Route exact path={"/supportOfficer/courseSchedule/" + this.state.course.subjectID + "/lectures"}>
+                  <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>COURSE SCHEDULE</h3></Col>
+                  </Row>
                   <Container fluid>
                     <Row >
                       <Col sm={1} className="below-nav" />
@@ -822,6 +836,9 @@ class App extends React.Component {
                 </Route>
 
                 <Route exact path={"/supportOfficer/lectures"}>
+                  <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>UPDATE BOOKABLE LECTURES</h3></Col>
+                  </Row>
                   <Container fluid>
                     <Row >
                       <Col sm={1} className="below-nav" />
@@ -838,6 +855,9 @@ class App extends React.Component {
                 <Route exact path="/student">
                   {this.state.logged ? <Redirect to="/student" /> : <Redirect to="/login" />}
                   <Container fluid>
+                    <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>TEACHING LOAD</h3></Col>
+                    </Row>
                     <Row /* style={{paddingTop: '5%'}}*/>
                       <Col sm={2}></Col>
                       <Col sm={8} className="below-nav">
@@ -870,6 +890,9 @@ class App extends React.Component {
 
                 <Route exact path="/student/calendar">
                   <Container fluid>
+                    <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>MY BOOKINGS</h3></Col>
+                    </Row>
                     <Row >
                       <Col sm={1}></Col>
                       <Col sm={10} className="below-nav">
@@ -903,7 +926,10 @@ class App extends React.Component {
 
                 <Route exact path="/teacher">
                   {this.state.logged ? <Redirect to="/teacher" /> : <Redirect to="/login" />}
-                  <Container fluid>
+                  
+                    <Row>
+                      <Col sm={8} style={{ paddingLeft: "50px" }}><h3 style={{ color: "white" }}>MY COURSES</h3></Col>
+                    </Row>
                     <Row >
                       <Col sm={1}></Col>
                       <Col sm={10} className="below-nav">
@@ -930,7 +956,6 @@ class App extends React.Component {
                         </Card>
                       </Col>
                     </Row>
-                  </Container>
                 </Route>
                 <Route exact path={"/teacher/courses/" + this.state.course.subjectID + "/lectures"}>
                   <Container fluid>
