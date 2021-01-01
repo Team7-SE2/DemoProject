@@ -96,12 +96,21 @@ button:focus {
 }
 
 .backgroundLogin{
+   
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(190,190,190,1) 23%, rgba(0,0,0,1) 79%);  
 }
 .backgroundPages{
   background: rgb(242,242,241);
   background: linear-gradient(180deg,rgba(53,53,53,1) 300px, rgba(242,242,241,1) 300px);
+}
+
+.backgroundLogin .vheight-100{
+   
+  background-image: url("./img/logo.png");
+  background-repeat: no-repeat;
+  background-size: 500px 500px;
+	background-position: 95% 100%;
 }
 
 .MuiTableCell-root{
