@@ -22,6 +22,8 @@ class supportOfficerLecturesRules extends React.Component {
             afternoon: false,
             showSuccess: false,
         }
+        
+     
        
     }
     updateField = (name, value) => {
@@ -82,7 +84,7 @@ class supportOfficerLecturesRules extends React.Component {
                                     </tr>
                                     <tr>
                                         <td>Only lectures that are scheduled in a room with at least a certain capiency are bookable  </td>
-                                        <td><Form.Control as="select" name="capiency_value" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)}>
+                                        <td><Form.Control as="select" data-testid="capiency_value" name="capiency_value" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)}>
                                             <option value="50"> 50 </option>
                                             <option value="100" > 100 </option>
                                             <option value="150" > 150 </option>

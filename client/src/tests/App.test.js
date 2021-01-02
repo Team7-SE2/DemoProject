@@ -23,6 +23,8 @@ import moment from "moment"
 import '@testing-library/jest-dom/extend-expect'
 import UploadLists from '../components/UploadLists';
 import ContactTracingReport from '../components/ContactTracingReport';
+
+
 const app=new App.WrappedComponent();
 
 
@@ -52,16 +54,49 @@ expect(1).toBe(1);
 
   
 
-  
-  
 
 it('renders StudentList', () => {
 	function switchRoute(path){
 		return 1;
 	}
-	render(<StudentList switchRoute={switchRoute} students={[{user:{userID:"AA",name:"AA",surname:"AA"}}]} lecture={{id:1,date:moment().add(1,"days")}} course={{description:"SE2"}}></StudentList>);
+	function changePresence(){
+		return 1;
+	}
+
+
+	render(<StudentList switchRoute={switchRoute} students={[{user:{userID:"AA",name:"AA",surname:"AA"}}]} lecture={{id:1,date:moment().add(1,"days")}} course={{description:"SE2"}} role_id={4}recordPresence ={false}  changePresence={changePresence}></StudentList>);
 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
 	var x=document.getElementsByClassName("btn btn-dark");
+	userEvent.click(x[0]);
+  });
+
+  it('renders StudentList 1', () => {
+	function switchRoute(path){
+		return 1;
+	}
+	function changePresence(){
+		return 1;
+	}
+
+
+	render(<StudentList switchRoute={switchRoute} students={[{user:{userID:"AA",name:"AA",surname:"AA"},present:0}]} lecture={{id:1,date:moment().add(1,"days")}} course={{description:"SE2"}} role_id={4}recordPresence ={true}  changePresence={changePresence}></StudentList>);
+	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+	var x=document.getElementsByClassName("btn btn-danger");
+	userEvent.click(x[0]);
+  });
+  it('renders StudentList 2', () => {
+	function switchRoute(path){
+		return 1;
+	}
+	function changePresence(){
+		return 1;
+	}
+
+
+	render(<StudentList switchRoute={switchRoute} students={[{user:{userID:"AA",name:"AA",surname:"AA"},present:1}]} lecture={{id:1,date:moment().add(1,"days")}} course={{description:"SE2"}} role_id={4}recordPresence ={true}  changePresence={changePresence}></StudentList>);
+	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+	var x=document.getElementsByClassName("btn btn-success");
+
 	userEvent.click(x[0]);
   });
 
@@ -100,6 +135,8 @@ it('renders CourseLectures' ,() => {
 	var x=document.getElementsByClassName("btn btn-primary");
 	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
 	userEvent.click(x[0]);
+	render(<CourseLectures lectures={[{id:1,date:moment().add(1,"days")}]} course={{description:""}}role_id={2} turnOnRemote={turnOnRemote}></CourseLectures>);
+	expect(screen.getByText('Lecture Day')).toBeInTheDocument();
 
 	render(<CourseLectures lectures={[{id:1,date:moment().add(1,"days"),deleted_at:"2020-11-12 10:30:00.000 +00:00"}]} course={{description:""}} bookLecture={bookLecture} deleteBookedLecture={App.deleteBookedLecture} deleteLecture={deleteLecture} bookedLectures={[]} getListStudents={getListStudents} role_id={4} turnOnRemote={turnOnRemote}></CourseLectures>);
 	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
@@ -137,12 +174,45 @@ it('renders CourseLectures' ,() => {
  	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
 })*/
 it('renders ListCourses', () => {
-	render(<ListCourses courses={[]} showLectures={App.showLectures} role_id={5}></ListCourses>);
+	function showLectures(){
+		return 1;
+	}
+	render(<ListCourses courses={[]} showLectures={showLectures} role_id={5}></ListCourses>);
 	expect(screen.getAllByText('Rows per page:')[0]).toBeInTheDocument();
   });
 it('renders ListCourses 2', () => {
-	render(<ListCourses courses={[{id: 1,subjectID:1,description: "andale andale andale"}]} showLectures={App.showLectures} role_id={5}></ListCourses>);
+	function showLectures(){
+		return 1;
+	}
+	function showPastLectures(){
+		return 1;
+	}
+	
+	render(<ListCourses courses={[{id: 1,subjectID:1,description: "andale andale andale"}]} showLectures={showLectures} showPastLectures={showPastLectures} role_id={4}></ListCourses>);
 	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+	userEvent.click(screen.getByText("View details"))
+
+  });
+  it('renders ListCourses 3', () => {
+	function showLectures(){
+		return 1;
+	}
+	render(<ListCourses courses={[{id: 1,subjectID:1,description: "andale andale andale"}]} showLectures={showLectures} role_id={5}></ListCourses>);
+	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+	userEvent.click(screen.getByText("Book your seat"))
+
+  });
+  it('renders ListCourses 4', () => {
+	function showLectures(){
+		return 1;
+	}
+	function showPastLectures(){
+		return 1;
+	}
+	render(<ListCourses courses={[{id: 1,subjectID:1,description: "andale andale andale"}]} showLectures={showLectures} showPastLectures={showPastLectures} role_id={4}></ListCourses>);
+	expect(screen.getByText('Rows per page:')).toBeInTheDocument();
+	userEvent.click(screen.getByText("Record presences"))
+
   });
 it('renders HomeCalendar', () => {
 	render(<HomeCalendar isMyCalendar={true} userId={3} isStudent={true}></HomeCalendar>);
@@ -553,8 +623,4 @@ it('HomeCalendar Click button', () => {
 	// check that the content changed to the new page
   })
 
-
-
-
-  
 
