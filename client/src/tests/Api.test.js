@@ -389,3 +389,33 @@ it('API generateContactTracingReport', (done) => {
         })
 });
 
+
+
+it('API putCourseLectureSchedule', (done) => {
+    API.putCourseLectureSchedule("AAA", "Monday 08:30", 3, "Friday", "08:30", 3)
+        .then((Obj) => {
+            expect(Obj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
+
+
+it('API putPresence', (done) => {
+    API.putPresence("999999", "1222", 1)
+        .then((Obj) => {
+            expect(Obj).not.toBeNull();
+            if (done)
+                done();
+        })
+        .catch((err) => {
+            expect(err).not.toBeNull();
+            if (done)
+                done();
+        })
+});
