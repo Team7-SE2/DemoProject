@@ -4,7 +4,6 @@ var emailHelper = {};
 emailHelper.transporter = nodemailer.createTransport({
     service: 'gmail',
     secure: false,
-    requireTLS: false,
     port: 25,
     auth: {
         user: /*"pulsbs.noreply@gmail.com",*/"pulsbs.noreply2020@gmail.com",
