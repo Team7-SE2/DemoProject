@@ -817,6 +817,21 @@ async function updateRules(rules) {
     });
 
 }
+
+async function getRules () {
+    const url = "/bookingRules";
+    const response = await fetch(url);
+    const rulesJson = await response.json();
+
+
+    if (response.ok) {
+        return rulesJson;  // have to do parsing
+    }
+    else {
+        let err = { status: response.status, errObj: rulesJson };
+        throw err;
+    }
+}
 /////////////////////////
 //      PULSBS-18     //
 /////////////////////////
@@ -854,5 +869,5 @@ async function putPresence(user_id, lecture_id, present) {
         }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Cannot communicate" }] }) }); // connection errors
     });
 }
-const API = { updateRules, putCourseLectureSchedule, uploadFile, getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport, putPresence };
+const API = { getRules, updateRules, putCourseLectureSchedule, uploadFile, getStudentfromWaitingList, getStudentsCountforLecture, turnOnBooked, getSubjects, getSubject, getStatisticsBookings, getCourseLectures, getTeacherLecturesWithParams, getStudentBookingsexcludeLecturesCanceled, turnOnRemote, deleteLecture, getStudentListforLecture, getStudentCourses, getStudentCourseLectures, getBookedLectures, getLectures, getTeacherLectures, deleteBookedLecture, getTeacherSubjects, bookLecture, userLogin, userLogout, getStudentBookings, getbookings, getStudentInfo, generateContactTracingReport, putPresence };
 export default API;
