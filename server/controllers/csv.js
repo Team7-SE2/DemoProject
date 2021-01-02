@@ -52,8 +52,8 @@ module.exports = function () {
                     console.log("Rename : "+ err);
                     res.status(500).end();
                 } else {
-                    csvHelper.parse(requestType, function (err){
-                        if(err)
+                    csvHelper.parse(requestType, function (err2){
+                        if(err2)
                             res.status(505).end();
                         else
                             res.status(201).end();

@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import Paper from '@material-ui/core/Paper';
 import Button from "react-bootstrap/Button";
 import { SortingState, PagingState, SearchState, FilteringState, IntegratedFiltering, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
-import { Grid, Table, TableHeaderRow, TableFilterRow, PagingPanel, Toolbar, SearchPanel } from '@devexpress/dx-react-grid-material-ui';
-import { FaUsers, FaTrashAlt, FaList, FaCogs } from 'react-icons/fa';
+import { Grid, Table, TableHeaderRow, TableFilterRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
+import { FaList, FaCogs } from 'react-icons/fa';
 
 const SupportOfficerListCourses = (props) => {
 
-  let { courses ,showLectures, showLecturesSchedule, role_id} = props;
+  let { courses ,showLectures, showLecturesSchedule } = props;
   
   const test = courses.map((course) => {
     return {

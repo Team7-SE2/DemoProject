@@ -21,7 +21,7 @@ module.exports = function () {
 
     //  GET -> /api/lectures/getCourseSchedule/:subjectId -> restituisce l'orario del corso--> lista di lezioni -->lecture.dayschedule
     router.get('/getCourseSchedule/:subjectId', function (req, res) {
-        let schedules = [];
+        //let schedules = [];
 
         db['lectures'].findAll({
             where: {

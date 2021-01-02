@@ -83,9 +83,9 @@ module.exports = function (app) {
                     l.save()
                         .then(()=>{ callback(); })
                         .catch((err)=>{console.log(err); callback();})
-                }, function (err) {
-                    if (err)
-                        console.log(err)
+                }, function (err1) {
+                    if (err1)
+                        console.log(err1)
                     Object.keys(actualJSON).forEach((k) => {
                         if (actualJSON[k]) {
                             var lectures_to_update = [];
@@ -153,7 +153,6 @@ module.exports = function (app) {
                                             .catch((err)=>{console.log(err); callback();})
                                     })
                                 } break;
-                                default: { } break;
                             }
                         }
                     })

@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import moment from 'moment';
 import Button from "react-bootstrap/Button";
 import PaperInsideCard from './PaperInsideCard';
-import { FaUsers, FaTrashAlt, FaTv } from 'react-icons/fa';
-import Modal from "react-bootstrap/Modal"
+import { FaUsers } from 'react-icons/fa';
 
 const PastLectures = (props) => {
 

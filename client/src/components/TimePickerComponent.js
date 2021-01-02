@@ -10,7 +10,7 @@ var moment = require("moment");
 
 const TimePickerComponent = (props) => {
 
-  let { type, initialValue, setStateDate } = props;
+  let { initialValue, setStateDate } = props;
 
   let date = initialValue ? moment(initialValue) : moment();
 

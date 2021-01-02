@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Paper from '@material-ui/core/Paper';
 import Button from "react-bootstrap/Button";
 import moment from 'moment';
-import { SortingState, PagingState, SearchState, FilteringState, IntegratedFiltering, IntegratedPaging, IntegratedSorting } from '@devexpress/dx-react-grid';
-import { Grid, Table, TableHeaderRow, TableFilterRow, PagingPanel, Toolbar, SearchPanel } from '@devexpress/dx-react-grid-material-ui';
+import { PagingState, SearchState, IntegratedPaging } from '@devexpress/dx-react-grid';
+import { Grid, Table, TableHeaderRow, PagingPanel } from '@devexpress/dx-react-grid-material-ui';
 import Modal from "react-bootstrap/Modal"
 import Form from "react-bootstrap/Form";
 import TimePickerComponent from './TimePickerComponent';

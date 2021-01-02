@@ -77,7 +77,7 @@ const CourseLectures = (props) => {
 
     const test = lectures.sort((a,b) =>{return moment(a.date).unix() - moment(b.date).unix()}).filter(function (l) {
         {if (role_id == 5) return (l.remote == null)
-         else /*if (role_id == 4)*/ return l;};
+         else /*if (role_id == 4)*/ return l;}
     }).map((lec) => {
 
         if (role_id == 4) {

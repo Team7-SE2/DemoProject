@@ -20,13 +20,13 @@ const StudentList = (props) => {
         surname: student.user.surname
       }
       else
-      return {
-        id: student.user.id,
-        name: student.user.name,
-        surname: student.user.surname,
-        presence: student.present ? <Button variant="success" onClick={() =>{changePresence(student.user.id, lecture.id, false)}}> <ImCheckmark></ImCheckmark> </Button> 
-                                  : <Button variant="danger" onClick={() =>{changePresence(student.user.id, lecture.id, true)}}> <ImCross></ImCross> </Button>
-      }
+        return {
+          id: student.user.id,
+          name: student.user.name,
+          surname: student.user.surname,
+          presence: student.present ? <Button variant="success" onClick={() =>{changePresence(student.user.id, lecture.id, false)}}> <ImCheckmark></ImCheckmark> </Button> 
+                                    : <Button variant="danger" onClick={() =>{changePresence(student.user.id, lecture.id, true)}}> <ImCross></ImCross> </Button>
+        }
 
   });
 
