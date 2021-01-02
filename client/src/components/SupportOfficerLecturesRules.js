@@ -22,9 +22,17 @@ class supportOfficerLecturesRules extends React.Component {
             afternoon: false,
             showSuccess: false,
         }
-        
-     
-       
+        API.getRules()
+        .then((rules) => {
+            this.setState ( { 
+                first_year: rules.first_year,
+                capiency: rules.capiency,
+                capiency_value: rules.capiency_value,
+                morning: rules.morning,
+                afternoon: rules.afternoon,
+                showSuccess: false,
+            });
+        });               
     }
     updateField = (name, value) => {
         this.setState({ [name]: value });
@@ -45,9 +53,7 @@ class supportOfficerLecturesRules extends React.Component {
         })
         .catch(()=> {
             console.log("ERRORE IN UPDATE RULES");
-        });
-        
-        
+        });                
     }
 
 
@@ -83,9 +89,9 @@ class supportOfficerLecturesRules extends React.Component {
                                         <td className="text-center"> {this.state.first_year && <FaCheck />}</td>
                                     </tr>
                                     <tr>
-                                        <td>Only lectures that are scheduled in a room with at least a certain capiency are bookable  </td>
-                                        <td><Form.Control as="select" data-testid="capiency_value" name="capiency_value" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)}>
-                                            <option value="50"> 50 </option>
+                                        <td>Only lectures that are scheduled in a room with at least <b>{this.state.capiency?this.state.capiency_value?this.state.capiency_value: "insert value" : "select the rule"} </b> seats are bookable  </td>
+                                        <td><Form.Control as="select" data-testid="capiency_value"  name="capiency_value" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} defaultValue="50" required={this.state.capiency}>
+                                            <option default value="50"> 50 </option>
                                             <option value="100" > 100 </option>
                                             <option value="150" > 150 </option>
                                         </Form.Control>
@@ -98,7 +104,7 @@ class supportOfficerLecturesRules extends React.Component {
                                     <tr>
                                         <td>Only morning lectures are bookable</td>
                                         <td></td>
-                                        <td> <Form.Check className="text-center" type="checkbox" checked={this.state.morining} disabled={this.state.afternoon}
+                                        <td> <Form.Check className="text-center" type="checkbox" checked={this.state.morning} disabled={this.state.afternoon}
                                             name="morning"
                                             onChange={(ev) => this.updateField(ev.target.name, !this.state.morning)}></Form.Check></td>
                                         <td className="text-center"> {this.state.morning && <FaCheck />}</td>
