@@ -105,6 +105,14 @@ button:focus {
   background: linear-gradient(180deg,rgba(53,53,53,1) 300px, rgba(242,242,241,1) 300px);
 }
 
+.backgroundPages .vheight-100{
+   
+  background-image: url("./img/logo.png");
+  background-repeat: no-repeat;
+  background-size: 100px 100px;
+	background-position: 95% 95%;
+}
+
 .backgroundLogin .vheight-100{
    
   background-image: url("./img/logo.png");
@@ -112,7 +120,6 @@ button:focus {
   background-size: 500px 500px;
 	background-position: 95% 100%;
 }
-
 .MuiTableCell-root{
   font-size: 1.1rem !important;
   white-space: break-spaces !important;
