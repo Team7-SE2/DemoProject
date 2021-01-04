@@ -26,6 +26,22 @@ test('check mail mechanism OK', () => {
     }
 })
 
+test('check mail mechanism NOK', () => {
+
+    var mailOptions = {
+        from: "pulsbsnoreply@gmail.com",
+        subject: 'Lecture Booking',
+        text: 'Ti sei iscritto correttamente alla lezione',
+    }
+    expect(transporter).not.toBeNull();
+    try {
+        transporter.sendEmail(mailOptions, function(){
+            console.log("NOK");
+        })
+    } catch (error) {
+        expect(error).not.toBe();
+    }
+})
 // test('check mail mechanism NOK', () => {
 //     var mailOptions= null;
 //     try {

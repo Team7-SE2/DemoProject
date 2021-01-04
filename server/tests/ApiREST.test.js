@@ -100,11 +100,11 @@ describe('API test', function () {
             .set('Accept', 'application/json')
             .expect(200, done);
     })
-    
+
     it('PUT lectures changeSchedule', function (done) {
         request(app)
             .put('/api/lectures/changeSchedule/Course/XY1211/Day/Monday 08:30/duration/3')
-            .send({ new_day: "Friday", new_time: "16:00",new_duration: 3 })
+            .send({ new_day: "Friday", new_time: "16:00", new_duration: 3 })
             .set('Accept', 'application/json')
             .expect(200, done);
     })
@@ -166,14 +166,14 @@ describe('API test', function () {
     it('POST bookings', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 900001, lecture_id: 2, email: "prova@prova.it", waiting: 0, present:false})
+            .send({ user_id: 900001, lecture_id: 2, email: "prova@prova.it", waiting: 0, present: false })
             .set('Accept', 'application/json')
             .expect(201, done);
     });
     it('POST bookings 2', function (done) {
         request(app)
             .post('/api/bookings/student')
-            .send({ user_id: 900001, lecture_id: 1, email: "prova@prova.it", waiting: null , present:false})
+            .send({ user_id: 900001, lecture_id: 1, email: "prova@prova.it", waiting: null, present: false })
             .set('Accept', 'application/json')
             .expect(201, done);
     });
@@ -436,17 +436,17 @@ describe('API test', function () {
 //==================== CSV API test =========================
 
 it('POST csv check error', function (done) {
-        
+
     request(app)
-    .post('/api/csv')
-    .set('Accept', 'application/json')
-    .expect(500, done);
+        .post('/api/csv')
+        .set('Accept', 'application/json')
+        .expect(500, done);
 
 });
 
 it('POST csv Students', function (done) {
 
-    fs.readFile('csv_files/Students.csv', 'utf8', function(err, data) {
+    fs.readFile('csv_files/Students.csv', 'utf8', function (err, data) {
         if (err) throw err;
 
         let formData = {
@@ -462,8 +462,8 @@ it('POST csv Students', function (done) {
 });
 
 it('POST csv Teachers', function (done) {
-    
-    fs.readFile('csv_files/Professors.csv', 'utf8', function(err, data) {
+
+    fs.readFile('csv_files/Professors.csv', 'utf8', function (err, data) {
         if (err) throw err;
 
         let formData = {
@@ -479,8 +479,8 @@ it('POST csv Teachers', function (done) {
 });
 
 it('POST csv Courses', function (done) {
-    
-    fs.readFile('csv_files/Courses.csv', 'utf8', function(err, data) {
+
+    fs.readFile('csv_files/Courses.csv', 'utf8', function (err, data) {
         if (err) throw err;
 
         let formData = {
@@ -495,8 +495,8 @@ it('POST csv Courses', function (done) {
     });
 });
 it('POST csv Schedule1s', function (done) {
-    
-    fs.readFile('csv_files/Schedule1s.csv', 'utf8', function(err, data) {
+
+    fs.readFile('csv_files/Schedule1s.csv', 'utf8', function (err, data) {
         if (err) throw err;
 
         let formData = {
@@ -511,8 +511,8 @@ it('POST csv Schedule1s', function (done) {
     });
 });
 it('POST csv Enrollment', function (done) {
-    
-    fs.readFile('csv_files/Enrollment.csv', 'utf8', function(err, data) {
+
+    fs.readFile('csv_files/Enrollment.csv', 'utf8', function (err, data) {
         if (err) throw err;
 
         let formData = {
@@ -526,4 +526,32 @@ it('POST csv Enrollment', function (done) {
 
     });
 });
+it('POST bookingRules', function (done) {
 
+    let formData = {"first_year":true,"capiency":true,"capiency_value":"100","morning":true,"afternoon":false}
+    
+    request(app)
+        .post("/bookingRules")
+        .send(formData)
+        .set('Accept', 'application/json')
+        .expect(200, done);
+
+});
+it('POST bookingRules 2', function (done) {
+
+    let formData = {"first_year":false,"capiency":false,"capiency_value":null,"morning":false,"afternoon":true}
+    
+    request(app)
+        .post("/bookingRules")
+        .send(formData)
+        .set('Accept', 'application/json')
+        .expect(200, done);
+
+});
+it('GET bookingRules', function (done) {
+
+    request(app)
+        .get('/bookingRules')
+        .set('Accept', 'application/json')
+        .expect(200, done);
+});
