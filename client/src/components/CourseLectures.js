@@ -76,7 +76,7 @@ const CourseLectures = (props) => {
     console.log("lectures: " + lectures)
 
     const test = lectures.sort((a,b) =>{return moment(a.date).unix() - moment(b.date).unix()}).filter(function (l) {
-        {if (role_id == 5) return (l.remote == null)
+        {if (role_id == 5) return (!l.remote)
          else /*if (role_id == 4)*/ return l;}
     }).map((lec) => {
 
