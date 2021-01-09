@@ -77,8 +77,8 @@ module.exports = function (app) {
             where: { date: { [Op.gt]: moment() } }, 
             include: [{ model: db.rooms, as: 'room' },{ model: db.subjects, as: 'subject'}] 
         })
-            .then((lectures) => {
-                async.eachLimit(lectures, 5, function (l, callback) { 
+            .then((actualLectures) => {
+                async.eachLimit(actualLectures, 5, function (l, callback) { 
                     l.remote = false;
                     l.save()
                         .then(()=>{ callback(); })
@@ -86,6 +86,35 @@ module.exports = function (app) {
                 }, function (err1) {
                     if (err1)
                         console.log(err1)
+
+                    let lectures = actualLectures;
+
+                    // filter the lectures with the END DATE
+                    if(actualJSON.end_date){
+
+                        let end_date = actualJSON.end_date;
+
+                        lectures = lectures.filter((l) => {
+                            let dateA = moment(l.date);
+                            let dateB = moment(end_date)
+                            return dateA <= dateB
+                        })
+
+                    }
+
+                    // filter the lectures with the START DATE
+                    if(actualJSON.start_date){
+
+                        let start_date = actualJSON.start_date;
+
+                        lectures = lectures.filter((l) => {
+                            let dateA = moment(l.date);
+                            let dateB = moment(start_date)
+                            return dateA >= dateB
+                        })
+
+                    }
+
                     Object.keys(actualJSON).forEach((k) => {
                         if (actualJSON[k]) {
                             var lectures_to_update = [];
