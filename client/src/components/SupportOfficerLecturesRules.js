@@ -20,44 +20,48 @@ class supportOfficerLecturesRules extends React.Component {
             morning: false,
             afternoon: false,
             showSuccess: false,
+            start_date: null,
+            end_date: null
         }
         API.getRules()
-        .then((rules) => {
-            this.setState ( { 
-                first_year: rules.first_year,
-                capiency: rules.capiency,
-                capiency_value: rules.capiency_value,
-                morning: rules.morning,
-                afternoon: rules.afternoon,
-                showSuccess: false,
+            .then((rules) => {
+                this.setState({
+                    first_year: rules.first_year,
+                    capiency: rules.capiency,
+                    capiency_value: rules.capiency_value,
+                    morning: rules.morning,
+                    afternoon: rules.afternoon,
+                    showSuccess: false,
+                });
             });
-        });               
     }
     updateField = (name, value) => {
         this.setState({ [name]: value });
-        this.setState({showSuccess:false});
+        this.setState({ showSuccess: false });
     }
     onSubmit = (event) => {
         event.preventDefault();
         let new_rules = {
             first_year: this.state.first_year,
             capiency: this.state.capiency,
-            capiency_value: this.state.capiency ? this.state.capiency_value: null,
+            capiency_value: this.state.capiency ? this.state.capiency_value : null,
             morning: this.state.morning,
             afternoon: this.state.afternoon,
+            start_date: this.state.start_date,
+            end_date: this.state.end_date
         }
         API.updateRules(new_rules)
-        .then(()=> {
-            this.setState({showSuccess: true});
-        })
-        .catch(()=> {
-            console.log("ERRORE IN UPDATE RULES");
-        });                
+            .then(() => {
+                this.setState({ showSuccess: true });
+            })
+            .catch(() => {
+                console.log("ERRORE IN UPDATE RULES");
+            });
     }
 
 
     closeSuccess = () => {
-        this.setState({showSuccess:false});
+        this.setState({ showSuccess: false });
     }
 
     render() {
@@ -88,8 +92,8 @@ class supportOfficerLecturesRules extends React.Component {
                                         <td className="text-center"> {this.state.first_year && <FaCheck />}</td>
                                     </tr>
                                     <tr>
-                                        <td>Only lectures that are scheduled in a room with at least <b>{this.state.capiency?this.state.capiency_value?this.state.capiency_value: "insert value" : "select the rule"} </b> seats are bookable  </td>
-                                        <td><Form.Control as="select" data-testid="capiency_value"  name="capiency_value" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} defaultValue="50" required={this.state.capiency}>
+                                        <td>Only lectures that are scheduled in a room with at least <b>{this.state.capiency ? this.state.capiency_value ? this.state.capiency_value : "insert value" : "select the rule"} </b> seats are bookable  </td>
+                                        <td><Form.Control as="select" data-testid="capiency_value" name="capiency_value" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} defaultValue="50" required={this.state.capiency}>
                                             <option default value="50"> 50 </option>
                                             <option value="100" > 100 </option>
                                             <option value="150" > 150 </option>
@@ -116,6 +120,14 @@ class supportOfficerLecturesRules extends React.Component {
                                             onChange={(ev) => this.updateField(ev.target.name, !this.state.afternoon)}></Form.Check></td>
                                         <td className="text-center"> {this.state.afternoon && <FaCheck />}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Select a range <br /> <br />
+                                          Start date: <Form.Control type="date" name="start_date" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
+                                            <br />
+                                          End date: <Form.Control type="date" name="end_date" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} /></td>
+                                        <td> </td>
+                                        <td></td>
+                                    </tr>
                                 </tbody>
                             </Table>
                         </Card.Body>
@@ -124,8 +136,8 @@ class supportOfficerLecturesRules extends React.Component {
                         </Card.Footer>
                     </Card>
                 </Form>
-                <br/>
-                <Success first_year = {this.state.first_year} capiency={this.state.capiency } capiency_value={this.state.capiency_value} morning={this.state.morning} afternoon = {this.state.afternoon} showSuccess={this.state.showSuccess} closeSuccess={this.closeSuccess} />
+                <br />
+                <Success start_date={this.state.start_date} end_date={this.state.end_date} first_year={this.state.first_year} capiency={this.state.capiency} capiency_value={this.state.capiency_value} morning={this.state.morning} afternoon={this.state.afternoon} showSuccess={this.state.showSuccess} closeSuccess={this.closeSuccess} />
 
             </Col>
             <Col sm={1} />
@@ -135,26 +147,28 @@ class supportOfficerLecturesRules extends React.Component {
 
 function Success(props) {
 
-    let {first_year, capiency,capiency_value,morning,afternoon,showSuccess,closeSuccess} = props;
+    let { first_year, capiency, capiency_value, morning, afternoon, start_date, end_date, showSuccess, closeSuccess } = props;
 
     if (showSuccess) {
         return (
             <Alert variant="success" onClose={() => closeSuccess()} dismissible>
                 <Alert.Heading>New rules applied!!!</Alert.Heading>
                 <p>
-                    The new rules are: <br/>
+                    The new rules are: <br />
                     <ul>
-                    <li>first year: {first_year?"yes":"no"}</li>
-                    <li>capiency: {capiency?`yes, capiency value: ${capiency_value}`:"no"}   </li>
-                    <li>morning {morning?"yes":"no"}</li>
-                    <li>afternoon: {afternoon?"yes":"no"}</li>
+                        <li>first year: {first_year ? "yes" : "no"}</li>
+                        <li>capiency: {capiency ? `yes, capiency value: ${capiency_value}` : "no"}   </li>
+                        <li>morning {morning ? "yes" : "no"}</li>
+                        <li>afternoon: {afternoon ? "yes" : "no"}</li>
+                        {start_date && <li> start date: {start_date}</li>}
+                        {end_date && <li>end date: {end_date} </li>}
                     </ul>
-          </p>
+                </p>
             </Alert>
         );
-        
+
     }
-return <> </>
+    return <> </>
 }
 
 
