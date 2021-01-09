@@ -21,16 +21,23 @@ class supportOfficerLecturesRules extends React.Component {
             afternoon: false,
             showSuccess: false,
             start_date: null,
-            end_date: null
+            end_date: null,
+            enable_start: false,
+            enable_end: false
         }
         API.getRules()
             .then((rules) => {
+                console.log(rules);
                 this.setState({
                     first_year: rules.first_year,
                     capiency: rules.capiency,
                     capiency_value: rules.capiency_value,
                     morning: rules.morning,
                     afternoon: rules.afternoon,
+                    start_date: rules.start_date,
+                    end_date: rules.end_date,
+                    enable_start: rules.start_date ? true : false,
+                    enable_end: rules.end_date? true : false, 
                     showSuccess: false,
                 });
             });
@@ -47,8 +54,8 @@ class supportOfficerLecturesRules extends React.Component {
             capiency_value: this.state.capiency ? this.state.capiency_value : null,
             morning: this.state.morning,
             afternoon: this.state.afternoon,
-            start_date: this.state.start_date,
-            end_date: this.state.end_date
+            start_date: this.state.enable_start ? this.state.start_date : null,
+            end_date: this.state.enable_end ? this.state.end_date: null
         }
         API.updateRules(new_rules)
             .then(() => {
@@ -113,20 +120,48 @@ class supportOfficerLecturesRules extends React.Component {
                                         <td className="text-center"> {this.state.morning && <FaCheck />}</td>
                                     </tr>
                                     <tr>
+
                                         <td>Only afternoon lectures are bookable</td>
+
                                         <td></td>
+
                                         <td> <Form.Check className="text-center" type="checkbox" checked={this.state.afternoon} disabled={this.state.morning}
                                             name="afternoon"
-                                            onChange={(ev) => this.updateField(ev.target.name, !this.state.afternoon)}></Form.Check></td>
+                                            onChange={(ev) => this.updateField(ev.target.name, !this.state.afternoon)}></Form.Check>
+                                        </td>
+
                                         <td className="text-center"> {this.state.afternoon && <FaCheck />}</td>
+
                                     </tr>
                                     <tr>
-                                        <td>Select a range <br /> <br />
-                                          Start date: <Form.Control type="date" name="start_date" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
-                                            <br />
-                                          End date: <Form.Control type="date" name="end_date" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} /></td>
-                                        <td> </td>
-                                        <td></td>
+                                        <td>
+                                            Start date: <Form.Control type="date" name="start_date"  defaultValue = {this.state.start_date} onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
+                                        </td>
+                                        <td />
+                                        <td>
+                                            <Form.Check className="text-center" type="checkbox" checked={this.state.enable_start}
+                                                name="enable_start"
+                                                onChange={(ev) => this.updateField(ev.target.name, !this.state.enable_start)}></Form.Check>
+                                        </td>
+
+                                        <td className="text-center"> {this.state.enable_start && <FaCheck />}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            End date: <Form.Control type="date" name="end_date" defaultValue={this.state.end_date} onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
+                                        </td>
+                                        <td />
+                                        <td>
+                                            <Form.Check className="text-center" type="checkbox" checked={this.state.enable_end}
+                                                name="enable_end"
+                                                onChange={(ev) => this.updateField(ev.target.name, !this.state.enable_end)}></Form.Check>
+                                        </td>
+                                        <td className="text-center"> {this.state.enable_end && <FaCheck />}</td>
+                                    </tr>
+
+
+                                    <tr>
+
                                     </tr>
                                 </tbody>
                             </Table>
@@ -137,17 +172,17 @@ class supportOfficerLecturesRules extends React.Component {
                     </Card>
                 </Form>
                 <br />
-                <Success start_date={this.state.start_date} end_date={this.state.end_date} first_year={this.state.first_year} capiency={this.state.capiency} capiency_value={this.state.capiency_value} morning={this.state.morning} afternoon={this.state.afternoon} showSuccess={this.state.showSuccess} closeSuccess={this.closeSuccess} />
+                <Success enable_start = {this.state.enable_start} enable_end = {this.state.enable_end} start_date={this.state.start_date} end_date={this.state.end_date} first_year={this.state.first_year} capiency={this.state.capiency} capiency_value={this.state.capiency_value} morning={this.state.morning} afternoon={this.state.afternoon} showSuccess={this.state.showSuccess} closeSuccess={this.closeSuccess} />
 
             </Col>
             <Col sm={1} />
-        </Row>
+        </Row >
     }
 }
 
 function Success(props) {
 
-    let { first_year, capiency, capiency_value, morning, afternoon, start_date, end_date, showSuccess, closeSuccess } = props;
+    let { first_year, capiency, capiency_value, morning, afternoon, start_date, end_date, enable_start, enable_end, showSuccess, closeSuccess } = props;
 
     if (showSuccess) {
         return (
@@ -160,8 +195,8 @@ function Success(props) {
                         <li>capiency: {capiency ? `yes, capiency value: ${capiency_value}` : "no"}   </li>
                         <li>morning {morning ? "yes" : "no"}</li>
                         <li>afternoon: {afternoon ? "yes" : "no"}</li>
-                        {start_date && <li> start date: {start_date}</li>}
-                        {end_date && <li>end date: {end_date} </li>}
+                        {enable_start && <li> start date: {start_date}</li>}
+                        {enable_end && <li>end date: {end_date} </li>}
                     </ul>
                 </p>
             </Alert>
