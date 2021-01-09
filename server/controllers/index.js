@@ -93,11 +93,11 @@ module.exports = function (app) {
                     if(actualJSON.end_date){
 
                         let end_date = actualJSON.end_date;
+                        end_date_Moment = moment(end_date).set({hour:23,minute:59,second:59});
 
                         lectures = lectures.filter((l) => {
                             let dateA = moment(l.date);
-                            let dateB = moment(end_date)
-                            return dateA <= dateB
+                            return dateA <= end_date_Moment
                         })
 
                     }
@@ -106,11 +106,11 @@ module.exports = function (app) {
                     if(actualJSON.start_date){
 
                         let start_date = actualJSON.start_date;
+                        start_date_Moment = moment(start_date).set({hour:0,minute:0,second:0});
 
                         lectures = lectures.filter((l) => {
                             let dateA = moment(l.date);
-                            let dateB = moment(start_date)
-                            return dateA >= dateB
+                            return dateA >= start_date_Moment
                         })
 
                     }
