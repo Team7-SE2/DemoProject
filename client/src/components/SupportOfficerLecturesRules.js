@@ -99,7 +99,8 @@ class supportOfficerLecturesRules extends React.Component {
                                         <td className="text-center"> {this.state.first_year && <FaCheck />}</td>
                                     </tr>
                                     <tr>
-                                        <td>Only lectures that are scheduled in a room with at least <b>{this.state.capiency ? this.state.capiency_value ? this.state.capiency_value : "insert value" : "select the rule"} </b> seats are bookable  </td>
+                                        {this.state.capiency && <td>Only lectures that are scheduled in a room with at least <b>{this.state.capiency ? this.state.capiency_value ? this.state.capiency_value : "insert value" : "select the rule"} </b> seats are bookable  </td>}
+                                        {!this.state.capiency && <td>Only lectures that are scheduled in a room with the selected capiency are bookable</td>}   
                                         <td><Form.Control as="select" data-testid="capiency_value" name="capiency_value" onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} defaultValue="50" required={this.state.capiency}>
                                             <option default value="50"> 50 </option>
                                             <option value="100" > 100 </option>
@@ -139,12 +140,12 @@ class supportOfficerLecturesRules extends React.Component {
                                         </td>
                                         <td />
                                         <td>
-                                            <Form.Check className="text-center" type="checkbox" checked={this.state.enable_start}
+                                            <Form.Check style={{paddingTop : "20px"}} className="text-center" type="checkbox" checked={this.state.enable_start}
                                                 name="enable_start"
                                                 onChange={(ev) => this.updateField(ev.target.name, !this.state.enable_start)}></Form.Check>
                                         </td>
 
-                                        <td className="text-center"> {this.state.enable_start && <FaCheck />}</td>
+                                        <td style={{paddingTop : "28px"}} className="text-center"> {this.state.enable_start && <FaCheck  />}</td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -152,11 +153,11 @@ class supportOfficerLecturesRules extends React.Component {
                                         </td>
                                         <td />
                                         <td>
-                                            <Form.Check className="text-center" type="checkbox" checked={this.state.enable_end}
+                                            <Form.Check style={{paddingTop : "20px"}} className="text-center" type="checkbox" checked={this.state.enable_end}
                                                 name="enable_end"
                                                 onChange={(ev) => this.updateField(ev.target.name, !this.state.enable_end)}></Form.Check>
                                         </td>
-                                        <td className="text-center"> {this.state.enable_end && <FaCheck />}</td>
+                                        <td style={{paddingTop : "28px"}} className="text-center"> {this.state.enable_end && <FaCheck />}</td>
                                     </tr>
 
 
