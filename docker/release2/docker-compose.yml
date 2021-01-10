@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  server-application:
+    env_file: "release.env"
+    build:
+      context: ../../
+      dockerfile: ./server/dockerfile
+    image: "benedettagiorgi/pulsbs:serverRelease2"
+    ports:
+     - "3100:3100"
+     - "9229:9229" #DEBUG
+    restart: always
+    command: npm start
+  client-application:
+    env_file: "../../client/client.env"
+    tty: true #interation mode
+    stdin_open: true #interation mode
+    build:
+      context: ../../
+      dockerfile: ./client/dockerfile
+    image: "benedettagiorgi/pulsbs:clientRelease2"
+    ports:
+     - "3000:3000"
+    restart: always
+    volumes:
+         - /usr/src/app/client/node_modules
+    depends_on:
+      - server-application
+    command: npm start
