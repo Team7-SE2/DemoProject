@@ -136,7 +136,7 @@ class supportOfficerLecturesRules extends React.Component {
                                     </tr>
                                     <tr>
                                         <td>
-                                            Start date: <Form.Control type="date" name="start_date"  defaultValue = {this.state.start_date} onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
+                                             Rules start date: <Form.Control type="date" name="start_date"  defaultValue = {this.state.start_date} onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
                                         </td>
                                         <td />
                                         <td>
@@ -149,7 +149,7 @@ class supportOfficerLecturesRules extends React.Component {
                                     </tr>
                                     <tr>
                                         <td>
-                                            End date: <Form.Control type="date" name="end_date" defaultValue={this.state.end_date} onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
+                                            Rules end date: <Form.Control type="date" name="end_date" defaultValue={this.state.end_date} onChange={(ev) => this.updateField(ev.target.name, ev.target.value)} />
                                         </td>
                                         <td />
                                         <td>
